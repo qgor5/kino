@@ -1,6 +1,6 @@
 ---
 title: 5 Tips for Starting a Startup
-slug: five-tips-for-starting-a-startup
+slug кекек еек к 546546 кеке: five-tips-for-starting-a-startup
 date: '2023-03-18'
 excerpt: >-
   Sit ratione eligendi et quis distinctio et maiores accusantium aut accusamus
