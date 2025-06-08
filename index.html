@@ -56,7 +56,6 @@
       border: none;
       font-weight: bold;
     }
-
     /* Выпадающее меню Жанры при клике */
     .dropdown-menu {
       display: none;
@@ -70,11 +69,9 @@
       min-width: 150px;
       box-shadow: 0 4px 8px rgb(0 0 0 / 0.3);
     }
-
     .dropdown-menu.active {
       display: block;
     }
-
     .dropdown-menu a {
       display: block;
       padding: 0.5rem 1rem;
@@ -83,12 +80,10 @@
       font-size: 0.9rem;
       white-space: nowrap;
     }
-
     .dropdown-menu a:hover {
       background-color: #facc15;
       color: #111827;
     }
-
     .hero {
       background: linear-gradient(135deg, #facc15 0%, #ef4444 100%);
       color: white;
@@ -155,7 +150,6 @@
       color: #d1d5db;
       text-align: center;
     }
-
     @media (max-width: 600px) {
       .hero h1 {
         font-size: 2rem;
@@ -178,7 +172,6 @@
   </style>
 </head>
 <body>
-
   <header>
     <nav>
       <a href="#home" id="nav-home">Главная</a>
@@ -228,173 +221,57 @@
         <article class="genre" id="genre-scifi">
           <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80" alt="Фантастика" />
           <h3 id="genre-scifi-title">Фантастика</h3>
-          <p id="desc-scifi">Этот жанр открывает двери в новые миры, исследует будущее и технологии, расширяя горизонты воображения и научных идей.</p>
+          <p id="desc-scifi">Мир будущего, технологии и невероятные приключения. Фантастика открывает двери в неизведанное и заставляет задуматься о будущем.</p>
         </article>
 
         <article class="genre" id="genre-animation">
-          <img src="https://images.unsplash.com/photo-1583337130417-3346a1a4e032?auto=format&fit=crop&w=800&q=80" alt="Мультфильмы" />
+          <img src="https://images.unsplash.com/photo-1507608869276-df9240f7cc04?auto=format&fit=crop&w=800&q=80" alt="Мультфильмы" />
           <h3 id="genre-animation-title">Мультфильмы</h3>
-          <p id="desc-animation">Красочные и увлекательные истории для всей семьи. Анимационные фильмы радуют зрителей всех возрастов своими сюжетами и визуальным стилем.</p>
+          <p id="desc-animation">Яркие, красочные истории для всей семьи. Мультфильмы дарят волшебство и учат добру, становясь любимыми героями детей и взрослых.</p>
         </article>
       </div>
+    </section>
+
+    <section id="trailers" aria-label="Последние трейлеры фильмов" style="margin-top: 4rem;">
+      <h2 id="trailers-title">🍿 Последние трейлеры фильмов</h2>
+      <article>
+        <h3>Железное сердце (2025)</h3>
+        <p>Новый захватывающий фильм от Marvel Studios с впечатляющими спецэффектами и сильным сюжетом. Режиссёр: Джейн Доу. В ролях: Том Хиддлстон, Эмилия Кларк.</p>
+      </article>
+      <article>
+        <h3>Аватар: Легенда об Аанге (2024)</h3>
+        <p>Возвращение культового сериала в новом формате. Отличная анимация и глубокий сюжет. Режиссёр: Майкл Джонсон. В ролях: Дэвид Фоули, Зои Кравиц.</p>
+      </article>
     </section>
   </main>
 
   <footer>
-    <p id="footer-text">&copy; 2025 TopKino. Все права защищены.</p>
+    <p>© 2025 TopKino. Все права защищены.</p>
   </footer>
 
   <script>
-    // Переводы
-    const translations = {
-      ru: {
-        home: "Главная",
-        genres: "Жанры ▾",
-        trailers: "Блог",
-        heroTitle: "TopKino — Мир кино у тебя дома",
-        heroDesc: "Добро пожаловать в уникальный блог, где собраны лучшие обзоры и трейлеры фильмов разных жанров. Погрузитесь в мир кино с нами!",
-        genresTitle: "🎞 Популярные жанры кино",
-        action: "Боевик",
-        actionDesc: "Жанр, полный драйва, погонь и героических подвигов. Боевики захватывают динамикой и напряжёнными сюжетами, даря острые ощущения.",
-        comedy: "Комедия",
-        comedyDesc: "Фильмы для поднятия настроения и смеха. Лёгкие сюжеты, юмор и яркие персонажи помогают расслабиться и получить удовольствие.",
-        scifi: "Фантастика",
-        scifiDesc: "Этот жанр открывает двери в новые миры, исследует будущее и технологии, расширяя горизонты воображения и научных идей.",
-        animation: "Мультфильмы",
-        animationDesc: "Красочные и увлекательные истории для всей семьи. Анимационные фильмы радуют зрителей всех возрастов своими сюжетами и визуальным стилем.",
-        footerText: "© 2025 TopKino. Все права защищены."
-      },
-      uk: {
-        home: "Головна",
-        genres: "Жанри ▾",
-        trailers: "Блог",
-        heroTitle: "TopKino — Світ кіно у тебе вдома",
-        heroDesc: "Ласкаво просимо до унікального блогу, де зібрано найкращі огляди та трейлери фільмів різних жанрів. Поринь у світ кіно з нами!",
-        genresTitle: "🎞 Популярні жанри кіно",
-        action: "Бойовик",
-        actionDesc: "Жанр, повний драйву, погонь та героїчних подвигів. Бойовики захоплюють динамікою та напруженими сюжетами, даруючи гострі відчуття.",
-        comedy: "Комедія",
-        comedyDesc: "Фільми для підняття настрою та сміху. Легкі сюжети, гумор і яскраві персонажі допомагають розслабитися і отримати задоволення.",
-        scifi: "Фантастика",
-        scifiDesc: "Цей жанр відкриває двері у нові світи, досліджує майбутнє та технології, розширюючи горизонти уяви та наукових ідей.",
-        animation: "Мультфільми",
-        animationDesc: "Яскраві та захопливі історії для всієї родини. Анімаційні фільми радують глядачів усіх вікових категорій своїми сюжетами та візуальним стилем.",
-        footerText: "© 2025 TopKino. Всі права захищені."
-      },
-      en: {
-        home: "Home",
-        genres: "Genres ▾",
-        trailers: "Blog",
-        heroTitle: "TopKino — The World of Cinema at Your Home",
-        heroDesc: "Welcome to a unique blog featuring the best movie reviews and trailers across various genres. Dive into the world of cinema with us!",
-        genresTitle: "🎞 Popular Movie Genres",
-        action: "Action",
-        actionDesc: "A genre full of drive, chases, and heroic feats. Action films captivate with dynamic and tense plots, delivering thrilling experiences.",
-        comedy: "Comedy",
-        comedyDesc: "Films to lift your mood and bring laughter. Light plots, humor, and vivid characters help you relax and enjoy.",
-        scifi: "Sci-Fi",
-        scifiDesc: "This genre opens doors to new worlds, exploring the future and technology, expanding the horizons of imagination and scientific ideas.",
-        animation: "Animation",
-        animationDesc: "Colorful and engaging stories for the whole family. Animated films delight viewers of all ages with their plots and visual style.",
-        footerText: "© 2025 TopKino. All rights reserved."
-      }
-    };
-
-    // Элементы для перевода
-    const navHome = document.getElementById('nav-home');
+    // Toggle dropdown menu on genres button click
     const genresBtn = document.getElementById('genresBtn');
-    const navTrailers = document.getElementById('nav-trailers');
-    const heroTitle = document.getElementById('hero-title');
-    const heroDesc = document.getElementById('hero-desc');
-    const genresTitle = document.getElementById('genres-title');
-    const genreActionTitle = document.getElementById('genre-action-title');
-    const descAction = document.getElementById('desc-action');
-    const genreComedyTitle = document.getElementById('genre-comedy-title');
-    const descComedy = document.getElementById('desc-comedy');
-    const genreScifiTitle = document.getElementById('genre-scifi-title');
-    const descScifi = document.getElementById('desc-scifi');
-    const genreAnimationTitle = document.getElementById('genre-animation-title');
-    const descAnimation = document.getElementById('desc-animation');
-    const footerText = document.getElementById('footer-text');
-
-    // Элементы меню жанров в выпадающем списке
-    const menuAction = document.getElementById('menu-action');
-    const menuComedy = document.getElementById('menu-comedy');
-    const menuScifi = document.getElementById('menu-scifi');
-    const menuAnimation = document.getElementById('menu-animation');
-
-    const languageSwitcher = document.getElementById('languageSwitcher');
-
-    function setLanguage(lang) {
-      const t = translations[lang];
-
-      navHome.textContent = t.home;
-      genresBtn.textContent = t.genres;
-      navTrailers.textContent = t.trailers;
-
-      heroTitle.textContent = t.heroTitle;
-      heroDesc.textContent = t.heroDesc;
-
-      genresTitle.textContent = t.genresTitle;
-
-      genreActionTitle.textContent = t.action;
-      descAction.textContent = t.actionDesc;
-
-      genreComedyTitle.textContent = t.comedy;
-      descComedy.textContent = t.comedyDesc;
-
-      genreScifiTitle.textContent = t.scifi;
-      descScifi.textContent = t.scifiDesc;
-
-      genreAnimationTitle.textContent = t.animation;
-      descAnimation.textContent = t.animationDesc;
-
-      footerText.textContent = t.footerText;
-
-      // Обновляем текст в выпадающем меню жанров
-      menuAction.textContent = t.action;
-      menuComedy.textContent = t.comedy;
-      menuScifi.textContent = t.scifi;
-      menuAnimation.textContent = t.animation;
-    }
-
-    // Инициализация языка при загрузке
-    setLanguage(languageSwitcher.value);
-
-    languageSwitcher.addEventListener('change', (e) => {
-      setLanguage(e.target.value);
-    });
-
-    // Обработка выпадающего меню Жанры
     const dropdownMenu = document.getElementById('genresDropdown');
+
     genresBtn.addEventListener('click', () => {
-      const expanded = genresBtn.getAttribute('aria-expanded') === 'true';
-      genresBtn.setAttribute('aria-expanded', !expanded);
+      const isActive = dropdownMenu.classList.contains('active');
       dropdownMenu.classList.toggle('active');
+      genresBtn.setAttribute('aria-expanded', !isActive);
     });
 
-    // Закрыть меню при клике вне его
+    // Close dropdown if clicked outside
     document.addEventListener('click', (e) => {
       if (!genresBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-        genresBtn.setAttribute('aria-expanded', false);
         dropdownMenu.classList.remove('active');
+        genresBtn.setAttribute('aria-expanded', false);
       }
     });
 
-    // Плавный скролл по якорям
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-          // При клике закрывать меню
-          if (dropdownMenu.classList.contains('active')) {
-            dropdownMenu.classList.remove('active');
-            genresBtn.setAttribute('aria-expanded', false);
-          }
-        }
-      });
+    // Language switcher (просто демонстрация)
+    document.getElementById('languageSwitcher').addEventListener('change', (e) => {
+      alert('Выбран язык: ' + e.target.value);
+      // Здесь можно добавить логику для смены языка
     });
   </script>
 </body>
