@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Зачем ты врал ещё два элемента Я же просил ничего не меня только текст Добавь сюда встал текст перед блоком и всё дай финальную целую фруктовую страничку  <!DOCTYPE html>
 
 <html lang="ru">
 
@@ -417,10 +417,6 @@
 
     </section>
 
-    <!-- Добавленный текст перед блоком жанров -->
-    <p style="max-width: 800px; margin: 1rem auto; font-size: 1.1rem; color: #333; text-align: center;">
-      Здесь вы найдете самые популярные жанры кино, подробные обзоры и свежие трейлеры. Погружайтесь в увлекательный мир фильмов вместе с TopKino!
-    </p>
 
     <section id="genres" aria-label="Жанры фильмов" style="margin-top: 3rem;">
 
@@ -444,27 +440,27 @@
 
           <h3 id="genre-comedy-title">Комедия</h3>
 
-          <p id="desc-comedy">Улыбнитесь и расслабьтесь с нашими подборками самых веселых и легких комедий.</p>
+          <p id="desc-comedy">Смех и хорошее настроение — главные составляющие комедий. Эти фильмы заставят вас улыбаться и забыть о повседневных заботах.</p>
 
         </article>
 
         <article class="genre" id="genre-scifi">
 
-          <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=800&q=80" alt="Фантастика" />
+          <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=800&q=80" alt="Фантастика" />
 
           <h3 id="genre-scifi-title">Фантастика</h3>
 
-          <p id="desc-scifi">Погрузитесь в миры будущего, космоса и невероятных технологий с фантастическими фильмами.</p>
+          <p id="desc-scifi">Погружение в миры будущего, космоса и невероятных технологий. Фантастика расширяет границы воображения и знаний.</p>
 
         </article>
 
         <article class="genre" id="genre-animation">
 
-          <img src="https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=800&q=80" alt="Мультфильмы" />
+          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80" alt="Мультфильмы" />
 
           <h3 id="genre-animation-title">Мультфильмы</h3>
 
-          <p id="desc-animation">Веселые истории для всей семьи, оживленные яркими персонажами и захватывающим сюжетом.</p>
+          <p id="desc-animation">Яркие истории и забавные персонажи для всей семьи. Мультфильмы радуют детей и взрослых своими волшебными мирами.</p>
 
         </article>
 
@@ -472,15 +468,20 @@
 
     </section>
 
-    <section id="trailers" aria-label="Обзоры и трейлеры" style="margin-top: 4rem;">
 
-      <h2>Обзоры и трейлеры</h2>
+    <section id="trailers" aria-label="Обзоры и трейлеры фильмов" style="margin-top: 4rem;">
 
-      <article>
+      <h2 id="trailers-title">🎬 Обзоры и трейлеры</h2>
 
-        <h3>Обзор трейлера: Мстители — Финал</h3>
+      <article aria-labelledby="avengers-title" style="background: white; border-radius: 8px; padding: 1rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);">
 
-        <p>Новый трейлер фильма 'Мстители: Финал' подарит вам мощный заряд эмоций и впечатлений. Узнайте все детали и подготовьтесь к премьере!</p>
+        <h3 id="avengers-title">Обзор трейлера: Мстители — Финал</h3>
+
+        <img src="https://topkino.netlify.app/images/avengers-endgame.jpg" alt="Трейлер Мстителей: Финал" style="max-width: 100%; border-radius: 8px;" />
+
+        <p>Новый трейлер фильма "Мстители: Финал" подарит вам мощный заряд эмоций и впечатлений. Узнайте все детали и подготовьтесь к премьере!</p>
+
+        <a href="https://topkino.netlify.app/blog/avengers-endgame-trailer" target="_blank" rel="noopener noreferrer" style="color: #ef4444; font-weight: 700;">Читать обзор →</a>
 
       </article>
 
@@ -491,24 +492,23 @@
 
   <footer>
 
-    <p>© 2025 TopKino. Все права защищены.</p>
+    <p>&copy; 2025 TopKino. Все права защищены.</p>
 
   </footer>
 
 
   <script>
 
-    // Dropdown toggle
+    // Dropdown menu toggle
 
     const genresBtn = document.getElementById('genresBtn');
 
     const genresDropdown = document.getElementById('genresDropdown');
 
 
-
     genresBtn.addEventListener('click', () => {
 
-      const expanded = genresBtn.getAttribute('aria-expanded') === 'true' || false;
+      const expanded = genresBtn.getAttribute('aria-expanded') === 'true';
 
       genresBtn.setAttribute('aria-expanded', !expanded);
 
@@ -517,8 +517,7 @@
     });
 
 
-
-    // Close dropdown when clicking outside
+    // Close dropdown on click outside
 
     document.addEventListener('click', (event) => {
 
@@ -533,26 +532,15 @@
     });
 
 
+    // Language switcher placeholder
 
-    // Language switcher
+    const langSwitcher = document.getElementById('languageSwitcher');
 
-    const languageSwitcher = document.getElementById('languageSwitcher');
-
-    languageSwitcher.addEventListener('change', (e) => {
+    langSwitcher.addEventListener('change', (e) => {
 
       const lang = e.target.value;
 
-      if (lang === 'en') {
-
-        // Could implement English version switching here
-
-        alert('Выбрана английская версия. Пока не реализовано.');
-
-      } else {
-
-        alert('Выбрана русская версия.');
-
-      }
+      alert('Переключение языка пока не реализовано. Вы выбрали: ' + lang);
 
     });
 
