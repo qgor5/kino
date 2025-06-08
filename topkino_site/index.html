@@ -31,7 +31,7 @@
   <meta name="twitter:description" content="Следи за киноновинками, жанрами и лучшими трейлерами в одном месте!" />
   <meta name="twitter:image" content="https://topkino.netlify.app/preview.jpg" />
 
-  <!-- JSON-LD WebSite + Organization -->
+  <!-- JSON-LD WebSite -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -45,6 +45,8 @@
     }
   }
   </script>
+
+  <!-- JSON-LD Organization -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -55,7 +57,7 @@
   }
   </script>
 
-  <!-- Fonts & Styles (не менялось) -->
+  <!-- Fonts & Styles -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body { font-family: 'Montserrat', sans-serif; margin: 0; background-color: #f3f4f6; color: #111827; line-height: 1.6; }
@@ -167,6 +169,54 @@
         "url": "https://topkino.netlify.app/logo.png"
       }
     }
+  }
+  </script>
+
+  <!-- FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Что такое TopKino?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TopKino — это сайт с трейлерами, обзорами и жанрами кино для всех любителей фильмов."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Какие жанры фильмов доступны?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TopKino предлагает обзоры и трейлеры боевиков, комедий, фантастики и мультфильмов."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Главная",
+        "item": "https://topkino.netlify.app/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Блог",
+        "item": "https://topkino.netlify.app/#trailers"
+      }
+    ]
   }
   </script>
 
