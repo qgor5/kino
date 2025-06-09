@@ -1,85 +1,47 @@
+
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Сторінка</title>
-  
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
-header, footer {
-  background-color: #fff;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ccc;
-}
-nav.language-menu {
-  text-align: right;
-}
-nav.language-menu a {
-  margin: 0 5px;
-  text-decoration: none;
-  color: #333;
-}
-.popular-movies, .blog-section {
-  padding: 20px;
-}
-.popular-movies h2, .blog-section h2 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-}
-.movie-grid, .blog-grid {
-  display: grid;
-  gap: 10px;
-}
-.movie-grid {
-  grid-template-columns: repeat(4, 1fr);
-}
-.blog-grid {
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, auto);
-}
-.movie-card, .blog-card {
-  background-color: #fff;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  text-align: center;
-}
-.movie-card img, .blog-card img {
-  max-width: 100%;
-  height: auto;
-}
-</style>
-
+  <title>Обзоры и трейлеры — Топ Кино</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { background: #000; color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; }
+    nav a { color: #fff; text-decoration: none; margin: 0 15px; position: relative; }
+    nav a:hover { text-decoration: underline; }
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content {
+      display: none; position: absolute; background-color: #111; min-width: 160px; z-index: 1;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    }
+    .dropdown-content a {
+      color: #fff; padding: 10px 16px; text-decoration: none; display: block;
+    }
+    .dropdown-content a:hover { background-color: #333; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
 </head>
 <body>
   <header>
-    <nav class="language-menu">
-      <a href="#">UA</a> | <a href="#">RU</a> | <a href="#">EN</a>
+    <div><a href="index.html" style="color:white; text-decoration:none; font-size:1.2em;"><strong>Топ Кино</strong></a></div>
+    <nav>
+      <a href="index.html">Главная</a>
+      <div class="dropdown">
+        <a href="#">Жанры ▾</a>
+        <div class="dropdown-content">
+          <a href="index.html#боевики">Боевики</a>
+          <a href="index.html#ужасы">Ужасы</a>
+          <a href="index.html#приключения">Приключения</a>
+          <a href="index.html#мелодрамы">Мелодрамы</a>
+        </div>
+      </div>
+      <a href="blog.html">Обзоры и трейлеры</a>
     </nav>
   </header>
-
-  <section class="popular-movies">
-    <h2>Популярні фільми</h2>
-    <div class="movie-grid">
-      <div class="movie-card"><a href="#"><img src="movie1.jpg" alt="Movie 1"><p>Movie 1</p></a></div><div class="movie-card"><a href="#"><img src="movie2.jpg" alt="Movie 2"><p>Movie 2</p></a></div><div class="movie-card"><a href="#"><img src="movie3.jpg" alt="Movie 3"><p>Movie 3</p></a></div><div class="movie-card"><a href="#"><img src="movie4.jpg" alt="Movie 4"><p>Movie 4</p></a></div>
-    </div>
-  </section>
-
-  <section class="blog-section">
-    <h2>Блог про фільми</h2>
-    <div class="blog-grid">
-      <div class="blog-card"><a href="blog-post1.html"><img src="blog1.jpg" alt="Blog 1"><p>Blog Post 1</p></a></div><div class="blog-card"><a href="blog-post2.html"><img src="blog2.jpg" alt="Blog 2"><p>Blog Post 2</p></a></div><div class="blog-card"><a href="blog-post3.html"><img src="blog3.jpg" alt="Blog 3"><p>Blog Post 3</p></a></div><div class="blog-card"><a href="blog-post4.html"><img src="blog4.jpg" alt="Blog 4"><p>Blog Post 4</p></a></div><div class="blog-card"><a href="blog-post5.html"><img src="blog5.jpg" alt="Blog 5"><p>Blog Post 5</p></a></div><div class="blog-card"><a href="blog-post6.html"><img src="blog6.jpg" alt="Blog 6"><p>Blog Post 6</p></a></div><div class="blog-card"><a href="blog-post7.html"><img src="blog7.jpg" alt="Blog 7"><p>Blog Post 7</p></a></div><div class="blog-card"><a href="blog-post8.html"><img src="blog8.jpg" alt="Blog 8"><p>Blog Post 8</p></a></div><div class="blog-card"><a href="blog-post9.html"><img src="blog9.jpg" alt="Blog 9"><p>Blog Post 9</p></a></div><div class="blog-card"><a href="blog-post10.html"><img src="blog10.jpg" alt="Blog 10"><p>Blog Post 10</p></a></div><div class="blog-card"><a href="blog-post11.html"><img src="blog11.jpg" alt="Blog 11"><p>Blog Post 11</p></a></div><div class="blog-card"><a href="blog-post12.html"><img src="blog12.jpg" alt="Blog 12"><p>Blog Post 12</p></a></div><div class="blog-card"><a href="blog-post13.html"><img src="blog13.jpg" alt="Blog 13"><p>Blog Post 13</p></a></div><div class="blog-card"><a href="blog-post14.html"><img src="blog14.jpg" alt="Blog 14"><p>Blog Post 14</p></a></div><div class="blog-card"><a href="blog-post15.html"><img src="blog15.jpg" alt="Blog 15"><p>Blog Post 15</p></a></div><div class="blog-card"><a href="blog-post16.html"><img src="blog16.jpg" alt="Blog 16"><p>Blog Post 16</p></a></div><div class="blog-card"><a href="blog-post17.html"><img src="blog17.jpg" alt="Blog 17"><p>Blog Post 17</p></a></div><div class="blog-card"><a href="blog-post18.html"><img src="blog18.jpg" alt="Blog 18"><p>Blog Post 18</p></a></div><div class="blog-card"><a href="blog-post19.html"><img src="blog19.jpg" alt="Blog 19"><p>Blog Post 19</p></a></div><div class="blog-card"><a href="blog-post20.html"><img src="blog20.jpg" alt="Blog 20"><p>Blog Post 20</p></a></div>
-    </div>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 КупиТовар</p>
-  </footer>
+  <main style="padding: 20px;">
+    <h1>Обзоры и трейлеры</h1>
+    <p>Здесь будут размещаться статьи блога.</p>
+  </main>
 </body>
 </html>
