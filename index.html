@@ -1,257 +1,186 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="google-site-verification" content="6NYcyQubNk3SflqGU9FXWbuZWKc6NTo86eZJlJKdoM4" />
-
-  <title>TopKino — Лучшие трейлеры и обзоры фильмов</title>
-  <meta name="description" content="TopKino — Лучшие трейлеры, обзоры, жанры и новинки кино. Погрузись в мир фильмов вместе с нами!" />
-  <meta name="keywords" content="TopKino, трейлеры, обзоры фильмов, жанры кино, новинки кино, боевик, комедия, фантастика, мультфильмы" />
-  <meta name="author" content="TopKino" />
-  <link rel="canonical" href="https://topkino.netlify.app/" />
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="TopKino — Лучшие трейлеры и обзоры фильмов" />
-  <meta property="og:description" content="Смотри лучшие трейлеры, читай обзоры и следи за новинками кино!" />
-  <meta property="og:image" content="https://topkino.netlify.app/preview.jpg" />
-  <meta property="og:url" content="https://topkino.netlify.app/" />
-  <meta property="og:locale" content="ru_RU" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="TopKino — Лучшие трейлеры и обзоры фильмов" />
-  <meta name="twitter:description" content="Следи за киноновинками, жанрами и лучшими трейлерами в одном месте!" />
-  <meta name="twitter:image" content="https://topkino.netlify.app/preview.jpg" />
-
-  <!-- Structured Data: Website, Organization, FAQ, Blog, Breadcrumb -->
-  <script type="application/ld+json">
-    {
-      "@context":"https://schema.org",
-      "@type":"WebSite",
-      "name":"TopKino",
-      "url":"https://topkino.netlify.app",
-      "potentialAction":{
-        "@type":"SearchAction",
-        "target":"https://topkino.netlify.app/search?q={search_term_string}",
-        "query-input":"required name=search_term_string"
-      }
-    }
-  </script>
-  <script type="application/ld+json">
-    {
-      "@context":"https://schema.org",
-      "@type":"Organization",
-      "name":"TopKino",
-      "url":"https://topkino.netlify.app",
-      "logo":{"@type":"ImageObject","url":"https://topkino.netlify.app/logo.png"}
-    }
-  </script>
-  <script type="application/ld+json">
-    {
-      "@context":"https://schema.org",
-      "@type":"FAQPage",
-      "mainEntity":[
-        {"@type":"Question","name":"Что такое TopKino?","acceptedAnswer":{"@type":"Answer","text":"TopKino — это сайт с трейлерами, обзорами и жанрами кино для всех любителей фильмов."}},
-        {"@type":"Question","name":"Какие жанры фильмов доступны?","acceptedAnswer":{"@type":"Answer","text":"TopKino предлагает обзоры и трейлеры боевиков, комедий, фантастики и мультфильмов."}}
-      ]
-    }
-  </script>
-  <script type="application/ld+json">
-    {
-      "@context":"https://schema.org",
-      "@type":"Blog",
-      "name":"TopKino — блог о кино",
-      "description":"Блог с обзорами фильмов, трейлерами и новостями киноиндустрии",
-      "url":"https://topkino.netlify.app",
-      "publisher":{"@type":"Organization","name":"TopKino","logo":{"@type":"ImageObject","url":"https://topkino.netlify.app/logo.png"}},
-      "blogPost":[
-        {
-          "@type":"BlogPosting",
-          "headline":"Обзор трейлера: Мстители — Финал",
-          "image":"https://topkino.netlify.app/images/avengers-endgame.jpg",
-          "author":{"@type":"Person","name":"TopKino","url":"https://topkino.netlify.app/about"},
-          "publisher":{"@type":"Organization","name":"TopKino","logo":{"@type":"ImageObject","url":"https://topkino.netlify.app/logo.png"}},
-          "datePublished":"2025-06-01T12:00:00+03:00",
-          "description":"Новый трейлер фильма 'Мстители: Финал' подарит вам мощный заряд эмоций и впечатлений. Узнайте все детали и подготовьтесь к премьере!",
-          "url":"https://topkino.netlify.app/blog/avengers-endgame-trailer"
-        }
-      ]
-    }
-  </script>
-  <script type="application/ld+json">
-    {
-      "@context":"https://schema.org",
-      "@type":"BreadcrumbList",
-      "itemListElement":[
-        {"@type":"ListItem","position":1,"name":"Главная","item":"https://topkino.netlify.app/"},
-        {"@type":"ListItem","position":2,"name":"Блог","item":"https://topkino.netlify.app/#trailers"}
-      ]
-    }
-  </script>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
-
-  <!-- Стили -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Жанры фильмов</title>
   <style>
-    body, h1, h2, h3, p, nav, footer, header, section, article {margin:0;padding:0;}
-    body {font-family:'Montserrat',sans-serif; background:#f3f4f6;color:#111827;line-height:1.6;}
-    header, footer {background:#000;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:1000;}
-    nav{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;}
-    nav a, nav button {color:#fff;text-decoration:none;font-weight:700;font-size:1rem;transition:color .3s;cursor:pointer;background:none;border:none;padding:0;font-family:inherit;}
-    nav a:hover, nav button:hover {color:#facc15;}
-    .lang-switch {margin-left:auto;}
-    select#languageSwitcher{padding:.25rem .5rem;border:none;border-radius:4px;font-weight:bold;}
-    .dropdown-menu {display:none;position:absolute;top:2.8rem;left:0;background:#1f2937;padding:.5rem 0;border-radius:4px;min-width:150px;box-shadow:0 4px 8px rgba(0,0,0,.3);z-index:999;}
-    .dropdown-menu.active{display:block;}
-    .dropdown-menu a{display:block;padding:.5rem 1rem;color:#fff;text-decoration:none;font-size:.9rem;white-space:nowrap;}
-    .dropdown-menu a:hover{background:#facc15;color:#111827;}
-    .hero{background:linear-gradient(135deg,#facc15 0%,#ef4444 100%);color:#fff;padding:4rem 1rem;text-align:center;}
-    .hero h1{font-size:2.5rem;margin-bottom:1rem;}
-    .hero p{font-size:1.25rem;max-width:600px;margin:0 auto;}
-    main{max-width:1200px;margin:2rem auto;padding:0 1rem;}
-    main h2{text-align:center;font-size:2rem;font-weight:700;margin-bottom:1.5rem;color:#111827;}
-    .genres-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;}
-    article.genre{background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column;}
-    article.genre img{width:100%;height:180px;object-fit:cover;border-bottom:4px solid #ef4444;border-radius:8px 8px 0 0;}
-    article.genre h3{margin:1rem;font-size:1.5rem;color:#ef4444;}
-    article.genre p{margin:0 1rem 1.5rem;flex-grow:1;color:#4b5563;font-size:1rem;}
-    footer p{margin:0 auto;font-size:.9rem;color:#d1d5db;text-align:center;}
-    @media(max-width:600px){.hero h1{font-size:2rem}.hero p{font-size:1rem}header{flex-direction:column;align-items:flex-start}nav{margin-bottom:.5rem}.lang-switch{align-self:flex-end;margin-top:.5rem}}
+    body { font-family: sans-serif; margin: 0; padding: 0; }
+    header, footer { background: #333; color: #fff; padding: 10px; text-align: center; }
+    nav { display: flex; justify-content: center; background: #444; padding: 10px; }
+    nav button { margin: 0 5px; padding: 5px 10px; cursor: pointer; }
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9;
+                        min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                        z-index: 1; }
+    .dropdown-content a { color: black; padding: 10px 16px; text-decoration: none; display: block; }
+    .dropdown:hover .dropdown-content { display: block; }
+    section { padding: 20px; }
+    .genre { margin-bottom: 20px; }
+    .language-switcher { margin-top: 10px; text-align: center; }
+    .language-switcher button { margin: 0 5px; }
   </style>
 </head>
 <body>
   <header>
-    <nav>
-      <a href="#home" id="nav-home">Главная</a>
-      <div style="position:relative;">
-        <button id="genresBtn" aria-haspopup="true" aria-expanded="false" aria-controls="genresDropdown">Жанры ▾</button>
-        <div class="dropdown-menu" id="genresDropdown" role="menu" aria-label="Список жанров">
-          <a href="#genre-action" role="menuitem" id="menu-action">Боевик</a>
-          <a href="#genre-comedy" role="menuitem" id="menu-comedy">Комедия</a>
-          <a href="#genre-scifi" role="menuitem" id="menu-scifi">Фантастика</a>
-          <a href="#genre-animation" role="menuitem" id="menu-animation">Мультфильмы</a>
-        </div>
-      </div>
-      <a href="#trailers" id="nav-trailers">Блог</a>
-    </nav>
-    <div class="lang-switch">
-      <select id="languageSwitcher" aria-label="Выбор языка">
-        <option value="ru" selected>Рус</option>
-        <option value="uk">Укр</option>
-        <option value="en">Eng</option>
-      </select>
-    </div>
+    <h1 id="hero-title">Добро пожаловать!</h1>
+    <p id="hero-desc">Откройте для себя любимые жанры кино</p>
   </header>
-
-  <main>
-    <section class="hero" id="home">
-      <h1 id="hero-title">TopKino — Мир кино у тебя дома</h1>
-      <p id="hero-desc">Добро пожаловать в уникальный блог, где собраны лучшие обзоры и трейлеры фильмов разных жанров. Погрузитесь в мир кино с нами!</p>
-    </section>
-
-    <section id="genres" aria-label="Популярные жанры кино">
-      <h2 id="genres-title">🎞 Популярные жанры кино</h2>
-      <div class="genres-grid">
-        <!-- Жанры -->
-        <article class="genre" id="genre-action">
-          <img src="https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=800&q=80" alt="Боевик" loading="lazy">
-          <h3 id="genre-action-title">Боевик</h3>
-          <p id="desc-action">Жанр, полный драйва, погонь и героических подвигов. Боевики захватывают динамикой и напряжёнными сюжетами, даря острые ощущения.</p>
-        </article>
-
-        <article class="genre" id="genre-comedy">
-          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Комедия" loading="lazy">
-          <h3 id="genre-comedy-title">Комедия</h3>
-          <p id="desc-comedy">Фильмы для поднятия настроения и смеха. Лёгкие сюжеты, юмор и яркие персонажи помогают расслабиться и получить удовольствие.</p>
-        </article>
-
-        <article class="genre" id="genre-scifi">
-          <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80" alt="Фантастика" loading="lazy">
-          <h3 id="genre-scifi-title">Фантастика</h3>
-          <p id="desc-scifi">Этот жанр открывает двери в новые миры, исследует будущее и технологии, расширяя горизонты воображения и научных идей.</p>
-        </article>
-
-        <article class="genre" id="genre-animation">
-          <img src="https://images.unsplash.com/photo-1583337130417-3346a1a4e032?auto=format&fit=crop&w=800&q=80" alt="Мультфильмы" loading="lazy">
-          <h3 id="genre-animation-title">Мультфильмы</h3>
-          <p id="desc-animation">Красочные и увлекательные истории для всей семьи. Анимационные фильмы радуют зрителей всех возрастов своими сюжетами и визуальным стилем.</p>
-        </article>
+  <nav>
+    <button id="nav-home">Главная</button>
+    <div class="dropdown">
+      <button id="genres-btn">Жанры</button>
+      <div class="dropdown-content">
+        <a href="#action" id="menu-action">Боевик</a>
+        <a href="#comedy" id="menu-comedy">Комедия</a>
+        <a href="#scifi" id="menu-scifi">Фантастика</a>
+        <a href="#animation" id="menu-animation">Мультфильмы</a>
       </div>
-    </section>
-  </main>
+    </div>
+    <button id="nav-trailers">Трейлеры</button>
+  </nav>
+  <section>
+    <h2 id="genres-title">Популярные жанры</h2>
 
+    <div class="genre" id="action">
+      <h3 id="genre-action-title">Боевик</h3>
+      <p id="desc-action">Динамичные сцены, погони и перестрелки</p>
+    </div>
+
+    <div class="genre" id="comedy">
+      <h3 id="genre-comedy-title">Комедия</h3>
+      <p id="desc-comedy">Фильмы, которые заставят вас смеяться</p>
+    </div>
+
+    <div class="genre" id="scifi">
+      <h3 id="genre-scifi-title">Фантастика</h3>
+      <p id="desc-scifi">Будущее, технологии и космос</p>
+    </div>
+
+    <div class="genre" id="animation">
+      <h3 id="genre-animation-title">Мультфильмы</h3>
+      <p id="desc-animation">Анимационные истории для всех возрастов</p>
+    </div>
+  </section>
+  <div class="language-switcher">
+    <button data-lang="ru">Рус</button>
+    <button data-lang="uk">Укр</button>
+    <button data-lang="en">Eng</button>
+  </div>
   <footer>
-    <p id="footer-text">© 2025 TopKino. Все права защищены.</p>
+    <p id="footer-text">Все права защищены © 2025</p>
   </footer>
-
   <script>
-    const translations = {/* ... тот же объект ... */};
-    const elems = {
-      navHome: '#nav-home', genresBtn: '#genresBtn', navTrailers: '#nav-trailers',
-      heroTitle: '#hero-title', heroDesc: '#hero-desc', genresTitle: '#genres-title',
-      actionT: '#genre-action-title', descA: '#desc-action',
-      comedyT: '#genre-comedy-title', descC: '#desc-comedy',
-      scifiT: '#genre-scifi-title', descS: '#desc-scifi',
-      animT: '#genre-animation-title', descA2: '#desc-animation',
-      footerText: '#footer-text',
-      menuAction: '#menu-action', menuComedy: '#menu-comedy',
-      menuScifi: '#menu-scifi', menuAnimation: '#menu-animation'
+    const translations = {
+      ru: {
+        home: "Главная",
+        genres: "Жанры",
+        trailers: "Трейлеры",
+        heroTitle: "Добро пожаловать!",
+        heroDesc: "Откройте для себя любимые жанры кино",
+        genresTitle: "Популярные жанры",
+        action: "Боевик",
+        actionDesc: "Динамичные сцены, погони и перестрелки",
+        comedy: "Комедия",
+        comedyDesc: "Фильмы, которые заставят вас смеяться",
+        scifi: "Фантастика",
+        scifiDesc: "Будущее, технологии и космос",
+        animation: "Мультфильмы",
+        animationDesc: "Анимационные истории для всех возрастов",
+        footerText: "Все права защищены © 2025"
+      },
+      uk: {
+        home: "Головна",
+        genres: "Жанри",
+        trailers: "Трейлери",
+        heroTitle: "Ласкаво просимо!",
+        heroDesc: "Відкрийте улюблені жанри кіно",
+        genresTitle: "Популярні жанри",
+        action: "Бойовик",
+        actionDesc: "Динамічні сцени, переслідування та стрілянина",
+        comedy: "Комедія",
+        comedyDesc: "Фільми, які змусять вас сміятися",
+        scifi: "Фантастика",
+        scifiDesc: "Майбутнє, технології та космос",
+        animation: "Мультфільми",
+        animationDesc: "Анімаційні історії для всіх вікових категорій",
+        footerText: "Всі права захищені © 2025"
+      },
+      en: {
+        home: "Home",
+        genres: "Genres",
+        trailers: "Trailers",
+        heroTitle: "Welcome!",
+        heroDesc: "Discover your favorite movie genres",
+        genresTitle: "Popular Genres",
+        action: "Action",
+        actionDesc: "Dynamic scenes, chases, and shootouts",
+        comedy: "Comedy",
+        comedyDesc: "Movies that will make you laugh",
+        scifi: "Sci-Fi",
+        scifiDesc: "Future, technology, and space",
+        animation: "Animation",
+        animationDesc: "Animated stories for all ages",
+        footerText: "All rights reserved © 2025"
+      }
     };
+
+    const navHome = document.getElementById("nav-home");
+    const genresBtn = document.getElementById("genres-btn");
+    const navTrailers = document.getElementById("nav-trailers");
+
+    const heroTitle = document.getElementById("hero-title");
+    const heroDesc = document.getElementById("hero-desc");
+    const genresTitle = document.getElementById("genres-title");
+
+    const genreActionTitle = document.getElementById("genre-action-title");
+    const descAction = document.getElementById("desc-action");
+    const genreComedyTitle = document.getElementById("genre-comedy-title");
+    const descComedy = document.getElementById("desc-comedy");
+    const genreScifiTitle = document.getElementById("genre-scifi-title");
+    const descScifi = document.getElementById("desc-scifi");
+    const genreAnimationTitle = document.getElementById("genre-animation-title");
+    const descAnimation = document.getElementById("desc-animation");
+
+    const menuAction = document.getElementById("menu-action");
+    const menuComedy = document.getElementById("menu-comedy");
+    const menuScifi = document.getElementById("menu-scifi");
+    const menuAnimation = document.getElementById("menu-animation");
+
+    const footerText = document.getElementById("footer-text");
+
     function setLanguage(lang) {
       const t = translations[lang];
-      document.querySelector(elems.navHome).textContent = t.home;
-      document.querySelector(elems.genresBtn).textContent = t.genres;
-      document.querySelector(elems.navTrailers).textContent = t.trailers;
-      document.querySelector(elems.heroTitle).textContent = t.heroTitle;
-      document.querySelector(elems.heroDesc).textContent = t.heroDesc;
-      document.querySelector(elems.genresTitle).textContent = t.genresTitle;
-      document.querySelector(elems.actionT).textContent = t.action;
-      document.querySelector(elems.descA).textContent = t.actionDesc;
-      document.querySelector(elems.comedyT).textContent = t.comedy;
-      document.querySelector(elems.descC).textContent = t.comedyDesc;
-      document.querySelector(elems.scifiT).textContent = t.scifi;
-      document.querySelector(elems.descS).textContent = t.scifiDesc;
-      document.querySelector(elems.animT).textContent = t.animation;
-      document.querySelector(elems.descA2).textContent = t.animationDesc;
-      document.querySelector(elems.footerText).textContent = t.footerText;
-      document.querySelector(elems.menuAction).textContent = t.action;
-      document.querySelector(elems.menuComedy).textContent = t.comedy;
-      document.querySelector(elems.menuScifi).textContent = t.scifi;
-      document.querySelector(elems.menuAnimation).textContent = t.animation;
+      navHome.textContent = t.home;
+      genresBtn.textContent = t.genres;
+      navTrailers.textContent = t.trailers;
+
+      heroTitle.textContent = t.heroTitle;
+      heroDesc.textContent = t.heroDesc;
+      genresTitle.textContent = t.genresTitle;
+
+      genreActionTitle.textContent = t.action;
+      descAction.textContent = t.actionDesc;
+      genreComedyTitle.textContent = t.comedy;
+      descComedy.textContent = t.comedyDesc;
+      genreScifiTitle.textContent = t.scifi;
+      descScifi.textContent = t.scifiDesc;
+      genreAnimationTitle.textContent = t.animation;
+      descAnimation.textContent = t.animationDesc;
+
+      footerText.textContent = t.footerText;
+
+      // переводим меню выпадающее тоже:
+      menuAction.textContent = t.action;
+      menuComedy.textContent = t.comedy;
+      menuScifi.textContent = t.scifi;
+      menuAnimation.textContent = t.animation;
     }
-    const switcher = document.getElementById('languageSwitcher');
-    setLanguage(switcher.value);
-    switcher.addEventListener('change', e => setLanguage(e.target.value));
 
-    const btn = document.getElementById('genresBtn');
-    const dropdown = document.getElementById('genresDropdown');
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', !expanded);
-      dropdown.classList.toggle('active');
-    });
-    document.addEventListener('click', e => {
-      if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
-        btn.setAttribute('aria-expanded', 'false');
-        dropdown.classList.remove('active');
-      }
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const t = document.querySelector(this.getAttribute('href'));
-        if (t) {
-          t.scrollIntoView({behavior:'smooth'});
-          if (dropdown.classList.contains('active')) {
-            dropdown.classList.remove('active');
-            btn.setAttribute('aria-expanded', 'false');
-          }
-        }
+    document.querySelectorAll(".language-switcher button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const lang = btn.dataset.lang;
+        setLanguage(lang);
       });
     });
   </script>
