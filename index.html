@@ -182,42 +182,71 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Movie",
-  "name": "The Crow",
-  "alternativeHeadline": "The Crow (2024) – Remake of the cult classic",
-  "image": "https://iphoneshopapple.blogspot.com/path-to-your-image.jpg",
-  "datePublished": "2024-08-23",
-  "dateCreated": "2023-11-01",
-  "genre": ["Action", "Fantasy", "Thriller"],
-  "duration": "PT1H52M",
-  "description": "The Crow (2024) is a dark and gritty reboot of the cult classic, following a man resurrected to avenge his fiancée’s death.",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "7.8",
-    "ratingCount": "1420"
-  },
-  "trailer": {
-    "@type": "VideoObject",
-    "name": "The Crow (2024) – Official Trailer",
-    "embedUrl": "https://www.youtube.com/embed/your-trailer-id",
-    "thumbnailUrl": "https://iphoneshopapple.blogspot.com/path-to-trailer-thumbnail.jpg",
-    "description": "Watch the official trailer for The Crow (2024), starring Bill Skarsgård and FKA twigs.",
-    "uploadDate": "2024-06-10"
-  },
-  "actor": [
-    { "@type": "Person", "name": "Bill Skarsgård" },
-    { "@type": "Person", "name": "FKA twigs" },
-    { "@type": "Person", "name": "Danny Huston" }
-  ],
-  "director": {
-    "@type": "Person",
-    "name": "Rupert Sanders"
-  },
-  "producer": {
-    "@type": "Person",
-    "name": "Edward R. Pressman"
-  },
-  "url": "https://iphoneshopapple.blogspot.com/2024/08/the-crow-2024.html"
+  "@graph": [
+    {
+      "@type": "Movie",
+      "name": "The Crow (2024)",
+      "image": "https://topkino.netlify.app/path-to-poster.jpg",
+      "description": "The Crow (2024) is a reboot of the cult classic, starring Bill Skarsgård and FKA twigs.",
+      "datePublished": "2024-08-23",
+      "actor": [
+        {
+          "@type": "Person",
+          "name": "Bill Skarsgård"
+        },
+        {
+          "@type": "Person",
+          "name": "FKA twigs"
+        },
+        {
+          "@type": "Person",
+          "name": "Danny Huston"
+        }
+      ],
+      "director": {
+        "@type": "Person",
+        "name": "Rupert Sanders"
+      },
+      "genre": ["Action", "Fantasy", "Thriller"],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "8.2",
+        "ratingCount": 1375
+      },
+      "trailer": {
+        "@type": "VideoObject",
+        "name": "The Crow (2024) – Official Trailer",
+        "description": "Watch the official trailer for The Crow (2024), starring Bill Skarsgård and FKA twigs.",
+        "thumbnailUrl": "https://topkino.netlify.app/path-to-trailer-thumbnail.jpg",
+        "uploadDate": "2024-06-10",
+        "embedUrl": "https://www.youtube.com/embed/YOUR_TRAILER_ID",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Lionsgate Movies",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://topkino.netlify.app/path-to-logo.jpg"
+          }
+        }
+      }
+    },
+    {
+      "@type": "VideoObject",
+      "name": "The Crow (2024) – Official Trailer",
+      "description": "Watch the official trailer for The Crow (2024), starring Bill Skarsgård and FKA twigs.",
+      "thumbnailUrl": "https://topkino.netlify.app/path-to-trailer-thumbnail.jpg",
+      "uploadDate": "2024-06-10",
+      "embedUrl": "https://www.youtube.com/embed/YOUR_TRAILER_ID",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Lionsgate Movies",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://topkino.netlify.app/path-to-logo.jpg"
+        }
+      }
+    }
+  ]
 }
 </script>
 
