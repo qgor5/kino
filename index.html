@@ -1,172 +1,47 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="google-site-verification" content="6NYcyQubNk3SflqGU9FXWbuZWKc6NTo86eZJlJKdoM4" />
-
-  <title>TopKino — Лучшие трейлеры и обзоры фильмов</title>
-  <meta name="description" content="TopKino — Лучшие трейлеры, обзоры, жанры и новинки кино. Погрузись в мир фильмов вместе с нами!" />
-  <meta name="keywords" content="TopKino, трейлеры, обзоры фильмов, жанры кино, новинки кино, боевик, комедия, фантастика, мультфильмы" />
-  <meta name="author" content="TopKino" />
-  <link rel="canonical" href="https://topkino.netlify.app/" />
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="TopKino — Лучшие трейлеры и обзоры фильмов" />
-  <meta property="og:description" content="Смотри лучшие трейлеры, читай обзоры и следи за новинками кино!" />
-  <meta property="og:image" content="https://topkino.netlify.app/preview.jpg" />
-  <meta property="og:url" content="https://topkino.netlify.app/" />
-  <meta property="og:locale" content="ru_RU" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="TopKino — Лучшие трейлеры и обзоры фильмов" />
-  <meta name="twitter:description" content="Следи за киноновинками, жанрами и лучшими трейлерами в одном месте!" />
-  <meta name="twitter:image" content="https://topkino.netlify.app/preview.jpg" />
-
-  <!-- Schema.org -->
-  <script type="application/ld+json" defer>
-    {"@context":"https://schema.org","@type":"WebSite","name":"TopKino","url":"https://topkino.netlify.app","potentialAction":{"@type":"SearchAction","target":"https://topkino.netlify.app/search?q={search_term_string}","query-input":"required name=search_term_string"}}
-  </script>
-  <script type="application/ld+json" defer>
-    {"@context":"https://schema.org","@type":"Organization","name":"TopKino","url":"https://topkino.netlify.app","logo":{"@type":"ImageObject","url":"https://topkino.netlify.app/logo.png"}}
-  </script>
-  <script type="application/ld+json" defer>
-    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Что такое TopKino?","acceptedAnswer":{"@type":"Answer","text":"TopKino — это сайт с трейлерами, обзорами и жанрами кино для всех любителей фильмов."}},{"@type":"Question","name":"Какие жанры фильмов доступны?","acceptedAnswer":{"@type":"Answer","text":"TopKino предлагает обзоры и трейлеры боевиков, комедий, фантастики и мультфильмов."}}]}
-  </script>
-  <script type="application/ld+json" defer>
-    {"@context":"https://schema.org","@type":"Blog","name":"TopKino — блог о кино","description":"Блог с обзорами фильмов, трейлерами и новостями киноиндустрии","url":"https://topkino.netlify.app","publisher":{"@type":"Organization","name":"TopKino","logo":{"@type":"ImageObject","url":"https://topkino.netlify.app/logo.png"}},"blogPost":[{"@type":"BlogPosting","headline":"Обзор трейлера: Мстители — Финал","image":"https://topkino.netlify.app/images/avengers-endgame.jpg","author":{"@type":"Person","name":"TopKino","url":"https://topkino.netlify.app/about"},"publisher":{"@type":"Organization","name":"TopKino","logo":{"@type":"ImageObject","url":"https://topkino.netlify.app/logo.png"}},"datePublished":"2025-06-01T12:00:00+03:00","description":"Новый трейлер фильма 'Мстители: Финал' подарит вам мощный заряд эмоций и впечатлений. Узнайте все детали и подготовьтесь к премьере!","url":"https://topkino.netlify.app/blog/avengers-endgame-trailer"}]}
-  </script>
-  <script type="application/ld+json" defer>
-    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://topkino.netlify.app/"},{"@type":"ListItem","position":2,"name":"Блог","item":"https://topkino.netlify.app/#trailers"}]}
-  </script>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
-
-  <!-- Styles -->
+  <meta charset="UTF-8">
+  <title>Топ Кино — лучшие фильмы и трейлеры</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {font-family: 'Montserrat', sans-serif; margin: 0; background-color: #f3f4f6; color: #111827; line-height: 1.6;}
-    header, footer {background-color: #000; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 1000;}
-    nav {display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;}
-    nav a, nav button {color: #fff; text-decoration: none; font-weight: 700; font-size: 1rem; transition: color 0.3s ease; cursor: pointer; background: none; border: none;}
-    nav a:hover, nav button:hover {color: #facc15;}
-    .lang-switch {margin-left: auto;}
-    select#languageSwitcher {padding: 0.25rem 0.5rem; border-radius: 4px; border: none; font-weight: bold;}
-    .dropdown-menu {display: none; position: absolute; top: 2.8rem; left: 0; background-color: #1f2937; padding: 0.5rem 0; border-radius: 4px; z-index: 999; min-width: 150px; box-shadow: 0 4px 8px rgba(0,0,0,.3);}
-    .dropdown-menu.active {display: block;}
-    .dropdown-menu a {display: block; padding: 0.5rem 1rem; color: #fff; text-decoration: none; font-size: 0.9rem;}
-    .dropdown-menu a:hover {background-color: #facc15; color: #111827;}
-    .hero {background: linear-gradient(135deg, #facc15 0%, #ef4444 100%); color: white; padding: 4rem 1rem; text-align: center;}
-    .hero h1 {font-size: 2.5rem; margin-bottom: 1rem;}
-    .hero p {font-size: 1.25rem; max-width: 600px; margin: 0 auto;}
-    main {max-width: 1200px; margin: 2rem auto; padding: 0 1rem;}
-    main h2 {font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; text-align: center;}
-    .genres-grid {display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 2rem;}
-    article.genre {background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.1); overflow: hidden; display: flex; flex-direction: column;}
-    article.genre img {width: 100%; display: block; border-bottom: 4px solid #ef4444; border-radius: 8px 8px 0 0; object-fit: cover; height: 180px;}
-    article.genre h3 {font-size: 1.5rem; margin: 1rem; color: #ef4444;}
-    article.genre p {margin: 0 1rem 1.5rem; color: #4b5563;}
-    footer p {margin: 0 auto; font-size: 0.9rem; color: #d1d5db; text-align: center;}
-    @media (max-width: 600px) {
-      .hero h1 {font-size: 2rem;}
-      .hero p {font-size: 1rem;}
-      header {flex-direction: column; align-items: flex-start;}
-      .lang-switch {align-self: flex-end; margin-top: 0.5rem;}
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { background: #000; color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; }
+    nav a { color: #fff; text-decoration: none; margin: 0 15px; position: relative; }
+    nav a:hover { text-decoration: underline; }
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content {
+      display: none; position: absolute; background-color: #111; min-width: 160px; z-index: 1;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
     }
+    .dropdown-content a {
+      color: #fff; padding: 10px 16px; text-decoration: none; display: block;
+    }
+    .dropdown-content a:hover { background-color: #333; }
+    .dropdown:hover .dropdown-content { display: block; }
   </style>
 </head>
 <body>
   <header>
+    <div><a href="index.html" style="color:white; text-decoration:none; font-size:1.2em;"><strong>Топ Кино</strong></a></div>
     <nav>
-      <a href="#home">Главная</a>
-      <div style="position: relative;">
-        <button id="genresBtn" aria-haspopup="true" aria-expanded="false" aria-controls="genresDropdown">Жанры ▾</button>
-        <div class="dropdown-menu" id="genresDropdown" role="menu">
-          <a href="#genre-action">Боевик</a>
-          <a href="#genre-comedy">Комедия</a>
-          <a href="#genre-scifi">Фантастика</a>
-          <a href="#genre-animation">Мультфильмы</a>
+      <a href="index.html">Главная</a>
+      <div class="dropdown">
+        <a href="#">Жанры ▾</a>
+        <div class="dropdown-content">
+          <a href="#боевики">Боевики</a>
+          <a href="#ужасы">Ужасы</a>
+          <a href="#приключения">Приключения</a>
+          <a href="#мелодрамы">Мелодрамы</a>
         </div>
       </div>
-      <a href="#trailers">Обзоры и трейлеры</a>
-      <div class="lang-switch">
-        <select id="languageSwitcher"><option value="ru" selected>Русский</option><option value="en">English</option></select>
-      </div>
+      <a href="blog.html">Обзоры и трейлеры</a>
     </nav>
   </header>
-
-  <main>
-    <section class="hero" id="home">
-      <h1>TopKino — Лучшие трейлеры и обзоры фильмов</h1>
-      <p>Смотри новые фильмы, читай обзоры и выбирай любимые жанры!</p>
-    </section>
-
-    <!-- ВСТАВЛЕННЫЙ ТЕКСТ -->
-    <div style="text-align:center; max-width: 800px; margin: 2rem auto;">
-      <p>Добро пожаловать на TopKino — портал для настоящих киноманов. Здесь вы найдете лучшие трейлеры, увлекательные обзоры и свежие жанры фильмов!</p>
-    </div>
-
-    <section id="genres">
-      <h2>Жанры</h2>
-      <div class="genres-grid">
-        <article class="genre" id="genre-action">
-          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Боевик" loading="lazy" />
-          <h3>Боевик</h3>
-          <p>Быстрые погони, яркие взрывы и захватывающие сцены — все, что нужно для настоящего боевика.</p>
-        </article>
-        <article class="genre" id="genre-comedy">
-          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80" alt="Комедия" loading="lazy" />
-          <h3>Комедия</h3>
-          <p>Смех и хорошее настроение — главные составляющие комедий. Эти фильмы заставят вас улыбаться и забыть о повседневных заботах.</p>
-        </article>
-        <article class="genre" id="genre-scifi">
-          <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=800&q=80" alt="Фантастика" loading="lazy" />
-          <h3>Фантастика</h3>
-          <p>Погружение в миры будущего, космоса и невероятных технологий. Фантастика расширяет границы воображения и знаний.</p>
-        </article>
-        <article class="genre" id="genre-animation">
-          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80" alt="Мультфильмы" loading="lazy" />
-          <h3>Мультфильмы</h3>
-          <p>Яркие истории и забавные персонажи для всей семьи. Мультфильмы радуют детей и взрослых своими волшебными мирами.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="trailers" style="margin-top: 4rem;">
-      <h2>🎬 Обзоры и трейлеры</h2>
-      <article style="background: white; border-radius: 8px; padding: 1rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,.1);">
-        <h3>Обзор трейлера: Мстители — Финал</h3>
-        <img src="https://topkino.netlify.app/images/avengers-endgame.jpg" alt="Трейлер Мстителей: Финал" style="max-width: 100%; border-radius: 8px;" loading="lazy" />
-        <p>Новый трейлер фильма "Мстители: Финал" подарит вам мощный заряд эмоций и впечатлений. Узнайте все детали и подготовьтесь к премьере!</p>
-        <a href="https://topkino.netlify.app/blog/avengers-endgame-trailer" target="_blank" rel="noopener noreferrer" style="color: #ef4444; font-weight: 700;">Читать обзор →</a>
-      </article>
-    </section>
+  <main style="padding: 20px;">
+    <h1>Добро пожаловать на сайт Топ Кино</h1>
+    <p>Это главная страница. Здесь будут категории фильмов.</p>
   </main>
-
-  <footer>
-    <p>&copy; 2025 TopKino. Все права защищены.</p>
-  </footer>
-
-  <script defer>
-    const genresBtn = document.getElementById('genresBtn');
-    const genresDropdown = document.getElementById('genresDropdown');
-    genresBtn.addEventListener('click', () => {
-      const expanded = genresBtn.getAttribute('aria-expanded') === 'true';
-      genresBtn.setAttribute('aria-expanded', !expanded);
-      genresDropdown.classList.toggle('active');
-    });
-    document.addEventListener('click', (event) => {
-      if (!genresBtn.contains(event.target) && !genresDropdown.contains(event.target)) {
-        genresBtn.setAttribute('aria-expanded', 'false');
-        genresDropdown.classList.remove('active');
-      }
-    });
-    document.getElementById('languageSwitcher').addEventListener('change', (e) => {
-      alert('Переключение языка пока не реализовано. Вы выбрали: ' + e.target.value);
-    });
-  </script>
 </body>
 </html>
