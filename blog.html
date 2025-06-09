@@ -1,85 +1,159 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Сторінка</title>
-  
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
-header, footer {
-  background-color: #fff;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ccc;
-}
-nav.language-menu {
-  text-align: right;
-}
-nav.language-menu a {
-  margin: 0 5px;
-  text-decoration: none;
-  color: #333;
-}
-.popular-movies, .blog-section {
-  padding: 20px;
-}
-.popular-movies h2, .blog-section h2 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-}
-.movie-grid, .blog-grid {
-  display: grid;
-  gap: 10px;
-}
-.movie-grid {
-  grid-template-columns: repeat(4, 1fr);
-}
-.blog-grid {
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, auto);
-}
-.movie-card, .blog-card {
-  background-color: #fff;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  text-align: center;
-}
-.movie-card img, .blog-card img {
-  max-width: 100%;
-  height: auto;
-}
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Блог — Последние новости и обзоры | TopKino</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+    header, footer {
+      background-color: #000;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #facc15;
+    }
+    .lang-switch select {
+      padding: 0.25rem 0.5rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+    }
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #ef4444;
+    }
+    .blog-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+    article.post {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    article.post img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 4px solid #ef4444;
+    }
+    article.post .content {
+      padding: 1rem;
+    }
+    article.post h2 {
+      margin-top: 0;
+      color: #ef4444;
+      font-size: 1.25rem;
+    }
+    article.post p {
+      color: #4b5563;
+      font-size: 0.95rem;
+    }
+    article.post a {
+      margin-top: auto;
+      display: inline-block;
+      margin-top: 1rem;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    article.post a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #d1d5db;
+    }
+  </style>
 </head>
 <body>
+
   <header>
-    <nav class="language-menu">
-      <a href="#">UA</a> | <a href="#">RU</a> | <a href="#">EN</a>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="blog.html">Блог</a>
     </nav>
+    <div class="lang-switch">
+      <select>
+        <option value="ru" selected>Рус</option>
+        <option value="uk">Укр</option>
+        <option value="en">Eng</option>
+      </select>
+    </div>
   </header>
 
-  <section class="popular-movies">
-    <h2>Популярні фільми</h2>
-    <div class="movie-grid">
-      <div class="movie-card"><a href="#"><img src="movie1.jpg" alt="Movie 1"><p>Movie 1</p></a></div><div class="movie-card"><a href="#"><img src="movie2.jpg" alt="Movie 2"><p>Movie 2</p></a></div><div class="movie-card"><a href="#"><img src="movie3.jpg" alt="Movie 3"><p>Movie 3</p></a></div><div class="movie-card"><a href="#"><img src="movie4.jpg" alt="Movie 4"><p>Movie 4</p></a></div>
-    </div>
-  </section>
+  <main>
+    <h1>📝 Последние обзоры и статьи</h1>
+    <section class="blog-list">
+      <article class="post">
+        <img src="https://images.unsplash.com/photo-1601933470928-c972f2fce177?auto=format&fit=crop&w=800&q=80" alt="Обзор фильма Дюна 2" />
+        <div class="content">
+          <h2>Обзор фильма «Дюна 2» (2024)</h2>
+          <p>Продолжение эпичной саги Дениса Вильнёва: визуальный шедевр, политические интриги и новый уровень масштабов.</p>
+          <a href="#">Читать далее →</a>
+        </div>
+      </article>
 
-  <section class="blog-section">
-    <h2>Блог про фільми</h2>
-    <div class="blog-grid">
-      <div class="blog-card"><a href="blog-post1.html"><img src="blog1.jpg" alt="Blog 1"><p>Blog Post 1</p></a></div><div class="blog-card"><a href="blog-post2.html"><img src="blog2.jpg" alt="Blog 2"><p>Blog Post 2</p></a></div><div class="blog-card"><a href="blog-post3.html"><img src="blog3.jpg" alt="Blog 3"><p>Blog Post 3</p></a></div><div class="blog-card"><a href="blog-post4.html"><img src="blog4.jpg" alt="Blog 4"><p>Blog Post 4</p></a></div><div class="blog-card"><a href="blog-post5.html"><img src="blog5.jpg" alt="Blog 5"><p>Blog Post 5</p></a></div><div class="blog-card"><a href="blog-post6.html"><img src="blog6.jpg" alt="Blog 6"><p>Blog Post 6</p></a></div><div class="blog-card"><a href="blog-post7.html"><img src="blog7.jpg" alt="Blog 7"><p>Blog Post 7</p></a></div><div class="blog-card"><a href="blog-post8.html"><img src="blog8.jpg" alt="Blog 8"><p>Blog Post 8</p></a></div><div class="blog-card"><a href="blog-post9.html"><img src="blog9.jpg" alt="Blog 9"><p>Blog Post 9</p></a></div><div class="blog-card"><a href="blog-post10.html"><img src="blog10.jpg" alt="Blog 10"><p>Blog Post 10</p></a></div><div class="blog-card"><a href="blog-post11.html"><img src="blog11.jpg" alt="Blog 11"><p>Blog Post 11</p></a></div><div class="blog-card"><a href="blog-post12.html"><img src="blog12.jpg" alt="Blog 12"><p>Blog Post 12</p></a></div><div class="blog-card"><a href="blog-post13.html"><img src="blog13.jpg" alt="Blog 13"><p>Blog Post 13</p></a></div><div class="blog-card"><a href="blog-post14.html"><img src="blog14.jpg" alt="Blog 14"><p>Blog Post 14</p></a></div><div class="blog-card"><a href="blog-post15.html"><img src="blog15.jpg" alt="Blog 15"><p>Blog Post 15</p></a></div><div class="blog-card"><a href="blog-post16.html"><img src="blog16.jpg" alt="Blog 16"><p>Blog Post 16</p></a></div><div class="blog-card"><a href="blog-post17.html"><img src="blog17.jpg" alt="Blog 17"><p>Blog Post 17</p></a></div><div class="blog-card"><a href="blog-post18.html"><img src="blog18.jpg" alt="Blog 18"><p>Blog Post 18</p></a></div><div class="blog-card"><a href="blog-post19.html"><img src="blog19.jpg" alt="Blog 19"><p>Blog Post 19</p></a></div><div class="blog-card"><a href="blog-post20.html"><img src="blog20.jpg" alt="Blog 20"><p>Blog Post 20</p></a></div>
-    </div>
-  </section>
+      <article class="post">
+        <img src="https://images.unsplash.com/photo-1542206395-9feb3edaa68b?auto=format&fit=crop&w=800&q=80" alt="Лучшие трейлеры июня 2025" />
+        <div class="content">
+          <h2>🔥 Лучшие трейлеры июня 2025</h2>
+          <p>От «Железного сердца» до нового хоррора от Джордана Пила — подборка самых ярких трейлеров месяца.</p>
+          <a href="#">Смотреть подборку →</a>
+        </div>
+      </article>
+
+      <article class="post">
+        <img src="https://images.unsplash.com/photo-1497015289637-546b20a4d937?auto=format&fit=crop&w=800&q=80" alt="Анализ сериала Уэнсдэй" />
+        <div class="content">
+          <h2>Секрет успеха сериала «Уэнсдэй»</h2>
+          <p>Почему Netflix снова попал в точку, и как Дженна Ортега сделала образ Уэнсдэй культовым для нового поколения?</p>
+          <a href="#">Читать анализ →</a>
+        </div>
+      </article>
+    </section>
+  </main>
 
   <footer>
-    <p>&copy; 2025 КупиТовар</p>
+    <p>&copy; 2025 TopKino. Все права защищены.</p>
   </footer>
+
 </body>
 </html>
