@@ -2,214 +2,102 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>КиноТрейлеры</title>
+  <title>Популярные фильмы - TopKino</title>
   <style>
     body {
-      margin: 0; font-family: Arial, sans-serif; background: #121212; color: #eee;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #eee;
+      margin: 0; padding: 0;
     }
-    header {
-      background: #1f1f1f; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 100;
+    header, footer {
+      background: #222;
+      padding: 15px 30px;
+      text-align: center;
     }
-    header nav a {
-      color: #eee; text-decoration: none; margin: 0 15px; font-weight: bold;
-    }
-    header nav a:hover {
-      color: #f39c12;
+    header h1 {
+      margin: 0;
+      font-weight: 700;
     }
     main {
-      padding: 20px 30px; max-width: 1200px; margin: 0 auto;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
     }
-    .movie-list {
-      display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 20px;
-    }
-    .movie-card {
-      background: #222; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px #0008;
-      display: flex; flex-direction: column;
-    }
-    .movie-card img {
-      width: 100%; object-fit: cover; height: 320px;
-    }
-    .movie-info {
-      padding: 10px 15px; flex-grow: 1; display: flex; flex-direction: column;
-    }
-    .movie-info h3 {
-      margin: 0 0 10px;
-      font-size: 1.1rem;
-      color: #f39c12;
-    }
-    .movie-info p {
-      flex-grow: 1;
-      font-size: 0.9rem;
-      line-height: 1.2em;
-      color: #ccc;
-    }
-    .btn-trailer {
-      margin-top: 15px;
-      padding: 8px 12px;
-      background: #f39c12;
-      border: none;
-      color: #121212;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      text-align: center;
-    }
-    .btn-trailer:hover {
-      background: #e67e22;
-    }
-    footer {
-      margin-top: 40px;
-      background: #1f1f1f;
-      color: #888;
-      text-align: center;
-      padding: 15px 20px;
-      font-size: 0.9rem;
-    }
-    /* Модальное окно трейлера */
-    .modal {
-      display: none; 
-      position: fixed; 
-      z-index: 1000; 
-      left: 0; top: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      align-items: center; justify-content: center;
-    }
-    .modal-content {
-      position: relative;
-      width: 90%; max-width: 900px;
-      background: #000;
+    .movie {
+      background: #1e1e1e;
       border-radius: 8px;
       overflow: hidden;
-    }
-    .modal-close {
-      position: absolute;
-      right: 10px; top: 10px;
-      color: #f39c12;
-      font-size: 24px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.7);
       cursor: pointer;
-      font-weight: bold;
-      user-select: none;
+      transition: transform 0.3s;
     }
-    iframe {
-      width: 100%; height: 500px; border: none;
+    .movie:hover {
+      transform: scale(1.05);
     }
-    @media (max-width: 600px) {
-      .movie-card img {
-        height: 220px;
-      }
-      iframe {
-        height: 280px;
-      }
+    .movie img {
+      width: 100%;
+      display: block;
+      height: 225px;
+      object-fit: cover;
+    }
+    .movie-title {
+      padding: 10px;
+      font-size: 16px;
+      text-align: center;
+      height: 50px;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Популярные фильмы</h1>
+  </header>
 
-<header>
-  <div class="logo" style="color:#f39c12; font-weight:bold; font-size:1.5rem;">КиноТрейлеры</div>
-  <nav>
-    <a href="#">Главная</a>
-    <a href="#">Жанры</a>
-    <a href="#">Топ фильмы</a>
-    <a href="#">О сайте</a>
-  </nav>
-</header>
+  <main id="movies-container">
+    <!-- Фильмы появятся здесь -->
+  </main>
 
-<main>
-  <div class="movie-list" id="movie-list">
-    <!-- Фильмы подгрузятся сюда -->
-  </div>
-</main>
+  <footer>
+    <small>© 2025 TopKino. Все права защищены.</small>
+  </footer>
 
-<footer>
-  © 2025 КиноТрейлеры | Сделано с ❤️ Artur Sem<br />
-  Контакты: example@mail.com
-</footer>
+  <script>
+    const API_KEY = '7cb67565ace3a08cd9d099c749787121';
+    const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`;
+    const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w300';
 
-<!-- Модальное окно для трейлера -->
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="modal-content">
-    <span id="modal-close" class="modal-close" role="button" aria-label="Закрыть трейлер">&times;</span>
-    <iframe id="trailer-frame" src="" allowfullscreen allow="autoplay"></iframe>
-  </div>
-</div>
-
-<script>
-  const API_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3Y2I2NzU2NWFjZTNhMDhjZDlkMDk5Yzc0OTg3MTIxIiwibmJmIjoxNzIyMTA3MTcyLjUzNiwic3ViIjoiNjZhNTQ1MjQwZGE5YWRhZDMxODZlNTlmIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.q3l_-tPvyWXqxB_nDMPJUEMnjFJz_VlwXFPTcnUQHjM';
-
-  const movieList = document.getElementById('movie-list');
-  const modal = document.getElementById('modal');
-  const modalClose = document.getElementById('modal-close');
-  const trailerFrame = document.getElementById('trailer-frame');
-
-  // Функция открытия трейлера
-  function openTrailer(url) {
-    trailerFrame.src = url;
-    modal.style.display = 'flex';
-    modal.setAttribute('aria-hidden', 'false');
-  }
-  // Закрытие трейлера
-  modalClose.onclick = () => {
-    trailerFrame.src = '';
-    modal.style.display = 'none';
-    modal.setAttribute('aria-hidden', 'true');
-  }
-  // Закрыть по клику вне окна
-  modal.onclick = (e) => {
-    if (e.target === modal) {
-      modalClose.onclick();
+    async function fetchPopularMovies() {
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error('Ошибка загрузки данных');
+        const data = await res.json();
+        displayMovies(data.results);
+      } catch (err) {
+        document.getElementById('movies-container').innerHTML = `<p style="color:red; text-align:center;">${err.message}</p>`;
+      }
     }
-  }
 
-  async function fetchMovies() {
-    try {
-      const res = await fetch('https://apivcdn.xyz/api/short?api_token=' + API_TOKEN);
-      if (!res.ok) throw new Error('Ошибка сети');
-      const data = await res.json();
+    function displayMovies(movies) {
+      const container = document.getElementById('movies-container');
+      container.innerHTML = '';
 
-      // Ожидается, что data будет массивом фильмов
-      movieList.innerHTML = ''; // очистить перед загрузкой
-
-      data.forEach(movie => {
-        // Вырежем ссылку на YouTube трейлер из embed или используем movie.trailer (если есть)
-        // Предполагается, что в movie есть поле trailer с URL
-        let trailerUrl = movie.trailer || '';
-        // Если embed, попробуем извлечь ссылку
-        if (!trailerUrl && movie.embed) {
-          // пример парсинга embed youtube
-          const m = movie.embed.match(/src="([^"]+)"/);
-          if (m && m[1]) trailerUrl = m[1];
-        }
-
-        // Формируем карточку фильма
-        const card = document.createElement('div');
-        card.className = 'movie-card';
-        card.innerHTML = `
-          <img src="${movie.poster || 'https://via.placeholder.com/300x450?text=No+Image'}" alt="Постер ${movie.title}" />
-          <div class="movie-info">
-            <h3>${movie.title}</h3>
-            <p>${movie.description || 'Описание недоступно'}</p>
-            <button class="btn-trailer" ${trailerUrl ? '' : 'disabled'}>Смотреть трейлер</button>
-          </div>
+      movies.forEach(movie => {
+        const movieEl = document.createElement('div');
+        movieEl.classList.add('movie');
+        movieEl.innerHTML = `
+          <img src="${movie.poster_path ? IMG_BASE_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
+          <div class="movie-title">${movie.title}</div>
         `;
-        // Кнопка открытия трейлера
-        if (trailerUrl) {
-          card.querySelector('button').onclick = () => openTrailer(trailerUrl);
-        }
-        movieList.appendChild(card);
+        container.appendChild(movieEl);
       });
-
-    } catch (err) {
-      movieList.innerHTML = '<p style="color:#f39c12;">Ошибка загрузки данных: ' + err.message + '</p>';
-      console.error(err);
     }
-  }
 
-  fetchMovies();
-</script>
-
+    fetchPopularMovies();
+  </script>
 </body>
 </html>
