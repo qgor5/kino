@@ -2,114 +2,116 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Детали фильма</title>
   <style>
     body {
-      margin: 0; 
+      margin: 0;
       font-family: Arial, sans-serif;
       background: #111;
       color: #eee;
       padding: 15px;
     }
+
     a {
       color: #00aaff;
       text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
     }
-    a:hover {
-      text-decoration: underline;
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
     }
-    .movie-details {
-      max-width: 800px;
-      margin: auto;
+
+    .poster {
+      width: 300px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    .movie-poster {
-      float: left;
-      margin-right: 15px;
-      max-width: 300px;
+
+    .details {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    iframe {
       width: 100%;
+      height: 300px;
+      margin-top: 20px;
+      border: none;
       border-radius: 8px;
     }
-    .movie-info {
-      overflow: hidden;
-    }
-    h1 {
-      margin-top: 0;
-    }
-    .genres {
-      margin: 10px 0;
-      font-style: italic;
-    }
-    .overview {
-      margin-top: 15px;
-      line-height: 1.4;
-    }
-    @media (max-width: 600px) {
-      .movie-poster {
-        float: none;
-        margin: 0 auto 15px auto;
-        display: block;
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .poster {
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .details {
+        width: 100%;
+      }
+
+      iframe {
+        height: 220px;
       }
     }
   </style>
 </head>
 <body>
 
-  <a href="/">← Назад к списку фильмов</a>
+  <a href="index.html">← Назад к списку фильмов</a>
 
-  <div class="movie-details" id="movie-details">
-    <!-- Данные фильма появятся здесь -->
+  <div class="container">
+    <img class="poster" src="" alt="Постер фильма">
+    <div class="details">
+      <h1 class="title"></h1>
+      <p class="description"></p>
+    </div>
   </div>
+
+  <iframe id="trailer" src="" allowfullscreen></iframe>
 
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-    function getMovieIdFromUrl() {
-      // URL формат: movie/1289601-boets-luchshiy-iz-luchshih.html
-      const path = window.location.pathname; 
-      // Например: /movie/1289601-boets-luchshiy-iz-luchshih.html
-      const parts = path.split('/');
-      if (parts.length < 3) return null;
-      const filename = parts[2]; // "1289601-boets-luchshiy-iz-luchshih.html"
-      const idPart = filename.split('-')[0]; // "1289601"
-      return idPart || null;
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieId = urlParams.get('id');
+
+    async function loadMovieDetails() {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+      const movie = await res.json();
+
+      document.querySelector('.poster').src = movie.poster_path
+        ? IMG_URL + movie.poster_path
+        : 'https://via.placeholder.com/300x450?text=Нет+постера';
+
+      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
+      document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
     }
 
-    async function fetchMovie(id) {
-      if (!id) {
-        document.getElementById('movie-details').innerHTML = '<p>Ошибка: не найден ID фильма в URL</p>';
-        return;
-      }
+    async function loadTrailer() {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+      const data = await res.json();
+      const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
 
-      try {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=ru-RU`);
-        if (!res.ok) throw new Error('Фильм не найден');
-        const movie = await res.json();
-        displayMovie(movie);
-      } catch (e) {
-        document.getElementById('movie-details').innerHTML = `<p>Ошибка загрузки фильма: ${e.message}</p>`;
+      if (trailer) {
+        document.getElementById('trailer').src = `https://www.youtube.com/embed/${trailer.key}`;
       }
     }
 
-    function displayMovie(movie) {
-      const container = document.getElementById('movie-details');
-      const genres = movie.genres.map(g => g.name).join(', ');
-
-      container.innerHTML = `
-        <img class="movie-poster" src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
-        <div class="movie-info">
-          <h1>${movie.title}</h1>
-          <div class="genres">Жанры: ${genres}</div>
-          <div class="overview">${movie.overview || 'Описание отсутствует.'}</div>
-          <p><strong>Дата выхода:</strong> ${movie.release_date || 'Неизвестно'}</p>
-          <p><strong>Рейтинг:</strong> ${movie.vote_average || 'нет данных'}</p>
-        </div>
-      `;
-    }
-
-    const movieId = getMovieIdFromUrl();
-    fetchMovie(movieId);
+    loadMovieDetails();
+    loadTrailer();
   </script>
 
 </body>
