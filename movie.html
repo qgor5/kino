@@ -85,8 +85,17 @@
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get('id');
+    let movieId = null;
+    const hash = window.location.hash;
+
+    if (hash.includes('=')) {
+      movieId = hash.split('=')[1];
+    }
+
+    if (!movieId) {
+      document.body.innerHTML = '<h2>Фильм не найден</h2>';
+      throw new Error('Movie ID не найден в URL.');
+    }
 
     async function loadMovieDetails() {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
@@ -96,7 +105,10 @@
         ? IMG_URL + movie.poster_path
         : 'https://via.placeholder.com/300x450?text=Нет+постера';
 
-      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
+      const title = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
+      document.querySelector('.title').textContent = title;
+      document.title = `${title} — Смотреть онлайн | TopKino`;
+
       document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
     }
 
