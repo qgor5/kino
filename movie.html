@@ -85,14 +85,16 @@
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-    // Получаем id из URL вида /movie/157336-interstellar.html
-    const pathParts = window.location.pathname.split('/');
-    // Последний элемент, например "157336-interstellar.html"
-    const lastPart = pathParts[pathParts.length - 1];
-    // Убираем расширение .html
-    const withoutExt = lastPart.replace('.html', '');
-    // Получаем id до дефиса
-    const movieId = withoutExt.split('-')[0];
+    // Получаем id из параметров URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieId = urlParams.get('id');
+
+    if (!movieId) {
+      document.body.innerHTML = '<h2>Ошибка: id фильма не указан в URL</h2>';
+    } else {
+      loadMovieDetails();
+      loadTrailer();
+    }
 
     async function loadMovieDetails() {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
@@ -115,9 +117,6 @@
         document.getElementById('trailer').src = `https://www.youtube.com/embed/${trailer.key}`;
       }
     }
-
-    loadMovieDetails();
-    loadTrailer();
   </script>
 
 </body>
