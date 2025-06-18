@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новые трейлеры фильмов 2025</title>
+  <meta name="description" content="Смотрите новейшие трейлеры фильмов 2025 года на русском языке. Топовые премьеры, эксклюзивные кадры и кнопка 'Смотреть фильм'.">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header>
+    <h1>🎬 Новые трейлеры фильмов</h1>
+  </header>
+  <main id="trailer-list">
+    <p>Загрузка трейлеров...</p>
+  </main>
+  <footer>
+    <p>&copy; 2025 Фильмотека трейлеров. Все права защищены.</p>
+  </footer>
+
+  <!-- Пример push-рекламы -->
+  <script async src="https://push-sdk.monetag.com/init.js" data-zone="1234567"></script>
+</body>
+</html>
+
+<!-- style.css -->
+<style>
+  body {
+    background-color: #121212;
+    color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  header, footer {
+    text-align: center;
+    padding: 1em;
+    background: #1e1e1e;
+  }
+  h1 {
+    font-size: 1.8em;
+  }
+  .trailer-card {
+    margin: 20px;
+    padding: 10px;
+    background: #1f1f1f;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(255,255,255,0.1);
+  }
+  iframe {
+    width: 100%;
+    height: 300px;
+    border: none;
+    border-radius: 10px;
+  }
+  .watch-button {
+    display: inline-block;
+    background: #ff4444;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-decoration: none;
+  }
+</style>
+
+<!-- script.js -->
+<script>
+const container = document.getElementById('trailer-list');
+container.innerHTML = '';
+
+fetch('https://apivcdn.xyz/api/short?api_token=7cb67565ace3a08cd9d099c749787121')
+  .then(res => res.json())
+  .then(data => {
+    data.data.slice(0, 8).forEach(movie => {
+      const card = document.createElement('div');
+      card.className = 'trailer-card';
+
+      const iframe = document.createElement('iframe');
+      iframe.src = movie.embed_url || movie.trailer || "https://www.youtube.com/embed/" + movie.trailer;
+      card.appendChild(iframe);
+
+      const title = document.createElement('h2');
+      title.textContent = movie.ru_title || movie.title;
+      card.appendChild(title);
+
+      const description = document.createElement('p');
+      description.textContent = movie.description || "Описание недоступно.";
+      card.appendChild(description);
+
+      const watchBtn = document.createElement('a');
+      watchBtn.href = 'https://t.me/yourchannel'; // замените на вашу ссылку
+      watchBtn.className = 'watch-button';
+      watchBtn.textContent = 'Смотреть фильм';
+      card.appendChild(watchBtn);
+
+      container.appendChild(card);
+    });
+  })
+  .catch(err => {
+    container.innerHTML = '<p>Ошибка загрузки трейлеров.</p>';
+  });
+</script>
