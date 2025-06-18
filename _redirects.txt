@@ -1,1 +1,1 @@
-/movie/:id-:slug   /movie.html?id=:id   200
+/movie/:id-:slug    /movie.html?id=:id    200
