@@ -3,112 +3,142 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TopKino — Детали фильма</title>
+  <title>TopKino — Популярные фильмы</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #eee;
-      padding: 15px;
-    }
-    a {
-      color: #00aaff;
-      text-decoration: none;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-    .poster {
-      width: 300px;
-      flex-shrink: 0;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-    .details {
-      flex: 1;
-      min-width: 280px;
-    }
-    iframe {
-      width: 100%;
-      height: 300px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 8px;
-    }
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        align-items: center;
-      }
-      .poster {
-        width: 100%;
-        max-width: 400px;
-      }
-      .details {
-        width: 100%;
-      }
-      iframe {
-        height: 220px;
-      }
-    }
+    /* Твой CSS без изменений */
+    /* ... */
+    /* (для краткости не вставляю весь CSS, возьми из своего файла) */
   </style>
 </head>
 <body>
 
-  <a href="/">← Назад к списку фильмов</a>
+  <header>
+    <h1>Популярные фильмы</h1>
+    <nav>
+      <div class="dropdown">
+        <button class="dropbtn" onclick="toggleDropdown()">Жанры ⮟</button>
+        <div class="dropdown-content" id="genres-menu"></div>
+        <div class="scroll-indicator">⮟ прокрутите ⮟</div>
+      </div>
+    </nav>
+  </header>
 
-  <div class="container">
-    <img class="poster" src="" alt="Постер фильма">
-    <div class="details">
-      <h1 class="title"></h1>
-      <p class="description"></p>
-    </div>
-  </div>
+  <main id="movies-container"></main>
 
-  <iframe id="trailer" src="" allowfullscreen></iframe>
+  <footer>
+    © 2025 TopKino. Все права защищены.
+  </footer>
 
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w300';
+    const genresMenu = document.getElementById('genres-menu');
+    const moviesContainer = document.getElementById('movies-container');
+    let currentGenreId = null;
 
-    // Получаем id из URL вида /movie/slug-id
-    function getMovieIdFromPath() {
-      const path = window.location.pathname; // "/movie/destinaciya-uzyi-krovi-574475"
-      const parts = path.split('-');
-      return parts[parts.length - 1]; // последний элемент - id
+    function toggleDropdown() {
+      document.getElementById("genres-menu").classList.toggle("show");
     }
 
-    const movieId = getMovieIdFromPath();
-
-    async function loadMovieDetails() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-      const movie = await res.json();
-
-      document.querySelector('.poster').src = movie.poster_path
-        ? IMG_URL + movie.poster_path
-        : 'https://via.placeholder.com/300x450?text=Нет+постера';
-
-      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
-      document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
-    }
-
-    async function loadTrailer() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const data = await res.json();
-      const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-
-      if (trailer) {
-        document.getElementById('trailer').src = `https://www.youtube.com/embed/${trailer.key}`;
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+          const openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
       }
     }
 
-    loadMovieDetails();
-    loadTrailer();
+    // Функция для транслитерации (SEO-friendly slug)
+    function toSlug(text) {
+      const ru = "абвгдеёжзийклмнопрстуфхцчшщьыъэюя";
+      const en = ["a","b","v","g","d","e","yo","zh","z","i","y","k","l","m","n","o","p","r","s","t","u","f","h","ts","ch","sh","sch","","","e","yu","ya"];
+      text = text.toLowerCase();
+      let result = "";
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const index = ru.indexOf(char);
+        if (index >= 0) {
+          result += en[index];
+        } else if (char.match(/[a-z0-9]/)) {
+          result += char;
+        } else if (char === " " || char === "-" || char === "_") {
+          result += "-";
+        }
+      }
+      // Убираем подряд идущие тире
+      result = result.replace(/-+/g, "-");
+      // Убираем тире в начале и конце
+      result = result.replace(/^-+|-+$/g, "");
+      return result;
+    }
+
+    async function fetchGenres() {
+      const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
+      const data = await res.json();
+      displayGenres(data.genres);
+    }
+
+    function displayGenres(genres) {
+      genresMenu.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Все фильмы';
+      allBtn.classList.add('active');
+      allBtn.onclick = () => {
+        currentGenreId = null;
+        setActiveGenre(allBtn);
+        fetchMovies();
+      };
+      genresMenu.appendChild(allBtn);
+
+      genres.forEach(genre => {
+        const btn = document.createElement('button');
+        btn.textContent = genre.name;
+        btn.onclick = () => {
+          currentGenreId = genre.id;
+          setActiveGenre(btn);
+          fetchMovies(genre.id);
+        };
+        genresMenu.appendChild(btn);
+      });
+    }
+
+    function setActiveGenre(activeBtn) {
+      genresMenu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+      activeBtn.classList.add('active');
+    }
+
+    async function fetchMovies(genreId = null) {
+      let url = genreId
+        ? `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc`
+        : `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+      displayMovies(data.results);
+    }
+
+    function displayMovies(movies) {
+      moviesContainer.innerHTML = '';
+      movies.forEach(movie => {
+        const slug = toSlug(movie.title);
+        const card = document.createElement('a');
+        card.href = `/movie/${slug}-${movie.id}`;
+        card.className = 'movie';
+        card.innerHTML = `
+          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
+          <div class="movie-title">${movie.title}</div>
+        `;
+        moviesContainer.appendChild(card);
+      });
+    }
+
+    fetchGenres();
+    fetchMovies();
   </script>
 
 </body>
