@@ -5,13 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Популярные фильмы</title>
   <style>
-    /* Твой CSS без изменений */
-    /* ... */
-    /* (для краткости не вставляю весь CSS, возьми из своего файла) */
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #eee; }
+    header { position: sticky; top: 0; background: #222; padding: 10px 15px; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+    header h1 { font-size: 1.4rem; margin: 0 0 10px 0; text-align: center; }
+    nav { display: flex; justify-content: center; }
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn { background: #444; color: white; padding: 8px 16px; font-size: 0.9rem; border: none; border-radius: 18px; cursor: pointer; }
+    .dropbtn:hover { background-color: #00aaff; }
+    .dropdown-content { display: none; position: absolute; background-color: #333; min-width: 180px; max-height: 250px; overflow-y: auto; box-shadow: 0 8px 16px rgba(0,0,0,0.6); z-index: 1; border-radius: 6px; margin-top: 5px; scrollbar-width: thin; scrollbar-color: #00aaff transparent; }
+    .dropdown-content::-webkit-scrollbar { width: 6px; }
+    .dropdown-content::-webkit-scrollbar-thumb { background-color: #00aaff; border-radius: 4px; }
+    .dropdown-content button { color: white; padding: 10px 16px; text-align: left; background: none; border: none; width: 100%; font-size: 0.9rem; cursor: pointer; }
+    .dropdown-content button:hover, .dropdown-content button.active { background-color: #00aaff; }
+    .show { display: block; }
+    .scroll-indicator { text-align: center; font-size: 1rem; color: #888; padding: 5px 0 0; }
+    main { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; padding: 15px; }
+    .movie { background: #1d1d1d; border-radius: 8px; overflow: hidden; text-align: center; text-decoration: none; color: #fff; box-shadow: 0 0 6px rgba(0,0,0,0.4); transition: transform 0.3s; }
+    .movie:hover { transform: scale(1.03); }
+    .movie img { width: 100%; height: 210px; object-fit: cover; display: block; }
+    .movie-title { padding: 8px; font-size: 0.9rem; min-height: 45px; }
+    footer { text-align: center; padding: 15px; background: #222; color: #aaa; font-size: 0.8rem; }
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.2rem; }
+      .dropbtn { padding: 8px 12px; font-size: 0.8rem; }
+      main { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+      .movie img { height: 180px; }
+    }
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.1rem; }
+      .dropbtn { padding: 7px 10px; font-size: 0.75rem; }
+      main { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+      .movie img { height: 160px; }
+    }
   </style>
 </head>
 <body>
-
   <header>
     <h1>Популярные фильмы</h1>
     <nav>
@@ -22,19 +51,25 @@
       </div>
     </nav>
   </header>
-
   <main id="movies-container"></main>
-
-  <footer>
-    © 2025 TopKino. Все права защищены.
-  </footer>
-
+  <footer>© 2025 TopKino. Все права защищены.</footer>
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
     const IMG_URL = 'https://image.tmdb.org/t/p/w300';
     const genresMenu = document.getElementById('genres-menu');
     const moviesContainer = document.getElementById('movies-container');
     let currentGenreId = null;
+
+    function slugify(text) {
+      return text.toString().toLowerCase()
+        .replace(/[ё]/g, 'e').replace(/[ъь]/g, '')
+        .replace(/[й]/g, 'i').replace(/[ч]/g, 'ch')
+        .replace(/[ш]/g, 'sh').replace(/[щ]/g, 'sch')
+        .replace(/[ц]/g, 'ts').replace(/[ю]/g, 'yu')
+        .replace(/[я]/g, 'ya')
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-+|-+$/g, '').replace(/-+/g, '-');
+    }
 
     function toggleDropdown() {
       document.getElementById("genres-menu").classList.toggle("show");
@@ -52,30 +87,6 @@
       }
     }
 
-    // Функция для транслитерации (SEO-friendly slug)
-    function toSlug(text) {
-      const ru = "абвгдеёжзийклмнопрстуфхцчшщьыъэюя";
-      const en = ["a","b","v","g","d","e","yo","zh","z","i","y","k","l","m","n","o","p","r","s","t","u","f","h","ts","ch","sh","sch","","","e","yu","ya"];
-      text = text.toLowerCase();
-      let result = "";
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const index = ru.indexOf(char);
-        if (index >= 0) {
-          result += en[index];
-        } else if (char.match(/[a-z0-9]/)) {
-          result += char;
-        } else if (char === " " || char === "-" || char === "_") {
-          result += "-";
-        }
-      }
-      // Убираем подряд идущие тире
-      result = result.replace(/-+/g, "-");
-      // Убираем тире в начале и конце
-      result = result.replace(/^-+|-+$/g, "");
-      return result;
-    }
-
     async function fetchGenres() {
       const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
       const data = await res.json();
@@ -84,7 +95,6 @@
 
     function displayGenres(genres) {
       genresMenu.innerHTML = '';
-
       const allBtn = document.createElement('button');
       allBtn.textContent = 'Все фильмы';
       allBtn.classList.add('active');
@@ -125,9 +135,9 @@
     function displayMovies(movies) {
       moviesContainer.innerHTML = '';
       movies.forEach(movie => {
-        const slug = toSlug(movie.title);
+        const slug = slugify(`${movie.title}-${movie.id}`);
         const card = document.createElement('a');
-        card.href = `/movie/${slug}-${movie.id}`;
+        card.href = `movie/${slug}.html`;
         card.className = 'movie';
         card.innerHTML = `
           <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
@@ -140,6 +150,5 @@
     fetchGenres();
     fetchMovies();
   </script>
-
 </body>
 </html>
