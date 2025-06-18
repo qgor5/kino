@@ -10,18 +10,40 @@
       color: #eee;
       margin: 0; padding: 0;
     }
-    header, footer {
+    header {
       background: #222;
       padding: 15px 30px;
       text-align: center;
     }
     header h1 {
-      margin: 0;
+      margin: 0 0 10px 0;
       font-weight: 700;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    nav button {
+      background: #444;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: #eee;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    nav button:hover,
+    nav button.active {
+      background: #39f;
+      color: white;
     }
     main {
       max-width: 1200px;
-      margin: 20px auto;
+      margin: 0 auto 40px auto;
       padding: 0 20px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -53,11 +75,21 @@
       height: 50px;
       overflow: hidden;
     }
+    footer {
+      background: #222;
+      padding: 15px 30px;
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Популярные фильмы</h1>
+    <nav id="genres-menu">
+      <!-- Жанры появятся здесь -->
+    </nav>
   </header>
 
   <main id="movies-container">
@@ -70,23 +102,88 @@
 
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`;
     const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w300';
+    const genresMenu = document.getElementById('genres-menu');
+    const moviesContainer = document.getElementById('movies-container');
 
-    async function fetchPopularMovies() {
+    // Хранит текущий выбранный жанр (id), null = все фильмы
+    let currentGenreId = null;
+
+    // Получить список жанров
+    async function fetchGenres() {
       try {
-        const res = await fetch(API_URL);
-        if (!res.ok) throw new Error('Ошибка загрузки данных');
+        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
+        if (!res.ok) throw new Error('Ошибка загрузки жанров');
         const data = await res.json();
-        displayMovies(data.results);
-      } catch (err) {
-        document.getElementById('movies-container').innerHTML = `<p style="color:red; text-align:center;">${err.message}</p>`;
+        displayGenres(data.genres);
+      } catch (e) {
+        genresMenu.innerHTML = `<p style="color:red;">${e.message}</p>`;
       }
     }
 
+    // Отобразить меню жанров
+    function displayGenres(genres) {
+      // Кнопка "Все фильмы"
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Все фильмы';
+      allBtn.classList.add('active');
+      allBtn.addEventListener('click', () => {
+        currentGenreId = null;
+        setActiveButton(allBtn);
+        fetchAndDisplayMovies();
+      });
+      genresMenu.appendChild(allBtn);
+
+      // Кнопки жанров
+      genres.forEach(genre => {
+        const btn = document.createElement('button');
+        btn.textContent = genre.name;
+        btn.dataset.genreId = genre.id;
+        btn.addEventListener('click', () => {
+          currentGenreId = genre.id;
+          setActiveButton(btn);
+          fetchAndDisplayMovies(currentGenreId);
+        });
+        genresMenu.appendChild(btn);
+      });
+    }
+
+    // Установить стиль активной кнопки
+    function setActiveButton(activeBtn) {
+      const buttons = genresMenu.querySelectorAll('button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      activeBtn.classList.add('active');
+    }
+
+    // Получить и отобразить фильмы, либо все популярные, либо по жанру
+    async function fetchAndDisplayMovies(genreId = null) {
+      let url;
+      if (genreId) {
+        // Получить популярные фильмы по жанру
+        url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc&page=1`;
+      } else {
+        // Все популярные фильмы
+        url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`;
+      }
+
+      try {
+        moviesContainer.innerHTML = '<p style="text-align:center;">Загрузка...</p>';
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Ошибка загрузки фильмов');
+        const data = await res.json();
+        displayMovies(data.results);
+      } catch (e) {
+        moviesContainer.innerHTML = `<p style="color:red; text-align:center;">${e.message}</p>`;
+      }
+    }
+
+    // Отобразить фильмы
     function displayMovies(movies) {
-      const container = document.getElementById('movies-container');
-      container.innerHTML = '';
+      moviesContainer.innerHTML = '';
+      if (!movies.length) {
+        moviesContainer.innerHTML = '<p style="text-align:center;">Фильмы не найдены.</p>';
+        return;
+      }
 
       movies.forEach(movie => {
         const movieEl = document.createElement('a');
@@ -97,11 +194,13 @@
           <img src="${movie.poster_path ? IMG_BASE_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
           <div class="movie-title">${movie.title}</div>
         `;
-        container.appendChild(movieEl);
+        moviesContainer.appendChild(movieEl);
       });
     }
 
-    fetchPopularMovies();
+    // Запуск при загрузке страницы
+    fetchGenres();
+    fetchAndDisplayMovies();
   </script>
 </body>
 </html>
