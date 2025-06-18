@@ -85,9 +85,13 @@
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-    // Получаем id из параметров URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get('id');
+    // Получаем id из URL (учитываем SEO-ссылку в формате movie/12345-slug)
+    const pathParts = window.location.pathname.split('/');
+    let movieId = null;
+    if (pathParts.length > 1) {
+      const lastPart = pathParts[pathParts.length - 1];
+      movieId = lastPart.split('-')[0]; // Получаем id до первого тире
+    }
 
     if (!movieId) {
       document.body.innerHTML = '<h2>Ошибка: id фильма не указан в URL</h2>';
