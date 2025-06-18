@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/movie/*"
+  to = "/movie.html"
+  status = 200
