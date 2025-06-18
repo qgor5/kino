@@ -8,237 +8,280 @@
   <meta name="keywords" content="трейлеры фильмов, смотреть трейлеры, новинки кино, рейтинг фильмов, лучшие трейлеры, TopKino">
   <meta name="robots" content="index, follow">
 
-  <meta property="og:title" content="TopKino — Детали фильма" />
+  <meta property="og:title" content="TopKino — Трейлеры популярных фильмов" />
   <meta property="og:description" content="Смотрите трейлеры фильмов, узнавайте новинки кино и рейтинги. Подборка лучших трейлеров на TopKino." />
   <meta property="og:image" content="https://topkino.netlify.app/logo.png" />
   <meta property="og:url" content="https://topkino.netlify.app/" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TopKino — Детали фильма</title>
-
+  <title>TopKino — Популярные фильмы</title>
   <style>
+    /* ...стили без изменений, как у тебя... */
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #111;
       color: #eee;
-      padding: 15px;
-      max-width: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    a {
-      color: #00aaff;
-      text-decoration: none;
-      display: inline-block;
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
-
-    a:hover {
-      text-decoration: underline;
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .search-container {
-      flex-grow: 1;
-      max-width: 400px;
-    }
-
-    input[type="search"] {
-      width: 100%;
-      padding: 8px 12px;
-      border-radius: 25px;
-      border: none;
-      font-size: 1rem;
-      outline: none;
-      box-shadow: 0 0 6px #00aaffaa;
-      color: #111;
-    }
-
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .poster {
-      width: 300px;
-      flex-shrink: 0;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-
-    .details {
-      flex: 1;
-      min-width: 280px;
-    }
-
-    iframe {
-      width: 100%;
-      height: 300px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 8px;
-    }
-
-    .similar-movies {
-      margin-top: 40px;
-    }
-
-    .similar-movies h2 {
-      margin-bottom: 15px;
-      color: #00aaff;
-      font-weight: 700;
-    }
-
-    .similar-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 15px;
-    }
-
-    .similar-movie-card {
+      position: sticky;
+      top: 0;
       background: #222;
+      padding: 10px 15px;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
+      background: #444;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+    }
+
+    .dropbtn:hover {
+      background-color: #00aaff;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      min-width: 180px;
+      max-height: 250px; /* примерно 5 кнопок по высоте */
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      z-index: 1;
+      border-radius: 6px;
+      margin-top: 5px;
+      scrollbar-width: thin;
+      scrollbar-color: #00aaff transparent;
+    }
+
+    .dropdown-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .dropdown-content::-webkit-scrollbar-thumb {
+      background-color: #00aaff;
+      border-radius: 4px;
+    }
+
+    .dropdown-content button {
+      color: white;
+      padding: 10px 16px;
+      text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .dropdown-content button:hover,
+    .dropdown-content button.active {
+      background-color: #00aaff;
+    }
+
+    .show {
+      display: block;
+    }
+
+    .scroll-indicator {
+      text-align: center;
+      font-size: 1rem;
+      color: #888;
+      padding: 5px 0 0;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      padding: 15px;
+    }
+
+    .movie {
+      background: #1d1d1d;
       border-radius: 8px;
       overflow: hidden;
       text-align: center;
-      box-shadow: 0 0 8px #00aaff66;
-      cursor: pointer;
-      transition: transform 0.3s;
-      color: #eee;
       text-decoration: none;
-      font-size: 0.9rem;
+      color: #fff;
+      box-shadow: 0 0 6px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
     }
 
-    .similar-movie-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 12px #00ccffcc;
+    .movie:hover {
+      transform: scale(1.03);
     }
 
-    .similar-movie-card img {
+    .movie img {
       width: 100%;
-      height: 190px;
+      height: 210px;
       object-fit: cover;
       display: block;
     }
 
-    .similar-movie-title {
-      padding: 8px 6px;
-      min-height: 44px;
+    .movie-title {
+      padding: 8px;
+      font-size: 0.9rem;
+      min-height: 45px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
+      color: #aaa;
+      font-size: 0.8rem;
     }
 
     @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        align-items: center;
+      header h1 {
+        font-size: 1.2rem;
       }
 
-      .poster {
-        width: 100%;
-        max-width: 400px;
+      .dropbtn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
       }
 
-      .details {
-        width: 100%;
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
 
-      iframe {
-        height: 220px;
+      .movie img {
+        height: 180px;
       }
     }
 
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.1rem;
+      }
+
+      .dropbtn {
+        padding: 7px 10px;
+        font-size: 0.75rem;
+      }
+
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+      }
+
+      .movie img {
+        height: 160px;
+      }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="index.html">← Назад к списку фильмов</a>
-    <div class="search-container">
-      <input id="search-input" type="search" placeholder="Поиск фильма по названию..." />
-    </div>
+    <h1>Популярные фильмы</h1>
+    <nav>
+      <div class="dropdown">
+        <button class="dropbtn" onclick="toggleDropdown()">Жанры ⮟</button>
+        <div class="dropdown-content" id="genres-menu">
+          <!-- Жанры появятся здесь -->
+        </div>
+        <div class="scroll-indicator">⮟ прокрутите ⮟</div>
+      </div>
+    </nav>
   </header>
 
-  <div class="container">
-    <img class="poster" src="" alt="Постер фильма" />
-    <div class="details">
-      <h1 class="title"></h1>
-      <p class="description"></p>
-    </div>
-  </div>
+  <main id="movies-container">
+    <!-- Фильмы загружаются сюда -->
+  </main>
 
-  <iframe id="trailer" src="" allowfullscreen></iframe>
-
-  <section class="similar-movies" id="similar-movies" style="display:none;">
-    <h2>Похожие фильмы</h2>
-    <div class="similar-list" id="similar-list"></div>
-  </section>
+  <footer>
+    © 2025 TopKino. Все права защищены.
+  </footer>
 
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w300';
+    const genresMenu = document.getElementById('genres-menu');
+    const moviesContainer = document.getElementById('movies-container');
+    let currentGenreId = null;
 
-    // Получаем id из URL вида /movie/157336-interstellar.html
-    const pathParts = window.location.pathname.split('/');
-    const lastPart = pathParts[pathParts.length - 1];
-    const withoutExt = lastPart.replace('.html', '');
-    const movieId = withoutExt.split('-')[0];
-
-    async function loadMovieDetails() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-      const movie = await res.json();
-
-      document.querySelector('.poster').src = movie.poster_path
-        ? IMG_URL + movie.poster_path
-        : 'https://via.placeholder.com/300x450?text=Нет+постера';
-
-      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
-      document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
+    function toggleDropdown() {
+      document.getElementById("genres-menu").classList.toggle("show");
     }
 
-    async function loadTrailer() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const data = await res.json();
-      const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-
-      if (trailer) {
-        document.getElementById('trailer').src = `https://www.youtube.com/embed/${trailer.key}`;
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+          const openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
       }
     }
 
-    async function loadSimilarMovies() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}&language=ru-RU&page=1`);
+    async function fetchGenres() {
+      const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
       const data = await res.json();
+      displayGenres(data.genres);
+    }
 
-      if (data.results && data.results.length > 0) {
-        const container = document.getElementById('similar-list');
-        container.innerHTML = '';
+    function displayGenres(genres) {
+      genresMenu.innerHTML = '';
 
-        data.results.forEach(movie => {
-          const seoTitle = transliterate(movie.title);
-          const movieCard = document.createElement('a');
-          movieCard.href = `movie/${movie.id}-${seoTitle}.html`;
-          movieCard.className = 'similar-movie-card';
-          movieCard.title = movie.title;
-          movieCard.innerHTML = `
-            <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}">
-            <div class="similar-movie-title">${movie.title}</div>
-          `;
-          container.appendChild(movieCard);
-        });
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Все фильмы';
+      allBtn.classList.add('active');
+      allBtn.onclick = () => {
+        currentGenreId = null;
+        setActiveGenre(allBtn);
+        fetchMovies();
+      };
+      genresMenu.appendChild(allBtn);
 
-        document.getElementById('similar-movies').style.display = 'block';
-      }
+      genres.forEach(genre => {
+        const btn = document.createElement('button');
+        btn.textContent = genre.name;
+        btn.onclick = () => {
+          currentGenreId = genre.id;
+          setActiveGenre(btn);
+          fetchMovies(genre.id);
+        };
+        genresMenu.appendChild(btn);
+      });
+    }
+
+    function setActiveGenre(activeBtn) {
+      genresMenu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+      activeBtn.classList.add('active');
     }
 
     // Простая транслитерация для url
@@ -248,24 +291,36 @@
       return str.toLowerCase().split('').map((char) => {
         const index = ru.indexOf(char);
         return index >= 0 ? en[index] : char;
-      }).join('').replace(/[^a-z0-9\-]/g, '');
+      }).join('').replace(/[^a-z0-9\-]/g, ''); // оставляем только латиницу, цифры и -
     }
 
-    // Поиск по названию фильма (перенаправляем на главную с параметром ?search=)
-    document.getElementById('search-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        const query = e.target.value.trim();
-        if (query.length > 0) {
-          // Пример: перейти на главную с параметром поиска
-          window.location.href = `index.html?search=${encodeURIComponent(query)}`;
-        }
-      }
-    });
+    async function fetchMovies(genreId = null) {
+      let url = genreId
+        ? `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc`
+        : `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU`;
 
-    // Загрузка данных
-    loadMovieDetails();
-    loadTrailer();
-    loadSimilarMovies();
+      const res = await fetch(url);
+      const data = await res.json();
+      displayMovies(data.results);
+    }
+
+    function displayMovies(movies) {
+      moviesContainer.innerHTML = '';
+      movies.forEach(movie => {
+        const seoTitle = transliterate(movie.title);
+        const card = document.createElement('a');
+        card.href = `movie/${movie.id}-${seoTitle}.html`;
+        card.className = 'movie';
+        card.innerHTML = `
+          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
+          <div class="movie-title">${movie.title}</div>
+        `;
+        moviesContainer.appendChild(card);
+      });
+    }
+
+    fetchGenres();
+    fetchMovies();
   </script>
 
 </body>
