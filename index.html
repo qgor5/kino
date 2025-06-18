@@ -1,10 +1,15 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TopKino — Детали фильма</title>
+  <title>TopKino — Популярные фильмы</title>
   <style>
+    /* ...стили без изменений, как у тебя... */
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -13,130 +18,298 @@
     }
 
     header {
+      position: sticky;
+      top: 0;
       background: #222;
-      padding: 12px 16px;
+      padding: 10px 15px;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      margin: 0 0 10px 0;
       text-align: center;
-      font-size: 1.3rem;
-      font-weight: bold;
     }
 
-    .container {
-      max-width: 1000px;
-      margin: 20px auto;
-      padding: 20px;
-      background: #1d1d1d;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.6);
+    nav {
+      display: flex;
+      justify-content: center;
     }
 
-    .poster {
-      max-width: 300px;
-      float: left;
-      margin-right: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.5);
-    }
-
-    .details {
-      overflow: hidden;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      margin: 0 0 10px;
-    }
-
-    p {
-      line-height: 1.6;
-      font-size: 1rem;
-      margin-bottom: 10px;
-    }
-
-    .tagline {
-      font-style: italic;
-      color: #aaa;
-      margin-bottom: 10px;
-    }
-
-    .back-link {
+    .dropdown {
+      position: relative;
       display: inline-block;
-      margin-top: 20px;
-      color: #00aaff;
-      text-decoration: none;
     }
 
-    .back-link:hover {
-      text-decoration: underline;
+    .dropbtn {
+      background: #444;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+    }
+
+    .dropbtn:hover {
+      background-color: #00aaff;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      min-width: 180px;
+      max-height: 250px; /* примерно 5 кнопок по высоте */
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      z-index: 1;
+      border-radius: 6px;
+      margin-top: 5px;
+      scrollbar-width: thin;
+      scrollbar-color: #00aaff transparent;
+    }
+
+    .dropdown-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .dropdown-content::-webkit-scrollbar-thumb {
+      background-color: #00aaff;
+      border-radius: 4px;
+    }
+
+    .dropdown-content button {
+      color: white;
+      padding: 10px 16px;
+      text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .dropdown-content button:hover,
+    .dropdown-content button.active {
+      background-color: #00aaff;
+    }
+
+    .show {
+      display: block;
+    }
+
+    .scroll-indicator {
+      text-align: center;
+      font-size: 1rem;
+      color: #888;
+      padding: 5px 0 0;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      padding: 15px;
+    }
+
+    .movie {
+      background: #1d1d1d;
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      box-shadow: 0 0 6px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
+    }
+
+    .movie:hover {
+      transform: scale(1.03);
+    }
+
+    .movie img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .movie-title {
+      padding: 8px;
+      font-size: 0.9rem;
+      min-height: 45px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
+      color: #aaa;
+      font-size: 0.8rem;
     }
 
     @media (max-width: 768px) {
-      .poster {
-        float: none;
-        display: block;
-        margin: 0 auto 20px;
+      header h1 {
+        font-size: 1.2rem;
       }
 
-      .details {
-        text-align: center;
+      .dropbtn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+
+      .movie img {
+        height: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.1rem;
+      }
+
+      .dropbtn {
+        padding: 7px 10px;
+        font-size: 0.75rem;
+      }
+
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+      }
+
+      .movie img {
+        height: 160px;
       }
     }
   </style>
 </head>
 <body>
 
-  <header>TopKino — Детали фильма</header>
+  <header>
+    <h1>Популярные фильмы</h1>
+    <nav>
+      <div class="dropdown">
+        <button class="dropbtn" onclick="toggleDropdown()">Жанры ⮟</button>
+        <div class="dropdown-content" id="genres-menu">
+          <!-- Жанры появятся здесь -->
+        </div>
+        <div class="scroll-indicator">⮟ прокрутите ⮟</div>
+      </div>
+    </nav>
+  </header>
 
-  <div class="container">
-    <img id="poster" class="poster" src="" alt="Постер фильма" />
-    <div class="details">
-      <h1 id="title">Загрузка...</h1>
-      <div id="tagline" class="tagline"></div>
-      <p id="overview">Описание фильма загружается...</p>
-      <p><strong>Дата выхода:</strong> <span id="release-date"></span></p>
-      <p><strong>Рейтинг:</strong> <span id="rating"></span> / 10</p>
-      <a class="back-link" href="../index.html">← Назад к списку фильмов</a>
-    </div>
-  </div>
+  <main id="movies-container">
+    <!-- Фильмы загружаются сюда -->
+  </main>
+
+  <footer>
+    © 2025 TopKino. Все права защищены.
+  </footer>
 
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w300';
+    const genresMenu = document.getElementById('genres-menu');
+    const moviesContainer = document.getElementById('movies-container');
+    let currentGenreId = null;
 
-    function extractIdFromUrl() {
-      const url = window.location.pathname;
-      const slug = url.substring(url.lastIndexOf('/') + 1); // ch-ya-574475.html
-      const match = slug.match(/-(\d+)\.html$/);
-      return match ? match[1] : null;
+    function toggleDropdown() {
+      document.getElementById("genres-menu").classList.toggle("show");
     }
 
-    async function loadMovieDetails() {
-      const movieId = extractIdFromUrl();
-      if (!movieId) {
-        document.getElementById('title').textContent = 'Ошибка: ID фильма не найден.';
-        return;
-      }
-
-      try {
-        const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-        const movie = await response.json();
-
-        document.title = `${movie.title} — TopKino`;
-        document.getElementById('title').textContent = movie.title;
-        document.getElementById('overview').textContent = movie.overview || 'Описание недоступно.';
-        document.getElementById('tagline').textContent = movie.tagline || '';
-        document.getElementById('release-date').textContent = movie.release_date || 'Неизвестна';
-        document.getElementById('rating').textContent = movie.vote_average || '—';
-        document.getElementById('poster').src = movie.poster_path
-          ? IMG_URL + movie.poster_path
-          : 'https://via.placeholder.com/300x450?text=Нет+постера';
-        document.getElementById('poster').alt = movie.title;
-      } catch (error) {
-        document.getElementById('title').textContent = 'Ошибка загрузки данных фильма.';
-        console.error(error);
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+          const openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
       }
     }
 
-    loadMovieDetails();
+    async function fetchGenres() {
+      const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
+      const data = await res.json();
+      displayGenres(data.genres);
+    }
+
+    function displayGenres(genres) {
+      genresMenu.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Все фильмы';
+      allBtn.classList.add('active');
+      allBtn.onclick = () => {
+        currentGenreId = null;
+        setActiveGenre(allBtn);
+        fetchMovies();
+      };
+      genresMenu.appendChild(allBtn);
+
+      genres.forEach(genre => {
+        const btn = document.createElement('button');
+        btn.textContent = genre.name;
+        btn.onclick = () => {
+          currentGenreId = genre.id;
+          setActiveGenre(btn);
+          fetchMovies(genre.id);
+        };
+        genresMenu.appendChild(btn);
+      });
+    }
+
+    function setActiveGenre(activeBtn) {
+      genresMenu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+      activeBtn.classList.add('active');
+    }
+
+    // Простая транслитерация для url
+    function transliterate(str) {
+      const ru = ['а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',' '];
+      const en = ['a','b','v','g','d','e','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','ts','ch','sh','sch','','y','','e','yu','ya','-'];
+      return str.toLowerCase().split('').map((char) => {
+        const index = ru.indexOf(char);
+        return index >= 0 ? en[index] : char;
+      }).join('').replace(/[^a-z0-9\-]/g, ''); // оставляем только латиницу, цифры и -
+    }
+
+    async function fetchMovies(genreId = null) {
+      let url = genreId
+        ? `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc`
+        : `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+      displayMovies(data.results);
+    }
+
+    function displayMovies(movies) {
+      moviesContainer.innerHTML = '';
+      movies.forEach(movie => {
+        const seoTitle = transliterate(movie.title);
+        const card = document.createElement('a');
+        card.href = `movie/${movie.id}-${seoTitle}.html`;
+        card.className = 'movie';
+        card.innerHTML = `
+          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
+          <div class="movie-title">${movie.title}</div>
+        `;
+        moviesContainer.appendChild(card);
+      });
+    }
+
+    fetchGenres();
+    fetchMovies();
   </script>
+
 </body>
 </html>
