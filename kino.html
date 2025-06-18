@@ -2,31 +2,66 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Информация о фильме - TopKino</title>
+  <title>Популярные фильмы - TopKino</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #121212; color: #eee; margin: 0; padding: 0; }
-    header, footer { background: #222; padding: 15px 30px; text-align: center; }
-    main {
-      max-width: 800px; margin: 20px auto; padding: 0 20px;
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #eee;
+      margin: 0; padding: 0;
+    }
+    header, footer {
+      background: #222;
+      padding: 15px 30px;
       text-align: center;
     }
-    img {
-      max-width: 100%; border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.8);
+    header h1 {
+      margin: 0;
+      font-weight: 700;
     }
-    h1 {
-      margin-top: 20px;
+    main {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+    .movie {
+      background: #1e1e1e;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 8px rgba(0,0,0,0.7);
+      cursor: pointer;
+      transition: transform 0.3s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .movie:hover {
+      transform: scale(1.05);
+    }
+    .movie img {
+      width: 100%;
+      display: block;
+      height: 225px;
+      object-fit: cover;
+    }
+    .movie-title {
+      padding: 10px;
+      font-size: 16px;
+      text-align: center;
+      height: 50px;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>TopKino</h1>
-    <!-- Здесь можешь вставить меню -->
+    <h1>Популярные фильмы</h1>
   </header>
 
-  <main id="movie-info">
-    <p>Загрузка...</p>
+  <main id="movies-container">
+    <!-- Фильмы появятся здесь -->
   </main>
 
   <footer>
@@ -35,37 +70,38 @@
 
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+    const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`;
+    const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w300';
 
-    // Получаем id фильма из URL ?id=12345
-    const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get('id');
-
-    async function fetchMovie(id) {
+    async function fetchPopularMovies() {
       try {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=ru-RU`);
-        if (!res.ok) throw new Error('Ошибка загрузки информации о фильме');
-        const movie = await res.json();
-        displayMovie(movie);
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error('Ошибка загрузки данных');
+        const data = await res.json();
+        displayMovies(data.results);
       } catch (err) {
-        document.getElementById('movie-info').innerHTML = `<p style="color:red;">${err.message}</p>`;
+        document.getElementById('movies-container').innerHTML = `<p style="color:red; text-align:center;">${err.message}</p>`;
       }
     }
 
-    function displayMovie(movie) {
-      const container = document.getElementById('movie-info');
-      container.innerHTML = `
-        <img src="${movie.poster_path ? IMG_BASE_URL + movie.poster_path : 'https://via.placeholder.com/500x750?text=Нет+постера'}" alt="${movie.title}" />
-        <h1>${movie.title}</h1>
-        <!-- Здесь позже можно добавить описание, трейлер и другое -->
-      `;
+    function displayMovies(movies) {
+      const container = document.getElementById('movies-container');
+      container.innerHTML = '';
+
+      movies.forEach(movie => {
+        const movieEl = document.createElement('a');
+        movieEl.classList.add('movie');
+        movieEl.href = `movie.html?id=${movie.id}`;
+        movieEl.target = '_self';
+        movieEl.innerHTML = `
+          <img src="${movie.poster_path ? IMG_BASE_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
+          <div class="movie-title">${movie.title}</div>
+        `;
+        container.appendChild(movieEl);
+      });
     }
 
-    if (movieId) {
-      fetchMovie(movieId);
-    } else {
-      document.getElementById('movie-info').innerHTML = '<p>Фильм не выбран.</p>';
-    }
+    fetchPopularMovies();
   </script>
 </body>
 </html>
