@@ -1,11 +1,10 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Популярные фильмы</title>
   <style>
-    /* Весь твой CSS из оригинала без изменений */
     * {
       box-sizing: border-box;
     }
@@ -61,7 +60,7 @@
       position: absolute;
       background-color: #333;
       min-width: 180px;
-      max-height: 250px; /* примерно 5 кнопок по высоте */
+      max-height: 250px;
       overflow-y: auto;
       box-shadow: 0 8px 16px rgba(0,0,0,0.6);
       z-index: 1;
@@ -282,12 +281,19 @@
       displayMovies(data.results);
     }
 
+    function slugify(text) {
+      return text.toString().toLowerCase()
+        .replace(/[^\w\s-]/g, '')       // Remove all non-word chars
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/--+/g, '-');          // Replace multiple - with single -
+    }
+
     function displayMovies(movies) {
       moviesContainer.innerHTML = '';
       movies.forEach(movie => {
+        const slug = slugify(movie.title);
         const card = document.createElement('a');
-        // Вот здесь - ссылка на movie.html с параметром id
-        card.href = `movie.html?id=${movie.id}`;
+        card.href = `movie/${movie.id}-${slug}`; // SEO-ссылка
         card.className = 'movie';
         card.innerHTML = `
           <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
