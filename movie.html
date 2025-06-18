@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Детали фильма</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPMXGR1HF9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-FPMXGR1HF9');
+  </script>
+
   <style>
     body {
       margin: 0;
@@ -87,11 +98,8 @@
 
     // Получаем id из URL вида /movie/157336-interstellar.html
     const pathParts = window.location.pathname.split('/');
-    // Последний элемент, например "157336-interstellar.html"
     const lastPart = pathParts[pathParts.length - 1];
-    // Убираем расширение .html
     const withoutExt = lastPart.replace('.html', '');
-    // Получаем id до дефиса
     const movieId = withoutExt.split('-')[0];
 
     async function loadMovieDetails() {
