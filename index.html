@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Популярные фильмы</title>
   <style>
-    /* ...стили без изменений, как у тебя... */
+    /* Весь твой CSS из оригинала без изменений */
     * {
       box-sizing: border-box;
     }
@@ -272,16 +272,6 @@
       activeBtn.classList.add('active');
     }
 
-    // Простая транслитерация для url
-    function transliterate(str) {
-      const ru = ['а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',' '];
-      const en = ['a','b','v','g','d','e','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','ts','ch','sh','sch','','y','','e','yu','ya','-'];
-      return str.toLowerCase().split('').map((char) => {
-        const index = ru.indexOf(char);
-        return index >= 0 ? en[index] : char;
-      }).join('').replace(/[^a-z0-9\-]/g, ''); // оставляем только латиницу, цифры и -
-    }
-
     async function fetchMovies(genreId = null) {
       let url = genreId
         ? `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc`
@@ -295,9 +285,9 @@
     function displayMovies(movies) {
       moviesContainer.innerHTML = '';
       movies.forEach(movie => {
-        const seoTitle = transliterate(movie.title);
         const card = document.createElement('a');
-        card.href = `movie/${movie.id}-${seoTitle}.html`;
+        // Вот здесь - ссылка на movie.html с параметром id
+        card.href = `movie.html?id=${movie.id}`;
         card.className = 'movie';
         card.innerHTML = `
           <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
