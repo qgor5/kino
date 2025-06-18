@@ -8,6 +8,7 @@
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -31,29 +32,59 @@
     }
 
     nav {
-      overflow-x: auto;
-      white-space: nowrap;
-      padding: 5px 0;
       display: flex;
-      gap: 10px;
+      justify-content: center;
     }
 
-    nav button {
-      flex: 0 0 auto;
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
       background: #444;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9rem;
       border: none;
-      color: #eee;
       border-radius: 18px;
-      padding: 8px 14px;
+      cursor: pointer;
+    }
+
+    .dropbtn:hover {
+      background-color: #00aaff;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      z-index: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .dropdown-content button {
+      color: white;
+      padding: 10px 16px;
+      text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
       font-size: 0.9rem;
       cursor: pointer;
-      transition: background 0.3s;
     }
 
-    nav button.active,
-    nav button:hover {
-      background: #00aaff;
-      color: #fff;
+    .dropdown-content button:hover,
+    .dropdown-content button.active {
+      background-color: #00aaff;
+    }
+
+    .show {
+      display: block;
     }
 
     main {
@@ -99,13 +130,12 @@
       font-size: 0.8rem;
     }
 
-    /* Адаптивность */
     @media (max-width: 768px) {
       header h1 {
         font-size: 1.2rem;
       }
 
-      nav button {
+      .dropbtn {
         padding: 8px 12px;
         font-size: 0.8rem;
       }
@@ -124,7 +154,7 @@
         font-size: 1.1rem;
       }
 
-      nav button {
+      .dropbtn {
         padding: 7px 10px;
         font-size: 0.75rem;
       }
@@ -144,8 +174,13 @@
 
   <header>
     <h1>Популярные фильмы</h1>
-    <nav id="genres-menu">
-      <!-- Жанры появятся здесь -->
+    <nav>
+      <div class="dropdown">
+        <button class="dropbtn" onclick="toggleDropdown()">Жанры</button>
+        <div class="dropdown-content" id="genres-menu">
+          <!-- Жанры появятся здесь -->
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -162,8 +197,23 @@
     const IMG_URL = 'https://image.tmdb.org/t/p/w300';
     const genresMenu = document.getElementById('genres-menu');
     const moviesContainer = document.getElementById('movies-container');
-
     let currentGenreId = null;
+
+    function toggleDropdown() {
+      document.getElementById("genres-menu").classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+          const openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
 
     async function fetchGenres() {
       const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
@@ -172,6 +222,8 @@
     }
 
     function displayGenres(genres) {
+      genresMenu.innerHTML = '';
+
       const allBtn = document.createElement('button');
       allBtn.textContent = 'Все фильмы';
       allBtn.classList.add('active');
