@@ -59,12 +59,24 @@
       display: none;
       position: absolute;
       background-color: #333;
-      min-width: 160px;
+      min-width: 180px;
+      max-height: 250px; /* примерно 5 кнопок по высоте */
+      overflow-y: auto;
       box-shadow: 0 8px 16px rgba(0,0,0,0.6);
       z-index: 1;
       border-radius: 6px;
-      overflow: hidden;
       margin-top: 5px;
+      scrollbar-width: thin;
+      scrollbar-color: #00aaff transparent;
+    }
+
+    .dropdown-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .dropdown-content::-webkit-scrollbar-thumb {
+      background-color: #00aaff;
+      border-radius: 4px;
     }
 
     .dropdown-content button {
@@ -85,6 +97,13 @@
 
     .show {
       display: block;
+    }
+
+    .scroll-indicator {
+      text-align: center;
+      font-size: 1rem;
+      color: #888;
+      padding: 5px 0 0;
     }
 
     main {
@@ -176,10 +195,11 @@
     <h1>Популярные фильмы</h1>
     <nav>
       <div class="dropdown">
-        <button class="dropbtn" onclick="toggleDropdown()">Жанры</button>
+        <button class="dropbtn" onclick="toggleDropdown()">Жанры ⮟</button>
         <div class="dropdown-content" id="genres-menu">
           <!-- Жанры появятся здесь -->
         </div>
+        <div class="scroll-indicator">⮟ прокрутите ⮟</div>
       </div>
     </nav>
   </header>
