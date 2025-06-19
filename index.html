@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
@@ -361,14 +361,24 @@
       document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
     }
 
-    // Загрузить популярные фильмы
+    // Загрузить популярные фильмы (24 фильма)
     async function loadPopular() {
       highlightMainButton('btn-popular');
       try {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU`);
-        if (!res.ok) throw new Error('Ошибка сети');
-        const data = await res.json();
-        displayMovies(data.results);
+        // Первая страница (20 фильмов)
+        const res1 = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`);
+        if (!res1.ok) throw new Error('Ошибка сети');
+        const data1 = await res1.json();
+
+        // Вторая страница (следующие 20 фильмов)
+        const res2 = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=2`);
+        if (!res2.ok) throw new Error('Ошибка сети');
+        const data2 = await res2.json();
+
+        // Объединяем и берём первые 24
+        const movies = data1.results.concat(data2.results).slice(0, 24);
+
+        displayMovies(movies);
       } catch(e) {
         moviesContainer.innerHTML = '<p style="color:#f55; padding:10px;">Не удалось загрузить популярные фильмы</p>';
       }
@@ -378,10 +388,11 @@
     async function loadMoviesByGenre(genreId) {
       removeMainButtonHighlight();
       try {
-        const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc`);
+        const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc&page=1`);
         if (!res.ok) throw new Error('Ошибка сети');
         const data = await res.json();
-        displayMovies(data.results);
+        // Берём 24 фильма
+        displayMovies(data.results.slice(0, 24));
       } catch(e) {
         moviesContainer.innerHTML = '<p style="color:#f55; padding:10px;">Не удалось загрузить фильмы по жанру</p>';
       }
@@ -391,10 +402,11 @@
     async function loadMoviesByYear(year) {
       removeMainButtonHighlight();
       try {
-        const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&primary_release_year=${year}&sort_by=popularity.desc`);
+        const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&primary_release_year=${year}&sort_by=popularity.desc&page=1`);
         if (!res.ok) throw new Error('Ошибка сети');
         const data = await res.json();
-        displayMovies(data.results);
+        // Берём 24 фильма
+        displayMovies(data.results.slice(0, 24));
       } catch(e) {
         moviesContainer.innerHTML = '<p style="color:#f55; padding:10px;">Не удалось загрузить фильмы по году</p>';
       }
