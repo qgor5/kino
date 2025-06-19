@@ -103,6 +103,38 @@
       border: none;
       display: block;
     }
+    /* Блок с мнением */
+    .review-text {
+      margin: 30px auto;
+      max-width: 800px;
+      background: #222;
+      border-radius: 8px;
+      padding: 20px;
+      font-style: italic;
+      box-shadow: 0 0 10px rgba(0,170,255,0.3);
+      color: #ddd;
+    }
+    /* Иконки соцсетей */
+    .social-links {
+      margin-top: 50px;
+      text-align: center;
+    }
+    .social-links a {
+      display: inline-block;
+      margin: 0 15px;
+      color: #00aaff;
+      transition: color 0.3s;
+      font-size: 0;
+    }
+    .social-links a svg {
+      width: 36px;
+      height: 36px;
+      fill: #00aaff;
+      transition: fill 0.3s;
+    }
+    .social-links a:hover svg {
+      fill: #0088cc;
+    }
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
@@ -143,6 +175,26 @@
   <div class="video-wrapper" id="videoWrapper" style="display:none;">
     <img id="videoThumb" src="" alt="Трейлер">
     <div class="play-button"></div>
+  </div>
+
+  <!-- Блок с мнением (статичный пример, можно заменить) -->
+  <div class="review-text" id="reviewText">
+    <h2>Мнение зрителя</h2>
+    <p>«Этот фильм впечатляет своей динамикой и глубоким сюжетом. Отличная игра актёров и качественная режиссура делают просмотр настоящим удовольствием. Рекомендую к просмотру всем любителям жанра!»</p>
+  </div>
+
+  <!-- Соцсети -->
+  <div class="social-links" aria-label="Социальные сети">
+    <!-- Здесь вставьте свои ссылки -->
+    <a href="https://t.me/yourchannel" target="_blank" rel="noopener" title="Telegram">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 2.5L2.5 10.5l5 2 1 7 3.5-5.5 4.5 4.5 5-17z"/></svg>
+    </a>
+    <a href="https://youtube.com/yourchannel" target="_blank" rel="noopener" title="YouTube">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5.19-3L10 9v6zM21 6c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6z"/></svg>
+    </a>
+    <a href="https://facebook.com/yourpage" target="_blank" rel="noopener" title="Facebook">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2c0-2 1-3 3-3h2v3h-2c-.5 0-1 .3-1 1v1h3l-.5 3h-2.5v7A10 10 0 0 0 22 12z"/></svg>
+    </a>
   </div>
 
   <script>
