@@ -63,6 +63,12 @@
       color: #00aaff;
     }
 
+    .meta-info {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
     .video-wrapper {
       margin: 40px auto 0;
       position: relative;
@@ -141,7 +147,11 @@
     <img class="poster" src="" alt="Постер фильма" width="300" height="450" loading="lazy">
     <div class="details">
       <h1 class="title"></h1>
+      <p class="meta-info" id="releaseDate"></p>
+      <p class="meta-info" id="director"></p>
+      <p class="meta-info" id="actors"></p>
       <p class="description"></p>
+      <p class="meta-info" id="rating"></p>
     </div>
   </div>
 
@@ -162,37 +172,77 @@
     const movieId = withoutExt.split('-')[0];
 
     async function loadMovieDetails() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-      const movie = await res.json();
+      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+      const movie = await movieRes.json();
 
+      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+      const credits = await creditsRes.json();
+
+      // Постер
       document.querySelector('.poster').src = movie.poster_path
         ? IMG_URL + movie.poster_path
         : 'https://via.placeholder.com/300x450?text=Нет+постера';
 
+      // Название + год
       document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
+
+      // Дата выхода
+      document.getElementById('releaseDate').textContent = movie.release_date
+        ? `Дата выхода: ${movie.release_date}`
+        : '';
+
+      // Режиссёр (первый в списке crew с job === 'Director')
+      const director = credits.crew.find(member => member.job === 'Director');
+      document.getElementById('director').textContent = director
+        ? `Режиссёр: ${director.name}`
+        : 'Режиссёр: информация отсутствует';
+
+      // Главные актеры (топ 5)
+      const topActors = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
+      document.getElementById('actors').textContent = topActors
+        ? `В главных ролях: ${topActors}`
+        : 'Информация об актёрах отсутствует';
+
+      // Описание
       document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
 
-      // Сгенерировать SEO-текст
-      document.getElementById('seoText').innerHTML = generateSeoText(movie);
+      // Рейтинг
+      document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
+
+      // SEO-текст
+      document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
     }
 
-    function generateSeoText(movie) {
+    function generateSeoText(movie, director, topActors) {
       const title = movie.title;
       const year = movie.release_date?.slice(0, 4) || '';
+      const fullDate = movie.release_date || '';
       const genres = movie.genres?.map(g => g.name).join(', ') || 'жанр неизвестен';
       const rating = movie.vote_average?.toFixed(1) || 'нет рейтинга';
+      const votes = movie.vote_count || 0;
       const overview = movie.overview || '';
+      const directorName = director ? director.name : 'информация отсутствует';
+      const actorsList = topActors || 'информация отсутствует';
+
+      // Ключевые слова
+      const keywords = [title, 'фильм', year, 'смотреть онлайн', genres, directorName, 'трейлер', 'отзывы', 'рейтинг'];
 
       const phrases = [
-        `Фильм «${title}» (${year}) — это ${genres.toLowerCase()}, получивший оценку ${rating} на TMDB.`,
-        `Это один из самых обсуждаемых фильмов ${year} года, который привлекает внимание как поклонников жанра, так и критиков.`,
-        `Сюжет проекта разворачивается следующим образом: ${overview}`,
-        `«${title}» — яркий пример современного кино, где режиссура сочетается с напряжённой атмосферой.`,
-        `Если вы любите ${genres.toLowerCase()} — обязательно посмотрите этот фильм.`
+        `Фильм «${title}» (${fullDate}) — это ${genres.toLowerCase()}, который режиссировал ${directorName}.`,
+        `В главных ролях: ${actorsList}.`,
+        `Проект получил рейтинг ${rating} на TMDB по результатам ${votes} голосов.`,
+        `Сюжет фильма: ${overview}`,
+        `Если вы ищете качественное кино в жанре ${genres.toLowerCase()}, то «${title}» станет отличным выбором.`,
+        `Этот фильм ${year} года обязательно стоит посмотреть всем поклонникам жанров ${genres.toLowerCase()}.`
       ];
 
       const shuffled = phrases.sort(() => 0.5 - Math.random());
-      return `<h2>Почему стоит посмотреть «${title}»</h2><p>${shuffled.slice(0, 3).join(' ')}</p>`;
+
+      return `
+        <h2>Почему стоит посмотреть «${title}»</h2>
+        <p>${shuffled.slice(0, 4).join(' ')}</p>
+        <meta name="keywords" content="${keywords.join(', ')}" />
+      `;
     }
 
     async function loadTrailer() {
