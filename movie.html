@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -93,36 +94,9 @@
     .social-links a {
       margin: 0 10px;
     }
-    .lang-switcher {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: #1a1a1a;
-      border-radius: 5px;
-      padding: 5px 10px;
-      z-index: 9999;
-    }
-    .lang-switcher button {
-      background: none;
-      border: none;
-      color: #eee;
-      margin: 0 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .lang-switcher button.active {
-      color: #00aaff;
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
-
-  <div class="lang-switcher">
-    <button onclick="setLang('ru')" id="lang-ru">RU</button>
-    <button onclick="setLang('uk')" id="lang-uk">UA</button>
-    <button onclick="setLang('en')" id="lang-en">EN</button>
-  </div>
 
   <a href="/index.html">← Назад к списку фильмов</a>
 
@@ -157,153 +131,109 @@
     </a>
   </div>
 
-<script>
-  const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-  const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-  const movieId = location.pathname.split('/').pop().split('-')[0];
-  const seoTextEl = document.getElementById('seoText');
+  <script>
+    const API_KEY = '7cb67565ace3a08cd9d099c749787121';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    const movieId = location.pathname.split('/').pop().split('-')[0];
+    const seoTextEl = document.getElementById('seoText');
 
-  // Храним язык в localStorage, по умолчанию 'ru'
-  let currentLang = localStorage.getItem('lang') || 'ru';
+    async function loadMovie() {
+      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+      const movie = await movieRes.json();
 
-  // Устанавливаем и сохраняем язык, перезагружаем страницу
-  function setLang(lang) {
-    if (lang === currentLang) return;
-    localStorage.setItem('lang', lang);
-    location.reload();
-  }
+      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+      const credits = await creditsRes.json();
 
-  // Подсвечиваем активный язык в переключателе
-  function highlightLang() {
-    document.querySelectorAll('.lang-switcher button').forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.getElementById('lang-' + currentLang);
-    if (activeBtn) activeBtn.classList.add('active');
-  }
+      const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
+      const actors = credits.cast.slice(0, 3).map(a => a.name);
+      const genres = movie.genres.map(g => g.name);
+      const poster = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450';
 
-  // Загружаем данные фильма на выбранном языке
-  async function loadMovie() {
-    // Преобразуем кода языка для TMDB API:
-    // ru => ru-RU, uk => uk-UA, en => en-US
-    let apiLang = 'ru-RU';
-    if (currentLang === 'uk') apiLang = 'uk-UA';
-    else if (currentLang === 'en') apiLang = 'en-US';
+      document.querySelector('.poster').src = poster;
+      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date.slice(0,4)})`;
+      document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date}`;
+      document.getElementById('director').textContent = `Режиссёр: ${director}`;
+      document.getElementById('actors').textContent = `Актёры: ${actors.join(', ')}`;
+      document.querySelector('.description').textContent = movie.overview;
+      document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
 
-    const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=${apiLang}`);
-    if (!movieRes.ok) {
-      seoTextEl.textContent = 'Ошибка загрузки данных фильма';
-      return;
-    }
-    const movie = await movieRes.json();
-
-    const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=${apiLang}`);
-    const credits = await creditsRes.json();
-
-    const director = credits.crew.find(p => p.job === 'Director')?.name || (currentLang === 'uk' ? 'Невідомий' : currentLang === 'en' ? 'Unknown' : 'Неизвестен');
-    const actors = credits.cast.slice(0, 3).map(a => a.name);
-    const genres = movie.genres.map(g => g.name);
-    const poster = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450';
-
-    document.querySelector('.poster').src = poster;
-
-    // Перевод заголовка страницы и h1
-    document.title = `${movie.title} (${movie.release_date?.slice(0,4) || ''}) — TopKino`;
-    document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0,4) || ''})`;
-
-    // Перевод подписей по языку
-    const labels = {
-      ru: { releaseDate: 'Дата выхода', director: 'Режиссёр', actors: 'Актёры', rating: 'Рейтинг TMDB' },
-      uk: { releaseDate: 'Дата виходу', director: 'Режисер', actors: 'Актори', rating: 'Рейтинг TMDB' },
-      en: { releaseDate: 'Release Date', director: 'Director', actors: 'Actors', rating: 'TMDB Rating' }
-    };
-
-    document.getElementById('releaseDate').textContent = `${labels[currentLang].releaseDate}: ${movie.release_date || '-'}`;
-    document.getElementById('director').textContent = `${labels[currentLang].director}: ${director}`;
-    document.getElementById('actors').textContent = `${labels[currentLang].actors}: ${actors.join(', ') || '-'}`;
-    document.querySelector('.description').textContent = movie.overview || '';
-    document.getElementById('rating').textContent = `${labels[currentLang].rating}: ${movie.vote_average?.toFixed(1) || '-'} (${movie.vote_count || 0} голосов)`;
-
-    // SEO текст — сохраняем отдельно для каждого языка
-    const seoKey = `seo-${movieId}-${currentLang}`;
-    let seo = localStorage.getItem(seoKey);
-    if (!seo) {
-      seo = `<h2>${movie.title} — ${currentLang === 'uk' ? 'дивитися онлайн' : currentLang === 'en' ? 'watch online' : 'смотреть онлайн'}</h2>
-      <p>${currentLang === 'uk' ? 'Фільм' : currentLang === 'en' ? 'Movie' : 'Фильм'} «${movie.title}» ${currentLang === 'uk' ? 'у жанрі' : currentLang === 'en' ? 'in genre' : 'в жанре'} ${genres.join(', ').toLowerCase()} ${currentLang === 'uk' ? 'вийшов у' : currentLang === 'en' ? 'released in' : 'вышел в'} ${movie.release_date?.slice(0, 4) || ''} ${currentLang === 'uk' ? 'році' : currentLang === 'en' ? '' : 'году'}. ${currentLang === 'uk' ? 'Режисер' : currentLang === 'en' ? 'Director' : 'Режиссёр'} — ${director}. ${currentLang === 'uk' ? 'У головних ролях' : currentLang === 'en' ? 'Starring' : 'В главных ролях'}: ${actors.join(', ')}. ${currentLang === 'uk' ? 'Сюжет' : currentLang === 'en' ? 'Plot' : 'Сюжет'}: ${movie.overview}</p>
-      <p>${currentLang === 'uk' ? 'Проект отримав оцінку' : currentLang === 'en' ? 'This project received a rating of' : 'Этот проект получил оценку'} ${movie.vote_average?.toFixed(1) || '-'} ${currentLang === 'uk' ? 'на TMDB на основі' : currentLang === 'en' ? 'on TMDB based on' : 'на TMDB на основе'} ${movie.vote_count || 0} ${currentLang === 'uk' ? 'голосів' : currentLang === 'en' ? 'votes' : 'голосов'}.</p>`;
-      localStorage.setItem(seoKey, seo);
-    }
-    seoTextEl.innerHTML = seo;
-
-    // Обновим Schema.org JSON-LD с языком
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "Movie",
-      "name": movie.title,
-      "description": movie.overview,
-      "datePublished": movie.release_date,
-      "url": location.href,
-      "image": poster,
-      "genre": genres,
-      "inLanguage": currentLang,
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": movie.vote_average?.toFixed(1) || '0',
-        "ratingCount": movie.vote_count || 0,
-        "bestRating": "10",
-        "worstRating": "1"
-      },
-      "review": {
-        "@type": "Review",
-        "author": { "@type": "Person", "name": "Кинообзор TopKino" },
-        "datePublished": movie.release_date,
-        "reviewBody": `Рецензия на фильм «${movie.title}»: отличная игра актёров и режиссура.`,
-        "reviewRating": { "@type": "Rating", "ratingValue": "8", "bestRating": "10", "worstRating": "1" }
-      },
-      "director": { "@type": "Person", "name": director },
-      "actor": actors.map(name => ({ "@type": "Person", "name": name })),
-      "publisher": {
-        "@type": "Organization",
-        "name": "TopKino",
-        "url": "https://topkino.netlify.app/"
+      // SEO текст — сохраняется 1 раз
+      const seoKey = `seo-${movieId}`;
+      let seo = localStorage.getItem(seoKey);
+      if (!seo) {
+        seo = `<h2>${movie.title} — смотреть онлайн</h2>
+        <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p>
+        <p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов. Если вы любите ${genres.join(', ').toLowerCase()}, этот фильм вам точно понравится.</p>`;
+        localStorage.setItem(seoKey, seo);
       }
-    };
+      seoTextEl.innerHTML = seo;
 
-    // Удалим старый JSON-LD если есть
-    const oldJsonLd = document.querySelector('script[type="application/ld+json"]');
-    if (oldJsonLd) oldJsonLd.remove();
-
-    // Добавим новый
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.textContent = JSON.stringify(schema);
-    document.head.appendChild(script);
-  }
-
-  // Загружаем трейлер, учитывая язык
-  async function loadTrailer() {
-    let apiLang = 'ru-RU';
-    if (currentLang === 'uk') apiLang = 'uk-UA';
-    else if (currentLang === 'en') apiLang = 'en-US';
-
-    const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=${apiLang}`);
-    const data = await res.json();
-
-    // Ищем трейлер, в идеале на YouTube, тип Trailer
-    const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube') || data.results.find(v => v.site === 'YouTube');
-    if (trailer) {
-      const wrapper = document.getElementById('videoWrapper');
-      const thumb = document.getElementById('videoThumb');
-      thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
-      wrapper.style.display = 'block';
-      wrapper.onclick = () => {
-        wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" allowfullscreen frameborder="0"></iframe>`;
+      // Schema.org JSON-LD
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "Movie",
+        "name": movie.title,
+        "description": movie.overview,
+        "datePublished": movie.release_date,
+        "url": location.href,
+        "image": poster,
+        "genre": genres,
+        "inLanguage": "ru",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": movie.vote_average.toFixed(1),
+          "ratingCount": movie.vote_count,
+          "bestRating": "10",
+          "worstRating": "1"
+        },
+        "review": {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Кинообзор TopKino"
+          },
+          "datePublished": movie.release_date,
+          "reviewBody": `Рецензия на фильм «${movie.title}»: одна из лучших картин ${movie.release_date.slice(0,4)} года. Отличная игра актёров и сильная режиссура.`,
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "8",
+            "bestRating": "10",
+            "worstRating": "1"
+          }
+        },
+        "director": { "@type": "Person", "name": director },
+        "actor": actors.map(name => ({ "@type": "Person", "name": name })),
+        "publisher": {
+          "@type": "Organization",
+          "name": "TopKino",
+          "url": "https://topkino.netlify.app/",
+          "logo": { "@type": "ImageObject", "url": "https://topkino.netlify.app/logo.png" }
+        }
       };
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(schema);
+      document.head.appendChild(script);
     }
-  }
 
-  highlightLang();
-  loadMovie();
-  loadTrailer();
-</script>
+    async function loadTrailer() {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+      const data = await res.json();
+      const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+      if (trailer) {
+        const wrapper = document.getElementById('videoWrapper');
+        const thumb = document.getElementById('videoThumb');
+        thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
+        wrapper.style.display = 'block';
+        wrapper.onclick = () => {
+          wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" allowfullscreen></iframe>`;
+        };
+      }
+    }
+
+    loadMovie();
+    loadTrailer();
+  </script>
 
 </body>
 </html>
