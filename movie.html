@@ -49,6 +49,7 @@
       border-radius: 8px;
       line-height: 1.5;
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      color: #ddd;
     }
     .seo-text h2 {
       margin-top: 0;
@@ -146,13 +147,13 @@
 
 <div class="seo-text" id="seoText"></div>
 
-<!-- Блок личного мнения -->
-<div class="seo-text" id="personalOpinion"></div>
-
 <div class="video-wrapper" id="videoWrapper" style="display:none;">
   <img id="videoThumb" src="" alt="Трейлер">
   <div class="play-button"></div>
 </div>
+
+<!-- Новый блок SEO текста под видео -->
+<div class="seo-text" id="seoTextUnderVideo"></div>
 
 <!-- Соцсети -->
 <div class="social-links">
@@ -190,7 +191,7 @@ async function loadMovieDetails() {
   document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
   document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
   document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
-  generatePersonalOpinion(movie, director, topActors);
+  generateSeoTextUnderVideo(movie, director, topActors);
 }
 
 function generateSeoText(movie, director, topActors) {
@@ -218,20 +219,22 @@ function generateSeoText(movie, director, topActors) {
   return `<h2>«${title}»</h2><p>${phrases.sort(() => 0.5 - Math.random()).slice(0, 4).join(' ')}</p><meta name="keywords" content="${keywords.join(', ')}" />`;
 }
 
-function generatePersonalOpinion(movie, director, topActors) {
+function generateSeoTextUnderVideo(movie, director, topActors) {
   const isAnimation = movie.genres?.some(g => g.name.toLowerCase().includes('анимация') || g.name.toLowerCase().includes('мультфильм'));
-  let opinionText = '';
+  const typeLabel = isAnimation ? 'мультфильм' : 'фильм';
+  const title = movie.title;
+  const year = movie.release_date?.slice(0, 4) || '';
+  const genres = movie.genres?.map(g => g.name).join(', ') || 'жанр неизвестен';
+  const rating = movie.vote_average?.toFixed(1) || 'нет рейтинга';
+  const votes = movie.vote_count || 0;
+  const overview = movie.overview || '';
 
-  if (isAnimation) {
-    opinionText = `Это отличный мультфильм с замечательной озвучкой и яркими персонажами. Рекомендуется для всей семьи и особенно для детей.`;
-  } else {
-    opinionText = `Фильм впечатляет качественной игрой актёров и интересным сюжетом. Отличный выбор для любителей жанра.`;
-  }
-
-  document.getElementById('personalOpinion').innerHTML = `
-    <h2>Личное мнение</h2>
-    <p>${opinionText}</p>
+  const text = `
+    <p>Данный ${typeLabel} под названием «${title}», вышедший в ${year} году, представляет собой качественный образец жанра ${genres.toLowerCase()}. Режиссёр создал глубокий и захватывающий сюжет, который привлекает внимание зрителей разных возрастов. ${overview} Рейтинг на TMDB составляет ${rating}, основанный на оценках более ${votes} пользователей, что подтверждает высокую популярность и признание фильма среди аудитории. Если вы цените ${genres.toLowerCase()} и интересные истории, этот ${typeLabel} обязательно стоит к просмотру. Вы сможете насладиться великолепной игрой актёров и яркой визуальной составляющей, которая делает просмотр максимально увлекательным.</p>
+    <p>Не упустите шанс познакомиться с этим ${typeLabel} — он подарит вам массу положительных эмоций и впечатлений, а также позволит погрузиться в уникальную атмосферу, созданную создателями фильма.</p>
   `;
+
+  document.getElementById('seoTextUnderVideo').innerHTML = text;
 }
 
 async function loadTrailer() {
