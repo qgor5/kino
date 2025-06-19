@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -92,16 +93,6 @@
     }
     .social-links a {
       margin: 0 10px;
-    }
-
-    /* Добавляем стили для iframe YouTube */
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
     }
   </style>
 </head>
@@ -225,30 +216,33 @@
       document.head.appendChild(script);
     }
 
-    async function loadTrailer() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const data = await res.json();
-      const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-      if (trailer) {
-        const wrapper = document.getElementById('videoWrapper');
-        const thumb = document.getElementById('videoThumb');
-        thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
-        wrapper.style.display = 'block';
-        wrapper.onclick = () => {
-          wrapper.innerHTML = '';
-          const iframe = document.createElement('iframe');
-          iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
-          iframe.allowFullscreen = true;
-          iframe.loading = 'lazy';
-          iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-          wrapper.appendChild(iframe);
-        };
-      }
-    }
+    <script>
+  // ... твои константы и loadMovie() без изменений ...
 
-    loadMovie();
-    loadTrailer();
-  </script>
+  async function loadTrailer() {
+    const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+    const data = await res.json();
+    const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+    if (trailer) {
+      const wrapper = document.getElementById('videoWrapper');
+      const thumb = document.getElementById('videoThumb');
+      thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
+      wrapper.style.display = 'block';
+      wrapper.onclick = () => {
+        wrapper.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
+        iframe.allowFullscreen = true;
+        iframe.loading = 'lazy';
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        wrapper.appendChild(iframe);
+      };
+    }
+  }
+
+  loadMovie();
+  loadTrailer();
+</script>
 
 </body>
 </html>
