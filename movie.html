@@ -38,14 +38,22 @@
 
     .poster {
       width: 300px;
+      height: 450px;
+      aspect-ratio: 2 / 3;
       flex-shrink: 0;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      object-fit: cover;
+      background-color: #222;
     }
 
     .details {
       flex: 1;
       min-width: 280px;
+      min-height: 450px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
     }
 
     .video-wrapper {
@@ -109,6 +117,7 @@
 
       .details {
         width: 100%;
+        min-height: auto;
       }
     }
   </style>
@@ -118,7 +127,7 @@
   <a href="index.html">← Назад к списку фильмов</a>
 
   <div class="container">
-    <img class="poster" src="" alt="Постер фильма">
+    <img class="poster" src="" alt="Постер фильма" width="300" height="450" loading="lazy">
     <div class="details">
       <h1 class="title"></h1>
       <p class="description"></p>
