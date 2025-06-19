@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Детали фильма</title>
   
-  <!-- SEO базовые метатеги будут динамически обновлены скриптом -->
-  
   <style>
     body {
       margin: 0;
@@ -188,8 +186,13 @@
     const withoutExt = lastPart.replace('.html', '');
     const movieId = withoutExt.split('-')[0];
 
-    // Уникальный SEO текст сверху (4 параграфа, разные каждый раз)
-    function generateSeoTextTop(movie, director, topActors) {
+    // Проверка — есть ли в жанрах мультфильм
+    function isAnimation(genres) {
+      if (!genres) return false;
+      return genres.some(g => g.name.toLowerCase() === 'мультфильм' || g.name.toLowerCase() === 'animation');
+    }
+
+    function generateSeoTextTop(movie, director, topActors, animation) {
       const title = movie.title;
       const year = movie.release_date?.slice(0, 4) || '';
       const genres = movie.genres?.map(g => g.name).join(', ') || 'разных жанров';
@@ -197,33 +200,42 @@
       const directorName = director ? director.name : 'неизвестен';
       const actorsList = topActors || 'нет данных об актёрах';
 
-      const phrases = [
-        `Фильм «${title}» ${year} года выпуска относится к жанрам: ${genres.toLowerCase()}.`,
-        `Режиссёр картины — ${directorName}. В главных ролях: ${actorsList}.`,
-        `Сюжет рассказывает: ${overview}`,
-        `Это одна из популярных кинолент, получившая признание зрителей и критиков.`
-      ];
-      return `<h2>О фильме «${title}»</h2><p>${phrases.join(' ')}</p>`;
+      if (animation) {
+        return `<h2>О мультфильме «${title}»</h2>
+          <p>Мультфильм «${title}» ${year} года — красочный представитель жанров: ${genres.toLowerCase()}.</p>
+          <p>Режиссёр этой анимационной ленты — ${directorName}. Главные герои озвучены талантливыми актёрами: ${actorsList}.</p>
+          <p>Сюжет рассказывает захватывающую историю, которая понравится зрителям всех возрастов.</p>
+          <p>Эта работа заслужила признание среди поклонников анимации и критиков.</p>`;
+      } else {
+        return `<h2>О фильме «${title}»</h2>
+          <p>Фильм «${title}» ${year} года выпуска относится к жанрам: ${genres.toLowerCase()}.</p>
+          <p>Режиссёр картины — ${directorName}. В главных ролях: ${actorsList}.</p>
+          <p>Сюжет рассказывает: ${overview}</p>
+          <p>Это одна из популярных кинолент, получившая признание зрителей и критиков.</p>`;
+      }
     }
 
-    // Уникальный SEO текст снизу — продолжение, не дублирует верхний
-    function generateSeoTextBottom(movie, director, topActors) {
+    function generateSeoTextBottom(movie, director, topActors, animation) {
       const title = movie.title;
-      const year = movie.release_date?.slice(0, 4) || '';
       const rating = movie.vote_average?.toFixed(1) || 'нет рейтинга';
       const votes = movie.vote_count || 0;
       const genres = movie.genres?.map(g => g.name).join(', ') || 'разных жанров';
 
-      const phrases = [
-        `Критики оценили фильм «${title}» на ${rating} из 10 на TMDB, основываясь на ${votes} голосах.`,
-        `Картина предлагает уникальное сочетание сюжета, актёрской игры и визуальных эффектов, что делает её достойной просмотра.`,
-        `Если вы любите фильмы жанра ${genres.toLowerCase()}, то эта работа точно вам понравится.`,
-        `Рекомендуем обратить внимание на этот фильм для глубокого погружения в сюжет и атмосферу.`
-      ];
-      return `<h2>Дополнительная информация</h2><p>${phrases.join(' ')}</p>`;
+      if (animation) {
+        return `<h2>Дополнительная информация</h2>
+          <p>Мультфильм «${title}» получил оценку ${rating} из 10 на TMDB по результатам ${votes} голосов.</p>
+          <p>Эта анимационная лента сочетает в себе интересный сюжет, красочную графику и великолепное озвучивание.</p>
+          <p>Если вы фанат мультфильмов жанра ${genres.toLowerCase()}, обязательно посмотрите эту работу.</p>
+          <p>Рекомендуется к просмотру всей семьёй для приятного и полезного времяпрепровождения.</p>`;
+      } else {
+        return `<h2>Дополнительная информация</h2>
+          <p>Фильм «${title}» имеет рейтинг ${rating} из 10 на TMDB, основанный на ${votes} голосах.</p>
+          <p>Картина предлагает уникальное сочетание сюжета, актёрской игры и визуальных эффектов, что делает её достойной просмотра.</p>
+          <p>Если вы любите фильмы жанра ${genres.toLowerCase()}, то эта работа точно вам понравится.</p>
+          <p>Рекомендуем обратить внимание на этот фильм для глубокого погружения в сюжет и атмосферу.</p>`;
+      }
     }
 
-    // Генерация структурированных данных JSON-LD
     function generateSchemaJson(movie, director, topActors, trailer) {
       const schema = {
         "@context": "https://schema.org",
@@ -254,79 +266,78 @@
     }
 
     async function loadMovieDetails() {
-      // Загрузка данных фильма
-      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-      if(!movieRes.ok) {
-        alert('Ошибка загрузки данных фильма');
-        return;
+      try {
+        const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+        if(!movieRes.ok) throw new Error('Ошибка загрузки данных фильма');
+        const movie = await movieRes.json();
+
+        const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+        const credits = await creditsRes.json();
+
+        const director = credits.crew.find(member => member.job === 'Director');
+        const topActors = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
+
+        const animation = isAnimation(movie.genres);
+
+        document.querySelector('.poster').src = movie.poster_path
+          ? IMG_URL + movie.poster_path
+          : 'https://via.placeholder.com/300x450?text=Нет+постера';
+
+        document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
+        document.getElementById('releaseDate').textContent = movie.release_date
+          ? `Дата выхода: ${movie.release_date}`
+          : '';
+        document.getElementById('director').textContent = director
+          ? `Режиссёр: ${director.name}`
+          : 'Режиссёр: информация отсутствует';
+        document.getElementById('actors').textContent = topActors
+          ? `В главных ролях: ${topActors}`
+          : 'Информация об актёрах отсутствует';
+        document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
+        document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
+
+        // Вставляем SEO текст вверху и внизу
+        document.getElementById('seoTextTop').innerHTML = generateSeoTextTop(movie, director, topActors, animation);
+
+        const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+        const videosData = await videosRes.json();
+        const trailer = videosData.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+
+        if (trailer) {
+          const wrapper = document.getElementById('videoWrapper');
+          const thumb = document.getElementById('videoThumb');
+          thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
+          wrapper.style.display = 'block';
+
+          wrapper.onclick = () => {
+            wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" allowfullscreen></iframe>`;
+          };
+        }
+
+        document.getElementById('seoTextBottom').innerHTML = generateSeoTextBottom(movie, director, topActors, animation);
+
+        // JSON-LD разметка
+        const schemaJson = generateSchemaJson(movie, director, topActors, trailer);
+        let script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = schemaJson;
+        document.head.appendChild(script);
+
+        // Обновляем метатеги
+        const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
+        metaDescription.name = "description";
+        metaDescription.content = movie.overview || `Информация о фильме ${movie.title}`;
+        if (!document.head.contains(metaDescription)) document.head.appendChild(metaDescription);
+
+        const metaKeywords = document.querySelector('meta[name="keywords"]') || document.createElement('meta');
+        metaKeywords.name = "keywords";
+        const genres = movie.genres?.map(g => g.name).join(', ') || '';
+        metaKeywords.content = `${movie.title}, фильм, трейлер, ${genres}`;
+        if (!document.head.contains(metaKeywords)) document.head.appendChild(metaKeywords);
+      } catch (e) {
+        console.error(e);
+        alert('Ошибка загрузки данных фильма.');
       }
-      const movie = await movieRes.json();
-
-      // Загрузка кастинга и режиссёра
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
-      const credits = await creditsRes.json();
-
-      const director = credits.crew.find(member => member.job === 'Director');
-      const topActors = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
-
-      // Заполнение основной информации на странице
-      document.querySelector('.poster').src = movie.poster_path
-        ? IMG_URL + movie.poster_path
-        : 'https://via.placeholder.com/300x450?text=Нет+постера';
-
-      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
-      document.getElementById('releaseDate').textContent = movie.release_date
-        ? `Дата выхода: ${movie.release_date}`
-        : '';
-      document.getElementById('director').textContent = director
-        ? `Режиссёр: ${director.name}`
-        : 'Режиссёр: информация отсутствует';
-      document.getElementById('actors').textContent = topActors
-        ? `В главных ролях: ${topActors}`
-        : 'Информация об актёрах отсутствует';
-      document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
-      document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
-
-      // Вставляем уникальные SEO тексты
-      document.getElementById('seoTextTop').innerHTML = generateSeoTextTop(movie, director, topActors);
-
-      // Загрузка трейлера
-      const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const videosData = await videosRes.json();
-      const trailer = videosData.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-
-      if (trailer) {
-        const wrapper = document.getElementById('videoWrapper');
-        const thumb = document.getElementById('videoThumb');
-        thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
-        wrapper.style.display = 'block';
-
-        wrapper.onclick = () => {
-          wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" allowfullscreen></iframe>`;
-        };
-      }
-
-      // Вставляем уникальный SEO текст снизу
-      document.getElementById('seoTextBottom').innerHTML = generateSeoTextBottom(movie, director, topActors);
-
-      // Добавляем JSON-LD разметку
-      const schemaJson = generateSchemaJson(movie, director, topActors, trailer);
-      let script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.text = schemaJson;
-      document.head.appendChild(script);
-
-      // Обновляем мета-теги description и keywords для SEO
-      const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
-      metaDescription.name = "description";
-      metaDescription.content = movie.overview || `Информация о фильме ${movie.title}`;
-      if (!document.head.contains(metaDescription)) document.head.appendChild(metaDescription);
-
-      const metaKeywords = document.querySelector('meta[name="keywords"]') || document.createElement('meta');
-      metaKeywords.name = "keywords";
-      const genres = movie.genres?.map(g => g.name).join(', ') || '';
-      metaKeywords.content = `${movie.title}, фильм, трейлер, ${genres}`;
-      if (!document.head.contains(metaKeywords)) document.head.appendChild(metaKeywords);
     }
 
     loadMovieDetails();
