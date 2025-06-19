@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Детали фильма</title>
-
   <style>
     body {
       margin: 0;
@@ -13,21 +12,18 @@
       color: #eee;
       padding: 15px;
     }
-
     a {
       color: #00aaff;
       text-decoration: none;
       display: inline-block;
       margin-bottom: 20px;
     }
-
     .container {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
-
     .poster {
       width: 300px;
       height: 450px;
@@ -38,7 +34,6 @@
       object-fit: cover;
       background-color: #222;
     }
-
     .details {
       flex: 1;
       min-width: 280px;
@@ -48,7 +43,6 @@
       justify-content: flex-start;
       max-width: 600px;
     }
-
     .seo-text {
       margin-top: 30px;
       padding: 15px;
@@ -57,18 +51,15 @@
       line-height: 1.5;
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
-
     .seo-text h2 {
       margin-top: 0;
       color: #00aaff;
     }
-
     .meta-info {
       margin-top: 10px;
       font-size: 14px;
       color: #aaa;
     }
-
     .video-wrapper {
       margin: 40px auto 0;
       position: relative;
@@ -80,14 +71,12 @@
       overflow: hidden;
       cursor: pointer;
     }
-
     .video-wrapper img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
-
     .play-button {
       position: absolute;
       top: 50%;
@@ -101,7 +90,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .play-button::before {
       content: '';
       border-style: solid;
@@ -109,30 +97,25 @@
       border-color: transparent transparent transparent white;
       margin-left: 5px;
     }
-
     iframe {
       width: 100%;
       height: 100%;
       border: none;
       display: block;
     }
-
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
         align-items: center;
       }
-
       .poster {
         width: 100%;
         max-width: 400px;
       }
-
       .details {
         width: 100%;
         min-height: auto;
       }
-
       .video-wrapper {
         margin-top: 20px;
       }
@@ -178,38 +161,30 @@
       const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
       const credits = await creditsRes.json();
 
-      // Постер
       document.querySelector('.poster').src = movie.poster_path
         ? IMG_URL + movie.poster_path
         : 'https://via.placeholder.com/300x450?text=Нет+постера';
 
-      // Название + год
       document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
 
-      // Дата выхода
       document.getElementById('releaseDate').textContent = movie.release_date
         ? `Дата выхода: ${movie.release_date}`
         : '';
 
-      // Режиссёр (первый в списке crew с job === 'Director')
       const director = credits.crew.find(member => member.job === 'Director');
       document.getElementById('director').textContent = director
         ? `Режиссёр: ${director.name}`
         : 'Режиссёр: информация отсутствует';
 
-      // Главные актеры (топ 5)
       const topActors = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
       document.getElementById('actors').textContent = topActors
         ? `В главных ролях: ${topActors}`
         : 'Информация об актёрах отсутствует';
 
-      // Описание
       document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
 
-      // Рейтинг
       document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
 
-      // SEO-текст
       document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
     }
 
@@ -224,7 +199,6 @@
       const directorName = director ? director.name : 'информация отсутствует';
       const actorsList = topActors || 'информация отсутствует';
 
-      // Ключевые слова
       const keywords = [title, 'фильм', year, 'смотреть онлайн', genres, directorName, 'трейлер', 'отзывы', 'рейтинг'];
 
       const phrases = [
@@ -239,7 +213,7 @@
       const shuffled = phrases.sort(() => 0.5 - Math.random());
 
       return `
-        <h2>Почему стоит посмотреть «${title}»</h2>
+        <h2>«${title}»</h2>
         <p>${shuffled.slice(0, 4).join(' ')}</p>
         <meta name="keywords" content="${keywords.join(', ')}" />
       `;
