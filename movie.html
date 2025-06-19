@@ -27,7 +27,6 @@
     .poster {
       width: 300px;
       height: 450px;
-      aspect-ratio: 2 / 3;
       flex-shrink: 0;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -103,37 +102,12 @@
       border: none;
       display: block;
     }
-    /* Блок с мнением */
-    .review-text {
-      margin: 30px auto;
-      max-width: 800px;
-      background: #222;
-      border-radius: 8px;
-      padding: 20px;
-      font-style: italic;
-      box-shadow: 0 0 10px rgba(0,170,255,0.3);
-      color: #ddd;
-    }
-    /* Иконки соцсетей */
     .social-links {
-      margin-top: 50px;
+      margin-top: 40px;
       text-align: center;
     }
     .social-links a {
-      display: inline-block;
-      margin: 0 15px;
-      color: #00aaff;
-      transition: color 0.3s;
-      font-size: 0;
-    }
-    .social-links a svg {
-      width: 36px;
-      height: 36px;
-      fill: #00aaff;
-      transition: fill 0.3s;
-    }
-    .social-links a:hover svg {
-      fill: #0088cc;
+      margin: 0 10px;
     }
     @media (max-width: 768px) {
       .container {
@@ -156,149 +130,108 @@
 </head>
 <body>
 
-  <a href="index.html">← Назад к списку фильмов</a>
+<a href="index.html">← Назад к списку фильмов</a>
 
-  <div class="container">
-    <img class="poster" src="" alt="Постер фильма" width="300" height="450" loading="lazy">
-    <div class="details">
-      <h1 class="title"></h1>
-      <p class="meta-info" id="releaseDate"></p>
-      <p class="meta-info" id="director"></p>
-      <p class="meta-info" id="actors"></p>
-      <p class="description"></p>
-      <p class="meta-info" id="rating"></p>
-    </div>
+<div class="container">
+  <img class="poster" src="" alt="Постер фильма" width="300" height="450" loading="lazy">
+  <div class="details">
+    <h1 class="title"></h1>
+    <p class="meta-info" id="releaseDate"></p>
+    <p class="meta-info" id="director"></p>
+    <p class="meta-info" id="actors"></p>
+    <p class="description"></p>
+    <p class="meta-info" id="rating"></p>
   </div>
+</div>
 
-  <div class="seo-text" id="seoText"></div>
+<div class="seo-text" id="seoText"></div>
 
-  <div class="video-wrapper" id="videoWrapper" style="display:none;">
-    <img id="videoThumb" src="" alt="Трейлер">
-    <div class="play-button"></div>
-  </div>
+<div class="video-wrapper" id="videoWrapper" style="display:none;">
+  <img id="videoThumb" src="" alt="Трейлер">
+  <div class="play-button"></div>
+</div>
 
-  <!-- Блок с мнением (статичный пример, можно заменить) -->
-  <div class="review-text" id="reviewText">
-    <h2>Мнение зрителя</h2>
-    <p>«Этот фильм впечатляет своей динамикой и глубоким сюжетом. Отличная игра актёров и качественная режиссура делают просмотр настоящим удовольствием. Рекомендую к просмотру всем любителям жанра!»</p>
-  </div>
-
-  <!-- Соцсети -->
-<div class="social-links" style="margin-top: 40px; text-align: center;">
-  <a href="https://t.me/film_kia" target="_blank" rel="noopener" title="Telegram" style="margin: 0 10px;">
-    <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
-      <path fill="#0088cc" d="M9.99 17.99l-.4-3.57 9.36-8.46-11.5 7.1-4.3-1.34 20.2-8.08-3.36 17.35-6.4-5.4-3.6 2.4z"/>
-    </svg>
+<!-- Соцсети -->
+<div class="social-links">
+  <a href="https://t.me/film_kia" target="_blank" rel="noopener" title="Telegram">
+    <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#0088cc" d="M9.99 17.99l-.4-3.57 9.36-8.46-11.5 7.1-4.3-1.34 20.2-8.08-3.36 17.35-6.4-5.4-3.6 2.4z"/></svg>
   </a>
-  
-  <a href="https://www.youtube.com/channel/UCp3sC6EPr6qhLKVMbA0S64A" target="_blank" rel="noopener" title="YouTube" style="margin: 0 10px;">
-    <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
-      <path fill="#FF0000" d="M23 7s-.2-1.5-.8-2.2c-.7-.8-1.6-.8-2-1C17.7 3.5 12 3.5 12 3.5s-5.7 0-8.2.3c-.5.2-1.3.2-2 1C1.2 5.5 1 7 1 7S.8 8.8.8 10.6v2.8C.8 15.2 1 17 1 17s.2 1.5.8 2.2c.7.8 1.6.8 2 1C6.3 20.5 12 20.5 12 20.5s5.7 0 8.2-.3c.5-.2 1.3-.2 2-1 .6-.7.8-2.2.8-2.2s.2-1.8.2-3.6v-2.8C23.2 8.8 23 7 23 7z"/>
-      <path fill="#FFFFFF" d="M10 15.5v-7l6 3.5-6 3.5z"/>
-    </svg>
+  <a href="https://www.youtube.com/channel/UCp3sC6EPr6qhLKVMbA0S64A" target="_blank" rel="noopener" title="YouTube">
+    <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#FF0000" d="M23 7s-.2-1.5-.8-2.2c-.7-.8-1.6-.8-2-1C17.7 3.5 12 3.5 12 3.5s-5.7 0-8.2.3c-.5.2-1.3.2-2 1C1.2 5.5 1 7 1 7S.8 8.8.8 10.6v2.8C.8 15.2 1 17 1 17s.2 1.5.8 2.2c.7.8 1.6.8 2 1C6.3 20.5 12 20.5 12 20.5s5.7 0 8.2-.3c.5-.2 1.3-.2 2-1 .6-.7.8-2.2.8-2.2s.2-1.8.2-3.6v-2.8C23.2 8.8 23 7 23 7z"/><path fill="#FFFFFF" d="M10 15.5v-7l6 3.5-6 3.5z"/></svg>
   </a>
-
-  <a href="https://www.facebook.com/groups/kino1" target="_blank" rel="noopener" title="Facebook" style="margin: 0 10px;">
-    <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
-      <path fill="#1877f2" d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.495v-9.294H9.847V11.04h2.972V8.414c0-2.937 1.794-4.541 4.414-4.541 1.256 0 2.337.094 2.652.135v3.074h-1.82c-1.429 0-1.705.679-1.705 1.673v2.195h3.409l-.444 3.667h-2.965V24h5.81C23.407 24 24 23.407 24 22.676V1.324C24 .593 23.407 0 22.676 0z"/>
-    </svg>
+  <a href="https://www.facebook.com/groups/kino1" target="_blank" rel="noopener" title="Facebook">
+    <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#1877f2" d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.495v-9.294H9.847V11.04h2.972V8.414c0-2.937 1.794-4.541 4.414-4.541 1.256 0 2.337.094 2.652.135v3.074h-1.82c-1.429 0-1.705.679-1.705 1.673v2.195h3.409l-.444 3.667h-2.965V24h5.81C23.407 24 24 23.407 24 22.676V1.324C24 .593 23.407 0 22.676 0z"/></svg>
   </a>
 </div>
 
-  <script>
-    const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+<script>
+const API_KEY = '7cb67565ace3a08cd9d099c749787121';
+const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+const pathParts = window.location.pathname.split('/');
+const lastPart = pathParts[pathParts.length - 1];
+const movieId = lastPart.replace('.html', '').split('-')[0];
 
-    const pathParts = window.location.pathname.split('/');
-    const lastPart = pathParts[pathParts.length - 1];
-    const withoutExt = lastPart.replace('.html', '');
-    const movieId = withoutExt.split('-')[0];
+async function loadMovieDetails() {
+  const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+  const movie = await movieRes.json();
+  const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+  const credits = await creditsRes.json();
 
-    async function loadMovieDetails() {
-      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-      const movie = await movieRes.json();
+  document.querySelector('.poster').src = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера';
+  document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
+  document.getElementById('releaseDate').textContent = movie.release_date ? `Дата выхода: ${movie.release_date}` : '';
+  const director = credits.crew.find(member => member.job === 'Director');
+  document.getElementById('director').textContent = director ? `Режиссёр: ${director.name}` : 'Режиссёр: информация отсутствует';
+  const topActors = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
+  document.getElementById('actors').textContent = topActors ? `В главных ролях: ${topActors}` : 'Информация об актёрах отсутствует';
+  document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
+  document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
+  document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
+}
 
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
-      const credits = await creditsRes.json();
+function generateSeoText(movie, director, topActors) {
+  const isAnimation = movie.genres?.some(g => g.name.toLowerCase().includes('анимация') || g.name.toLowerCase().includes('мультфильм'));
+  const typeLabel = isAnimation ? 'мультфильм' : 'фильм';
+  const actorLabel = isAnimation ? 'озвучки' : 'актёров';
+  const title = movie.title;
+  const year = movie.release_date?.slice(0, 4) || '';
+  const fullDate = movie.release_date || '';
+  const genres = movie.genres?.map(g => g.name).join(', ') || 'жанр неизвестен';
+  const rating = movie.vote_average?.toFixed(1) || 'нет рейтинга';
+  const votes = movie.vote_count || 0;
+  const overview = movie.overview || '';
+  const directorName = director ? director.name : 'информация отсутствует';
+  const actorsList = topActors || 'информация отсутствует';
 
-      document.querySelector('.poster').src = movie.poster_path
-        ? IMG_URL + movie.poster_path
-        : 'https://via.placeholder.com/300x450?text=Нет+постера';
+  const keywords = [title, typeLabel, year, 'смотреть онлайн', genres, directorName, 'трейлер', 'отзывы', 'рейтинг'];
+  const phrases = [
+    `${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)} «${title}» (${fullDate}) — это ${genres.toLowerCase()}, созданный режиссёром ${directorName}.`,
+    topActors ? `В главных ролях ${isAnimation ? '(озвучка)' : ''}: ${actorsList}.` : '',
+    `${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)} получил рейтинг ${rating} на TMDB на основе ${votes} голосов.`,
+    `Описание: ${overview}`,
+    `Если вы любите ${genres.toLowerCase()}, то «${title}» точно вам понравится.`,
+    `Этот ${typeLabel} ${year} года стоит увидеть каждому поклоннику жанра ${genres.toLowerCase()}.`
+  ];
+  return `<h2>«${title}»</h2><p>${phrases.sort(() => 0.5 - Math.random()).slice(0, 4).join(' ')}</p><meta name="keywords" content="${keywords.join(', ')}" />`;
+}
 
-      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
+async function loadTrailer() {
+  const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+  const data = await res.json();
+  const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+  if (trailer) {
+    const wrapper = document.getElementById('videoWrapper');
+    const thumb = document.getElementById('videoThumb');
+    thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
+    wrapper.style.display = 'block';
+    wrapper.addEventListener('click', () => {
+      wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" allowfullscreen></iframe>`;
+    });
+  }
+}
 
-      document.getElementById('releaseDate').textContent = movie.release_date
-        ? `Дата выхода: ${movie.release_date}`
-        : '';
-
-      const director = credits.crew.find(member => member.job === 'Director');
-      document.getElementById('director').textContent = director
-        ? `Режиссёр: ${director.name}`
-        : 'Режиссёр: информация отсутствует';
-
-      const topActors = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
-      document.getElementById('actors').textContent = topActors
-        ? `В главных ролях: ${topActors}`
-        : 'Информация об актёрах отсутствует';
-
-      document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
-
-      document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
-
-      document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
-    }
-
-    function generateSeoText(movie, director, topActors) {
-      const title = movie.title;
-      const year = movie.release_date?.slice(0, 4) || '';
-      const fullDate = movie.release_date || '';
-      const genres = movie.genres?.map(g => g.name).join(', ') || 'жанр неизвестен';
-      const rating = movie.vote_average?.toFixed(1) || 'нет рейтинга';
-      const votes = movie.vote_count || 0;
-      const overview = movie.overview || '';
-      const directorName = director ? director.name : 'информация отсутствует';
-      const actorsList = topActors || 'информация отсутствует';
-
-      const keywords = [title, 'фильм', year, 'смотреть онлайн', genres, directorName, 'трейлер', 'отзывы', 'рейтинг'];
-
-      const phrases = [
-        `Фильм «${title}» (${fullDate}) — это ${genres.toLowerCase()}, который режиссировал ${directorName}.`,
-        `В главных ролях: ${actorsList}.`,
-        `Проект получил рейтинг ${rating} на TMDB по результатам ${votes} голосов.`,
-        `Сюжет фильма: ${overview}`,
-        `Если вы ищете качественное кино в жанре ${genres.toLowerCase()}, то «${title}» станет отличным выбором.`,
-        `Этот фильм ${year} года обязательно стоит посмотреть всем поклонникам жанров ${genres.toLowerCase()}.`
-      ];
-
-      const shuffled = phrases.sort(() => 0.5 - Math.random());
-
-      return `
-        <h2>«${title}»</h2>
-        <p>${shuffled.slice(0, 4).join(' ')}</p>
-        <meta name="keywords" content="${keywords.join(', ')}" />
-      `;
-    }
-
-    async function loadTrailer() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const data = await res.json();
-      const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-
-      if (trailer) {
-        const wrapper = document.getElementById('videoWrapper');
-        const thumb = document.getElementById('videoThumb');
-        thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
-        wrapper.style.display = 'block';
-
-        wrapper.addEventListener('click', () => {
-          wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" allowfullscreen></iframe>`;
-        });
-      }
-    }
-
-    loadMovieDetails();
-    loadTrailer();
-  </script>
-
+loadMovieDetails();
+loadTrailer();
+</script>
 </body>
 </html>
