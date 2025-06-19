@@ -146,6 +146,9 @@
 
 <div class="seo-text" id="seoText"></div>
 
+<!-- Блок личного мнения -->
+<div class="seo-text" id="personalOpinion"></div>
+
 <div class="video-wrapper" id="videoWrapper" style="display:none;">
   <img id="videoThumb" src="" alt="Трейлер">
   <div class="play-button"></div>
@@ -187,12 +190,12 @@ async function loadMovieDetails() {
   document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
   document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
   document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
+  generatePersonalOpinion(movie, director, topActors);
 }
 
 function generateSeoText(movie, director, topActors) {
   const isAnimation = movie.genres?.some(g => g.name.toLowerCase().includes('анимация') || g.name.toLowerCase().includes('мультфильм'));
   const typeLabel = isAnimation ? 'мультфильм' : 'фильм';
-  const actorLabel = isAnimation ? 'озвучки' : 'актёров';
   const title = movie.title;
   const year = movie.release_date?.slice(0, 4) || '';
   const fullDate = movie.release_date || '';
@@ -206,13 +209,29 @@ function generateSeoText(movie, director, topActors) {
   const keywords = [title, typeLabel, year, 'смотреть онлайн', genres, directorName, 'трейлер', 'отзывы', 'рейтинг'];
   const phrases = [
     `${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)} «${title}» (${fullDate}) — это ${genres.toLowerCase()}, созданный режиссёром ${directorName}.`,
-    topActors ? `В главных ролях ${isAnimation ? '(озвучка)' : ''}: ${actorsList}.` : '',
+    topActors ? `В главных ролях${isAnimation ? ' (озвучка)' : ''}: ${actorsList}.` : '',
     `${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)} получил рейтинг ${rating} на TMDB на основе ${votes} голосов.`,
     `Описание: ${overview}`,
     `Если вы любите ${genres.toLowerCase()}, то «${title}» точно вам понравится.`,
     `Этот ${typeLabel} ${year} года стоит увидеть каждому поклоннику жанра ${genres.toLowerCase()}.`
   ];
   return `<h2>«${title}»</h2><p>${phrases.sort(() => 0.5 - Math.random()).slice(0, 4).join(' ')}</p><meta name="keywords" content="${keywords.join(', ')}" />`;
+}
+
+function generatePersonalOpinion(movie, director, topActors) {
+  const isAnimation = movie.genres?.some(g => g.name.toLowerCase().includes('анимация') || g.name.toLowerCase().includes('мультфильм'));
+  let opinionText = '';
+
+  if (isAnimation) {
+    opinionText = `Это отличный мультфильм с замечательной озвучкой и яркими персонажами. Рекомендуется для всей семьи и особенно для детей.`;
+  } else {
+    opinionText = `Фильм впечатляет качественной игрой актёров и интересным сюжетом. Отличный выбор для любителей жанра.`;
+  }
+
+  document.getElementById('personalOpinion').innerHTML = `
+    <h2>Личное мнение</h2>
+    <p>${opinionText}</p>
+  `;
 }
 
 async function loadTrailer() {
