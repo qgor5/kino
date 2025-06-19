@@ -1,10 +1,14 @@
+movies сылки робоч
+
+
+
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Детали фильма</title>
-
   <style>
     body {
       margin: 0;
@@ -25,76 +29,26 @@
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
-      justify-content: center;
     }
 
     .poster {
       width: 300px;
-      height: 450px;
-      aspect-ratio: 2 / 3;
       flex-shrink: 0;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      object-fit: cover;
-      background-color: #222;
     }
 
     .details {
       flex: 1;
       min-width: 280px;
-      min-height: 450px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      max-width: 600px;
-    }
-
-    .video-wrapper {
-      margin: 40px auto 0;
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      aspect-ratio: 16 / 9;
-      background: #000;
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .video-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .play-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 64px;
-      height: 64px;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .play-button::before {
-      content: '';
-      border-style: solid;
-      border-width: 12px 0 12px 20px;
-      border-color: transparent transparent transparent white;
-      margin-left: 5px;
     }
 
     iframe {
       width: 100%;
-      height: 100%;
+      height: 300px;
+      margin-top: 20px;
       border: none;
-      display: block;
+      border-radius: 8px;
     }
 
     @media (max-width: 768px) {
@@ -110,40 +64,40 @@
 
       .details {
         width: 100%;
-        min-height: auto;
       }
 
-      .video-wrapper {
-        margin-top: 20px;
+      iframe {
+        height: 220px;
       }
     }
   </style>
 </head>
 <body>
 
-  <a href="index.html">← Назад к списку фильмов</a>
+  <a href="/index.html">← Назад к списку фильмов</a>
 
   <div class="container">
-    <img class="poster" src="" alt="Постер фильма" width="300" height="450" loading="lazy">
+    <img class="poster" src="" alt="Постер фильма">
     <div class="details">
       <h1 class="title"></h1>
       <p class="description"></p>
     </div>
   </div>
 
-  <div class="video-wrapper" id="videoWrapper" style="display:none;">
-    <img id="videoThumb" src="" alt="Трейлер">
-    <div class="play-button"></div>
-  </div>
+  <iframe id="trailer" src="" allowfullscreen></iframe>
 
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-    const pathParts = window.location.pathname.split('/');
-    const lastPart = pathParts[pathParts.length - 1];
-    const withoutExt = lastPart.replace('.html', '');
-    const movieId = withoutExt.split('-')[0];
+    // Получаем ID из URL-пути (SEO-friendly)
+    function getMovieIdFromPath() {
+      const path = window.location.pathname;
+      const lastPart = path.split('-').pop();
+      return lastPart;
+    }
+
+    const movieId = getMovieIdFromPath();
 
     async function loadMovieDetails() {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
@@ -163,14 +117,7 @@
       const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
 
       if (trailer) {
-        const wrapper = document.getElementById('videoWrapper');
-        const thumb = document.getElementById('videoThumb');
-        thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
-        wrapper.style.display = 'block';
-
-        wrapper.addEventListener('click', () => {
-          wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" allowfullscreen></iframe>`;
-        });
+        document.getElementById('trailer').src = `https://www.youtube.com/embed/${trailer.key}`;
       }
     }
 
