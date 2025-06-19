@@ -49,6 +49,20 @@
       max-width: 600px;
     }
 
+    .seo-text {
+      margin-top: 30px;
+      padding: 15px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      line-height: 1.5;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+
+    .seo-text h2 {
+      margin-top: 0;
+      color: #00aaff;
+    }
+
     .video-wrapper {
       margin: 40px auto 0;
       position: relative;
@@ -131,6 +145,8 @@
     </div>
   </div>
 
+  <div class="seo-text" id="seoText"></div>
+
   <div class="video-wrapper" id="videoWrapper" style="display:none;">
     <img id="videoThumb" src="" alt="Трейлер">
     <div class="play-button"></div>
@@ -155,6 +171,28 @@
 
       document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
       document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
+
+      // Сгенерировать SEO-текст
+      document.getElementById('seoText').innerHTML = generateSeoText(movie);
+    }
+
+    function generateSeoText(movie) {
+      const title = movie.title;
+      const year = movie.release_date?.slice(0, 4) || '';
+      const genres = movie.genres?.map(g => g.name).join(', ') || 'жанр неизвестен';
+      const rating = movie.vote_average?.toFixed(1) || 'нет рейтинга';
+      const overview = movie.overview || '';
+
+      const phrases = [
+        `Фильм «${title}» (${year}) — это ${genres.toLowerCase()}, получивший оценку ${rating} на TMDB.`,
+        `Это один из самых обсуждаемых фильмов ${year} года, который привлекает внимание как поклонников жанра, так и критиков.`,
+        `Сюжет проекта разворачивается следующим образом: ${overview}`,
+        `«${title}» — яркий пример современного кино, где режиссура сочетается с напряжённой атмосферой.`,
+        `Если вы любите ${genres.toLowerCase()} — обязательно посмотрите этот фильм.`
+      ];
+
+      const shuffled = phrases.sort(() => 0.5 - Math.random());
+      return `<h2>Почему стоит посмотреть «${title}»</h2><p>${shuffled.slice(0, 3).join(' ')}</p>`;
     }
 
     async function loadTrailer() {
