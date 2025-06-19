@@ -152,7 +152,7 @@
   <div class="play-button"></div>
 </div>
 
-<!-- Новый блок SEO текста под видео -->
+<!-- SEO-текст под видео -->
 <div class="seo-text" id="seoTextUnderVideo"></div>
 
 <!-- Соцсети -->
@@ -190,11 +190,14 @@ async function loadMovieDetails() {
   document.getElementById('actors').textContent = topActors ? `В главных ролях: ${topActors}` : 'Информация об актёрах отсутствует';
   document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
   document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
-  document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
-  generateSeoTextUnderVideo(movie, director, topActors);
+
+  // Генерируем оба текста и отображаем
+  const seoData = generateSeoTexts(movie, director, topActors);
+  document.getElementById('seoText').innerHTML = seoData.topText;
+  document.getElementById('seoTextUnderVideo').innerHTML = seoData.bottomText;
 }
 
-function generateSeoText(movie, director, topActors) {
+function generateSeoTexts(movie, director, topActors) {
   const isAnimation = movie.genres?.some(g => g.name.toLowerCase().includes('анимация') || g.name.toLowerCase().includes('мультфильм'));
   const typeLabel = isAnimation ? 'мультфильм' : 'фильм';
   const title = movie.title;
@@ -207,34 +210,35 @@ function generateSeoText(movie, director, topActors) {
   const directorName = director ? director.name : 'информация отсутствует';
   const actorsList = topActors || 'информация отсутствует';
 
+  // Ключевые слова для meta
   const keywords = [title, typeLabel, year, 'смотреть онлайн', genres, directorName, 'трейлер', 'отзывы', 'рейтинг'];
-  const phrases = [
+
+  // Фразы для верхнего блока (короткий SEO-текст)
+  const topPhrases = [
     `${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)} «${title}» (${fullDate}) — это ${genres.toLowerCase()}, созданный режиссёром ${directorName}.`,
     topActors ? `В главных ролях${isAnimation ? ' (озвучка)' : ''}: ${actorsList}.` : '',
     `${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)} получил рейтинг ${rating} на TMDB на основе ${votes} голосов.`,
+    `Если вы любите ${genres.toLowerCase()}, то «${title}» точно вам понравится.`
+  ].filter(Boolean);
+
+  // Для нижнего блока — расширенный SEO-текст, исключая фразы из верхнего блока
+  const excludeSet = new Set(topPhrases.map(s => s.toLowerCase()));
+
+  const bottomPhrasesPool = [
     `Описание: ${overview}`,
-    `Если вы любите ${genres.toLowerCase()}, то «${title}» точно вам понравится.`,
-    `Этот ${typeLabel} ${year} года стоит увидеть каждому поклоннику жанра ${genres.toLowerCase()}.`
+    `Этот ${typeLabel} ${year} года стоит увидеть каждому поклоннику жанра ${genres.toLowerCase()}.`,
+    `Режиссёр создал глубокий и захватывающий сюжет, который привлекает внимание зрителей разных возрастов.`,
+    `Вы сможете насладиться великолепной игрой актёров и яркой визуальной составляющей, которая делает просмотр максимально увлекательным.`,
+    `Не упустите шанс познакомиться с этим ${typeLabel} — он подарит вам массу положительных эмоций и впечатлений.`,
+    `Этот ${typeLabel} позволит погрузиться в уникальную атмосферу, созданную создателями фильма.`
   ];
-  return `<h2>«${title}»</h2><p>${phrases.sort(() => 0.5 - Math.random()).slice(0, 4).join(' ')}</p><meta name="keywords" content="${keywords.join(', ')}" />`;
-}
 
-function generateSeoTextUnderVideo(movie, director, topActors) {
-  const isAnimation = movie.genres?.some(g => g.name.toLowerCase().includes('анимация') || g.name.toLowerCase().includes('мультфильм'));
-  const typeLabel = isAnimation ? 'мультфильм' : 'фильм';
-  const title = movie.title;
-  const year = movie.release_date?.slice(0, 4) || '';
-  const genres = movie.genres?.map(g => g.name).join(', ') || 'жанр неизвестен';
-  const rating = movie.vote_average?.toFixed(1) || 'нет рейтинга';
-  const votes = movie.vote_count || 0;
-  const overview = movie.overview || '';
+  const bottomPhrases = bottomPhrasesPool.filter(phrase => !excludeSet.has(phrase.toLowerCase()));
 
-  const text = `
-    <p>Данный ${typeLabel} под названием «${title}», вышедший в ${year} году, представляет собой качественный образец жанра ${genres.toLowerCase()}. Режиссёр создал глубокий и захватывающий сюжет, который привлекает внимание зрителей разных возрастов. ${overview} Рейтинг на TMDB составляет ${rating}, основанный на оценках более ${votes} пользователей, что подтверждает высокую популярность и признание фильма среди аудитории. Если вы цените ${genres.toLowerCase()} и интересные истории, этот ${typeLabel} обязательно стоит к просмотру. Вы сможете насладиться великолепной игрой актёров и яркой визуальной составляющей, которая делает просмотр максимально увлекательным.</p>
-    <p>Не упустите шанс познакомиться с этим ${typeLabel} — он подарит вам массу положительных эмоций и впечатлений, а также позволит погрузиться в уникальную атмосферу, созданную создателями фильма.</p>
-  `;
-
-  document.getElementById('seoTextUnderVideo').innerHTML = text;
+  return {
+    topText: `<h2>«${title}»</h2><p>${topPhrases.join(' ')}</p><meta name="keywords" content="${keywords.join(', ')}" />`,
+    bottomText: `<p>${bottomPhrases.join(' ')}</p>`
+  };
 }
 
 async function loadTrailer() {
@@ -255,5 +259,6 @@ async function loadTrailer() {
 loadMovieDetails();
 loadTrailer();
 </script>
+
 </body>
 </html>
