@@ -211,6 +211,9 @@
 
       // SEO-текст
       document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
+
+      // Добавляем JSON-LD микроразметку
+      addJsonLd(movie, director, topActors);
     }
 
     function generateSeoText(movie, director, topActors) {
@@ -243,6 +246,63 @@
         <p>${shuffled.slice(0, 4).join(' ')}</p>
         <meta name="keywords" content="${keywords.join(', ')}" />
       `;
+    }
+
+    function addJsonLd(movie, director, topActors) {
+      const title = movie.title;
+      const releaseDate = movie.release_date || '';
+      const genres = movie.genres?.map(g => g.name) || [];
+      const ratingValue = movie.vote_average?.toFixed(1) || null;
+      const ratingCount = movie.vote_count || 0;
+      const description = movie.overview || '';
+      const poster = movie.poster_path ? IMG_URL + movie.poster_path : '';
+      const directorName = director ? director.name : null;
+      const actorsList = topActors ? topActors.split(', ').map(name => ({ '@type': 'Person', 'name': name })) : [];
+
+      // Попытаемся получить трейлер YouTube
+      fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}&language=ru-RU`)
+        .then(res => res.json())
+        .then(data => {
+          const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+          const trailerUrl = trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
+
+          const jsonLd = {
+            "@context": "https://schema.org",
+            "@type": "Movie",
+            "name": title,
+            "image": poster,
+            "datePublished": releaseDate,
+            "genre": genres,
+            "description": description,
+            "director": directorName ? {
+              "@type": "Person",
+              "name": directorName
+            } : undefined,
+            "actor": actorsList.length ? actorsList : undefined,
+            "aggregateRating": ratingValue ? {
+              "@type": "AggregateRating",
+              "ratingValue": ratingValue,
+              "ratingCount": ratingCount
+            } : undefined,
+            "trailer": trailerUrl ? {
+              "@type": "VideoObject",
+              "name": `${title} — Трейлер`,
+              "embedUrl": `https://www.youtube.com/embed/${trailer.key}`,
+              "thumbnailUrl": `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`,
+              "uploadDate": releaseDate
+            } : undefined
+          };
+
+          // Удаляем свойства с undefined
+          Object.keys(jsonLd).forEach(key => {
+            if (jsonLd[key] === undefined) delete jsonLd[key];
+          });
+
+          const script = document.createElement('script');
+          script.type = 'application/ld+json';
+          script.text = JSON.stringify(jsonLd, null, 2);
+          document.head.appendChild(script);
+        });
     }
 
     async function loadTrailer() {
