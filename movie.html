@@ -93,9 +93,36 @@
     .social-links a {
       margin: 0 10px;
     }
+    .lang-switcher {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #1a1a1a;
+      border-radius: 5px;
+      padding: 5px 10px;
+      z-index: 9999;
+    }
+    .lang-switcher button {
+      background: none;
+      border: none;
+      color: #eee;
+      margin: 0 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .lang-switcher button.active {
+      color: #00aaff;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
+
+  <div class="lang-switcher">
+    <button onclick="setLang('ru')" id="lang-ru">RU</button>
+    <button onclick="setLang('uk')" id="lang-uk">UA</button>
+    <button onclick="setLang('en')" id="lang-en">EN</button>
+  </div>
 
   <a href="/index.html">← Назад к списку фильмов</a>
 
@@ -135,12 +162,27 @@
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
     const movieId = location.pathname.split('/').pop().split('-')[0];
     const seoTextEl = document.getElementById('seoText');
+    let currentLang = localStorage.getItem('lang') || 'ru';
+
+    function setLang(lang) {
+      if (lang === currentLang) return;
+      localStorage.setItem('lang', lang);
+      location.reload();
+    }
+
+    function highlightLang() {
+      document.querySelectorAll('.lang-switcher button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.getElementById('lang-' + currentLang);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
 
     async function loadMovie() {
-      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=${currentLang}-RU`);
       const movie = await movieRes.json();
 
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=${currentLang}-RU`);
       const credits = await creditsRes.json();
 
       const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
@@ -156,18 +198,16 @@
       document.querySelector('.description').textContent = movie.overview;
       document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
 
-      // SEO текст — сохраняется 1 раз
-      const seoKey = `seo-${movieId}`;
+      const seoKey = `seo-${movieId}-${currentLang}`;
       let seo = localStorage.getItem(seoKey);
       if (!seo) {
         seo = `<h2>${movie.title} — смотреть онлайн</h2>
         <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p>
-        <p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов. Если вы любите ${genres.join(', ').toLowerCase()}, этот фильм вам точно понравится.</p>`;
+        <p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов.</p>`;
         localStorage.setItem(seoKey, seo);
       }
       seoTextEl.innerHTML = seo;
 
-      // Schema.org JSON-LD
       const schema = {
         "@context": "https://schema.org",
         "@type": "Movie",
@@ -177,27 +217,21 @@
         "url": location.href,
         "image": poster,
         "genre": genres,
-        "inLanguage": "ru",
+        "inLanguage": currentLang,
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": movie.vote_average.toFixed(1),
-          "ratingCount": movie.vote_count,
-          "bestRating": "10",
-          "worstRating": "1"
+          "ratingCount": movie.vote_count
         },
         "review": {
           "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Кинообзор TopKino"
-          },
+          "author": { "@type": "Person", "name": "Кинообзор TopKino" },
           "datePublished": movie.release_date,
-          "reviewBody": `Рецензия на фильм «${movie.title}»: одна из лучших картин ${movie.release_date.slice(0,4)} года. Отличная игра актёров и сильная режиссура.`,
+          "reviewBody": `Рецензия на фильм «${movie.title}» — отличная игра актёров и режиссура.`,
           "reviewRating": {
             "@type": "Rating",
             "ratingValue": "8",
-            "bestRating": "10",
-            "worstRating": "1"
+            "bestRating": "10"
           }
         },
         "director": { "@type": "Person", "name": director },
@@ -205,8 +239,7 @@
         "publisher": {
           "@type": "Organization",
           "name": "TopKino",
-          "url": "https://topkino.netlify.app/",
-          "logo": { "@type": "ImageObject", "url": "https://topkino.netlify.app/logo.png" }
+          "url": "https://topkino.netlify.app/"
         }
       };
       const script = document.createElement('script');
@@ -216,7 +249,7 @@
     }
 
     async function loadTrailer() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=${currentLang}-RU`);
       const data = await res.json();
       const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
       if (trailer) {
@@ -230,6 +263,7 @@
       }
     }
 
+    highlightLang();
     loadMovie();
     loadTrailer();
   </script>
