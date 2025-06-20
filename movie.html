@@ -102,36 +102,15 @@
     .social-links a {
       margin: 0 10px;
     }
-    /* Новые стили для галерей и блоков */
-    .gallery {
+    /* Актёры и похожие фильмы */
+    .actors-list, .similar-movies-list {
       margin-top: 40px;
     }
-    .gallery h2 {
+    .actors-list h2, .similar-movies-list h2 {
       color: #00aaff;
       margin-bottom: 15px;
     }
-    .gallery-images {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .gallery-images img {
-      border-radius: 5px;
-      object-fit: cover;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    .gallery-images img:hover {
-      transform: scale(1.05);
-    }
-    .actors-list, .similar-movies-list, .reviews-list, .keywords-list {
-      margin-top: 40px;
-    }
-    .actors-list h2, .similar-movies-list h2, .reviews-list h2, .keywords-list h2 {
-      color: #00aaff;
-      margin-bottom: 15px;
-    }
-    .actors-list ul, .similar-movies-list ul, .reviews-list ul, .keywords-list ul {
+    .actors-list ul, .similar-movies-list ul {
       list-style: none;
       padding: 0;
       display: flex;
@@ -158,18 +137,10 @@
       object-fit: cover;
       margin-bottom: 8px;
     }
-    .reviews-list li {
-      background: #222;
-      border-radius: 8px;
-      padding: 15px;
-      flex: 1 1 100%;
-      max-width: 800px;
-      margin-bottom: 15px;
-    }
-    .reviews-list li strong {
+    .actors-list a, .similar-movies-list a {
+      text-decoration: none;
+      color: inherit;
       display: block;
-      margin-bottom: 10px;
-      color: #00aaff;
     }
   </style>
 </head>
@@ -196,30 +167,15 @@
 
   <div class="seo-text" id="seoText"></div>
 
-  <!-- Новые блоки -->
-
-  <div class="gallery" id="galleryPosters">
-    <h2>Постеры и изображения</h2>
-    <div class="gallery-images" id="postersGallery"></div>
-  </div>
-
+  <!-- Актёры -->
   <div class="actors-list" id="actorsList">
     <h2>Актёры</h2>
     <ul></ul>
   </div>
 
+  <!-- Похожие фильмы -->
   <div class="similar-movies-list" id="similarMoviesList">
     <h2>Похожие фильмы</h2>
-    <ul></ul>
-  </div>
-
-  <div class="reviews-list" id="reviewsList">
-    <h2>Отзывы</h2>
-    <ul></ul>
-  </div>
-
-  <div class="keywords-list" id="keywordsList">
-    <h2>Ключевые слова</h2>
     <ul></ul>
   </div>
 
@@ -348,32 +304,7 @@
       }
     }
 
-    // Новый блок: загрузка изображений (постеры, бэкдропы)
-    async function loadImages() {
-      const imagesRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/images?api_key=${API_KEY}`);
-      const images = await imagesRes.json();
-      const postersGallery = document.getElementById('postersGallery');
-
-      // Постеры (до 10)
-      images.posters.slice(0, 10).forEach(img => {
-        const imgEl = document.createElement('img');
-        imgEl.src = IMG_URL + img.file_path;
-        imgEl.style.width = '150px';
-        imgEl.style.height = '225px';
-        postersGallery.appendChild(imgEl);
-      });
-
-      // Бэкдропы (до 5)
-      images.backdrops.slice(0, 5).forEach(img => {
-        const imgEl = document.createElement('img');
-        imgEl.src = IMG_URL + img.file_path;
-        imgEl.style.width = '300px';
-        imgEl.style.height = '169px';
-        postersGallery.appendChild(imgEl);
-      });
-    }
-
-    // Новый блок: загрузка расширенного списка актёров с фото
+    // Загрузка актёров с кликабельностью
     async function loadActors() {
       const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
       const credits = await creditsRes.json();
@@ -383,6 +314,11 @@
 
       credits.cast.slice(0, 12).forEach(actor => {
         const li = document.createElement('li');
+
+        const a = document.createElement('a');
+        a.href = `/person/${actor.id}`; // ссылка на страницу актёра (адаптируй под свой роутинг)
+        a.title = actor.name;
+
         const img = document.createElement('img');
         img.src = actor.profile_path ? IMG_URL + actor.profile_path : 'https://via.placeholder.com/140x180?text=No+Photo';
         img.alt = actor.name;
@@ -390,13 +326,14 @@
         const name = document.createElement('span');
         name.textContent = actor.name;
 
-        li.appendChild(img);
-        li.appendChild(name);
+        a.appendChild(img);
+        a.appendChild(name);
+        li.appendChild(a);
         actorsListEl.appendChild(li);
       });
     }
 
-    // Новый блок: загрузка похожих фильмов
+    // Загрузка похожих фильмов с кликабельностью
     async function loadSimilarMovies() {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}&language=ru-RU&page=1`);
       const data = await res.json();
@@ -406,6 +343,11 @@
 
       data.results.slice(0, 10).forEach(movie => {
         const li = document.createElement('li');
+
+        const a = document.createElement('a');
+        a.href = `/movie/${movie.id}`; // ссылка на страницу фильма (адаптируй под свой роутинг)
+        a.title = movie.title;
+
         const img = document.createElement('img');
         img.src = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster';
         img.alt = movie.title;
@@ -413,67 +355,17 @@
         const title = document.createElement('span');
         title.textContent = movie.title;
 
-        li.appendChild(img);
-        li.appendChild(title);
+        a.appendChild(img);
+        a.appendChild(title);
+        li.appendChild(a);
         similarListEl.appendChild(li);
       });
     }
 
-    // Новый блок: загрузка отзывов
-    async function loadReviews() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=${API_KEY}&language=ru-RU&page=1`);
-      const data = await res.json();
-
-      const reviewsListEl = document.querySelector('#reviewsList ul');
-      reviewsListEl.innerHTML = ''; // очистка
-
-      if (data.results.length === 0) {
-        reviewsListEl.innerHTML = '<li>Отзывов пока нет.</li>';
-        return;
-      }
-
-      data.results.slice(0, 5).forEach(review => {
-        const li = document.createElement('li');
-        const author = document.createElement('strong');
-        author.textContent = `Автор: ${review.author}`;
-
-        const content = document.createElement('p');
-        content.textContent = review.content.length > 300 ? review.content.slice(0, 300) + '...' : review.content;
-
-        li.appendChild(author);
-        li.appendChild(content);
-        reviewsListEl.appendChild(li);
-      });
-    }
-
-    // Новый блок: загрузка ключевых слов
-    async function loadKeywords() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${API_KEY}`);
-      const data = await res.json();
-
-      const keywordsListEl = document.querySelector('#keywordsList ul');
-      keywordsListEl.innerHTML = ''; // очистка
-
-      if (!data.keywords || data.keywords.length === 0) {
-        keywordsListEl.innerHTML = '<li>Ключевые слова отсутствуют.</li>';
-        return;
-      }
-
-      data.keywords.slice(0, 20).forEach(kw => {
-        const li = document.createElement('li');
-        li.textContent = kw.name;
-        keywordsListEl.appendChild(li);
-      });
-    }
-
-    // Запускаем все
     loadMovie();
     loadTrailer();
-    loadImages();
     loadActors();
     loadSimilarMovies();
-    loadReviews();
-    loadKeywords();
 
   </script>
 
