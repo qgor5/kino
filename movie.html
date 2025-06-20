@@ -109,6 +109,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
+      justify-content: center;
     }
     #actorsList li {
       width: 140px;
@@ -118,27 +119,39 @@
       background: #222;
       padding: 10px;
       transition: background-color 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     #actorsList li:hover {
       background: #00aaff;
       color: #111;
-    }
-    #actorsList img {
-      width: 140px;
-      height: 180px;
-      border-radius: 6px;
-      object-fit: cover;
-      margin-bottom: 8px;
-      user-select: none;
-      pointer-events: none;
     }
     #actorsList span {
       display: block;
       font-size: 14px;
       font-weight: bold;
       user-select: none;
+      margin-bottom: 8px;
+    }
+    #actorsList img {
+      width: 120px;
+      height: 160px;
+      border-radius: 6px;
+      object-fit: cover;
+      user-select: none;
+      pointer-events: none;
+      order: 2; /* чтобы фото было ниже имени */
     }
     /* Стили для похожих фильмов */
+    #similarMoviesList {
+      margin-top: 40px;
+      text-align: center;
+    }
+    #similarMoviesList h2 {
+      margin-bottom: 20px;
+      color: #00aaff;
+    }
     #similarMoviesList ul {
       list-style: none;
       padding: 0;
@@ -154,6 +167,7 @@
       background: #222;
       padding: 10px;
       transition: background-color 0.3s;
+      cursor: pointer;
     }
     #similarMoviesList li:hover {
       background: #00aaff;
@@ -285,7 +299,7 @@
       const credits = await creditsRes.json();
 
       const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
-      const actors = credits.cast.slice(0, 3).map(a => a.name);
+      const actors = credits.cast.slice(0, 8); // возьмём 8 актёров
       const genres = movie.genres.map(g => g.name);
       const poster = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450';
 
@@ -293,7 +307,27 @@
       document.querySelector('.title').textContent = `${movie.title} (${movie.release_date.slice(0,4)})`;
       document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date}`;
       document.getElementById('director').textContent = `Режиссёр: ${director}`;
-      // Здесь не выводим просто текст актеров, список ниже
+
+      // Отобразим актёров имена + фото ниже
+      const actorsListEl = document.querySelector('#actorsList ul');
+      actorsListEl.innerHTML = '';
+      actors.forEach(actor => {
+        const li = document.createElement('li');
+        li.style.cursor = 'pointer';
+        li.dataset.actorId = actor.id;
+
+        const name = document.createElement('span');
+        name.textContent = actor.name;
+
+        const img = document.createElement('img');
+        img.src = actor.profile_path ? IMG_URL + actor.profile_path : 'https://via.placeholder.com/140x180?text=No+Photo';
+        img.alt = actor.name;
+
+        li.appendChild(name);
+        li.appendChild(img);
+        actorsListEl.appendChild(li);
+      });
+
       document.querySelector('.description').textContent = movie.overview;
       document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
 
@@ -302,7 +336,7 @@
       let seo = localStorage.getItem(seoKey);
       if (!seo) {
         seo = `<h2>${movie.title} — смотреть онлайн</h2>
-        <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p>
+        <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.map(a => a.name).join(', ')}. Сюжет: ${movie.overview}</p>
         <p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов. Если вы любите ${genres.join(', ').toLowerCase()}, этот фильм вам точно понравится.</p>`;
         localStorage.setItem(seoKey, seo);
       }
@@ -342,7 +376,7 @@
           }
         },
         "director": { "@type": "Person", "name": director },
-        "actor": actors.map(name => ({ "@type": "Person", "name": name })),
+        "actor": actors.map(actor => ({ "@type": "Person", "name": actor.name })),
         "publisher": {
           "@type": "Organization",
           "name": "TopKino",
@@ -383,42 +417,6 @@
       }
     }
 
-    async function loadActors() {
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
-      const credits = await creditsRes.json();
-
-      const actorsListEl = document.querySelector('#actorsList ul');
-      actorsListEl.innerHTML = ''; // очистка
-
-      credits.cast.slice(0, 12).forEach(actor => {
-        const li = document.createElement('li');
-        li.style.cursor = 'pointer';
-
-        li.dataset.actorId = actor.id;
-
-        const img = document.createElement('img');
-        img.src = actor.profile_path ? IMG_URL + actor.profile_path : 'https://via.placeholder.com/140x180?text=No+Photo';
-        img.alt = actor.name;
-
-        const name = document.createElement('span');
-        name.textContent = actor.name;
-
-        li.appendChild(img);
-        li.appendChild(name);
-        actorsListEl.appendChild(li);
-      });
-
-      // Обработчик клика по актёру
-      actorsListEl.addEventListener('click', async (e) => {
-        let li = e.target.closest('li');
-        if (!li) return;
-        const actorId = li.dataset.actorId;
-        if (!actorId) return;
-
-        await showActorModal(actorId);
-      });
-    }
-
     async function loadSimilarMovies() {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}&language=ru-RU&page=1`);
       const data = await res.json();
@@ -440,7 +438,6 @@
 
         li.style.cursor = 'pointer';
         li.onclick = () => {
-          // Перезагрузить страницу с новым фильмом (обновить location)
           window.location.href = `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`;
         };
 
@@ -474,6 +471,15 @@
       }
     }
 
+    // Обработчик клика по актёрам
+    document.querySelector('#actorsList').addEventListener('click', async (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      const actorId = li.dataset.actorId;
+      if (!actorId) return;
+      await showActorModal(actorId);
+    });
+
     // Закрытие модального окна
     document.getElementById('closeModal').onclick = () => {
       document.getElementById('actorModal').style.display = 'none';
@@ -488,7 +494,6 @@
 
     loadMovie();
     loadTrailer();
-    loadActors();
     loadSimilarMovies();
   </script>
 
