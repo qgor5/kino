@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -112,6 +112,7 @@
       margin-top: 50px;
     }
     #similarMoviesList li {
+      cursor: pointer;
       width: 140px;
       background: #222;
       border-radius: 8px;
@@ -143,6 +144,42 @@
       text-overflow: ellipsis;
     }
   </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Movie",
+  "name": "Название фильма",
+  "image": "https://image.tmdb.org/t/p/w500/poster.jpg",
+  "description": "Описание фильма...",
+  "datePublished": "2024-06-20",
+  "url": "https://example.com/film/123",
+  "genre": ["Драма", "Триллер"],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "8.5",
+    "ratingCount": "1234",
+    "bestRating": "10",
+    "worstRating": "1"
+  },
+  "director": {
+    "@type": "Person",
+    "name": "Имя режиссёра"
+  },
+  "actor": [
+    {"@type": "Person", "name": "Актёр 1"},
+    {"@type": "Person", "name": "Актёр 2"}
+  ],
+  "trailer": {
+    "@type": "VideoObject",
+    "name": "Трейлер фильма",
+    "thumbnailUrl": "https://img.youtube.com/vi/ключ_видео/hqdefault.jpg",
+    "uploadDate": "2024-06-15",
+    "contentUrl": "https://www.youtube.com/watch?v=ключ_видео",
+    "embedUrl": "https://www.youtube.com/embed/ключ_видео"
+  }
+}
+</script>
+  
 </head>
 <body>
 
@@ -240,7 +277,8 @@
 
       if (trailer) {
         trailerKey = trailer.key;
-        trailerUploadDate = new Date(movie.release_date).toISOString(); 
+        // Попытка получить дату из трейлера (можно брать дату выхода фильма, если точной нет)
+        trailerUploadDate = new Date(movie.release_date).toISOString(); // Пример
       }
 
       renderTrailer(trailerKey);
@@ -279,6 +317,7 @@
     }
 
     function addJsonLd(json) {
+      // Удаляем старый скрипт с JSON-LD, если есть
       const oldScript = document.querySelector('script[type="application/ld+json"]');
       if (oldScript) oldScript.remove();
 
@@ -316,28 +355,42 @@
       const data = await res.json();
       const listEl = document.querySelector('#similarMoviesList ul');
       listEl.innerHTML = '';
-
       data.results.slice(0, 7).forEach(movie => {
         const li = document.createElement('li');
-
-        // Ссылка на детальную страницу фильма с правильным URL
-        const link = document.createElement('a');
-        link.href = `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`;
-        link.style.color = '#eee';
-        link.style.textDecoration = 'none';
-        link.style.display = 'block';
+        li.style.cursor = 'pointer';
+        li.style.width = '140px';
+        li.style.background = '#222';
+        li.style.borderRadius = '8px';
+        li.style.padding = '10px';
+        li.style.color = '#eee';
+        li.style.userSelect = 'none';
+        li.style.textAlign = 'center';
+        li.style.transition = 'background 0.3s';
 
         const img = document.createElement('img');
         img.src = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster';
         img.alt = movie.title;
+        img.style.width = '140px';
+        img.style.height = '180px';
+        img.style.borderRadius = '6px';
+        img.style.objectFit = 'cover';
+        img.style.marginBottom = '8px';
+        img.style.pointerEvents = 'none';
 
         const span = document.createElement('span');
         span.textContent = movie.title;
+        span.style.fontWeight = 'bold';
 
-        link.appendChild(img);
-        link.appendChild(span);
+        li.appendChild(img);
+        li.appendChild(span);
 
-        li.appendChild(link);
+        li.onclick = () => {
+          movieId = movie.id;
+          history.pushState(null, '', `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`);
+          loadMovie();
+          window.scrollTo(0, 0);
+        };
+
         listEl.appendChild(li);
       });
     }
