@@ -145,41 +145,91 @@
     }
   </style>
   
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Movie",
-  "name": "Название фильма",
-  "image": "https://image.tmdb.org/t/p/w500/poster.jpg",
-  "description": "Описание фильма: захватывающий триллер с напряжённым сюжетом и великолепной актёрской игрой.",
-  "datePublished": "2024-06-20",
-  "url": "https://example.com/film/123",
-  "genre": ["Драма", "Триллер"],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "8.5",
-    "ratingCount": "1234",
-    "bestRating": "10",
-    "worstRating": "1"
-  },
-  "director": {
-    "@type": "Person",
-    "name": "Имя режиссёра"
-  },
-  "actor": [
-    { "@type": "Person", "name": "Актёр 1" },
-    { "@type": "Person", "name": "Актёр 2" }
-  ],
-  "trailer": {
-    "@type": "VideoObject",
-    "name": "Трейлер фильма",
-    "description": "Смотрите официальный трейлер фильма. Нас ждёт напряжённая история и великолепные актёры.",
-    "thumbnailUrl": "https://img.youtube.com/vi/ключ_видео/hqdefault.jpg",
-    "uploadDate": "2024-06-15T12:00:00+03:00",
-    "contentUrl": "https://www.youtube.com/watch?v=ключ_видео",
-    "embedUrl": "https://www.youtube.com/embed/ключ_видео"
+<script>
+  const API_KEY = '7cb67565ace3a08cd9d099c749787121'; // TMDb API ключ
+  const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+
+  function getMovieIdFromUrl() {
+    const path = window.location.pathname;
+    const lastPart = path.split('/').pop();
+    return lastPart.split('-')[0];
   }
-}
+
+  async function addJsonLd(json) {
+    const oldScript = document.querySelector('script[type="application/ld+json"]');
+    if (oldScript) oldScript.remove();
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(json, null, 2);
+    document.head.appendChild(script);
+  }
+
+  async function loadMovieData() {
+    try {
+      const movieId = getMovieIdFromUrl();
+
+      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+      if (!movieRes.ok) throw new Error('Фильм не найден');
+      const movie = await movieRes.json();
+
+      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+      const credits = await creditsRes.json();
+
+      const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+      const videos = await videosRes.json();
+
+      const directorName = credits.crew.find(c => c.job === 'Director')?.name || 'Неизвестен';
+      const actorsList = credits.cast.slice(0, 5).map(actor => ({
+        "@type": "Person",
+        "name": actor.name
+      }));
+      const genresList = movie.genres.map(g => g.name);
+      const trailer = videos.results.find(v => v.type === "Trailer" && v.site === "YouTube");
+
+      const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Movie",
+        "name": movie.title,
+        "image": movie.poster_path ? IMG_URL + movie.poster_path : '',
+        "description": movie.overview,
+        "datePublished": movie.release_date,
+        "url": window.location.href,
+        "genre": genresList,
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": movie.vote_average.toFixed(1),
+          "ratingCount": movie.vote_count.toString(),
+          "bestRating": "10",
+          "worstRating": "1"
+        },
+        "director": {
+          "@type": "Person",
+          "name": directorName
+        },
+        "actor": actorsList
+      };
+
+      if (trailer) {
+        jsonLd.trailer = {
+          "@type": "VideoObject",
+          "name": `Трейлер фильма ${movie.title}`,
+          "description": `Официальный трейлер фильма ${movie.title}`,
+          "thumbnailUrl": `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`,
+          "uploadDate": movie.release_date,
+          "contentUrl": `https://www.youtube.com/watch?v=${trailer.key}`,
+          "embedUrl": `https://www.youtube.com/embed/${trailer.key}`
+        };
+      }
+
+      await addJsonLd(jsonLd);
+
+    } catch (error) {
+      console.error('Ошибка при загрузке данных фильма:', error);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', loadMovieData);
 </script>
   
 </head>
