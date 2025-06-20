@@ -1,4 +1,4 @@
-[[redirects]]
-  from = "/movie/*"
-  to = "/movie.html"
-  status = 200
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Prerender-Token = "Mq8bRFjRwIzAzWo82QDK"
