@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Детали фильма</title>
+
   <style>
     body {
       margin: 0;
@@ -12,18 +13,21 @@
       color: #eee;
       padding: 15px;
     }
+
     a {
       color: #00aaff;
       text-decoration: none;
       display: inline-block;
       margin-bottom: 20px;
     }
+
     .container {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
+
     .poster {
       width: 300px;
       height: 450px;
@@ -34,6 +38,7 @@
       object-fit: cover;
       background-color: #222;
     }
+
     .details {
       flex: 1;
       min-width: 280px;
@@ -43,6 +48,7 @@
       justify-content: flex-start;
       max-width: 600px;
     }
+
     .seo-text {
       margin-top: 30px;
       padding: 15px;
@@ -51,15 +57,18 @@
       line-height: 1.5;
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
+
     .seo-text h2 {
       margin-top: 0;
       color: #00aaff;
     }
+
     .meta-info {
       margin-top: 10px;
       font-size: 14px;
       color: #aaa;
     }
+
     .video-wrapper {
       margin: 40px auto 0;
       position: relative;
@@ -71,12 +80,14 @@
       overflow: hidden;
       cursor: pointer;
     }
+
     .video-wrapper img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
+
     .play-button {
       position: absolute;
       top: 50%;
@@ -90,6 +101,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .play-button::before {
       content: '';
       border-style: solid;
@@ -97,57 +109,30 @@
       border-color: transparent transparent transparent white;
       margin-left: 5px;
     }
+
     iframe {
       width: 100%;
       height: 100%;
       border: none;
       display: block;
     }
-    /* Блок с мнением */
-    .review-text {
-      margin: 30px auto;
-      max-width: 800px;
-      background: #222;
-      border-radius: 8px;
-      padding: 20px;
-      font-style: italic;
-      box-shadow: 0 0 10px rgba(0,170,255,0.3);
-      color: #ddd;
-    }
-    /* Иконки соцсетей */
-    .social-links {
-      margin-top: 50px;
-      text-align: center;
-    }
-    .social-links a {
-      display: inline-block;
-      margin: 0 15px;
-      color: #00aaff;
-      transition: color 0.3s;
-      font-size: 0;
-    }
-    .social-links a svg {
-      width: 36px;
-      height: 36px;
-      fill: #00aaff;
-      transition: fill 0.3s;
-    }
-    .social-links a:hover svg {
-      fill: #0088cc;
-    }
+
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
         align-items: center;
       }
+
       .poster {
         width: 100%;
         max-width: 400px;
       }
+
       .details {
         width: 100%;
         min-height: auto;
       }
+
       .video-wrapper {
         margin-top: 20px;
       }
@@ -177,34 +162,6 @@
     <div class="play-button"></div>
   </div>
 
-  <!-- Блок с мнением (статичный пример, можно заменить) -->
-  <div class="review-text" id="reviewText">
-    <h2>Мнение зрителя</h2>
-    <p>«Этот фильм впечатляет своей динамикой и глубоким сюжетом. Отличная игра актёров и качественная режиссура делают просмотр настоящим удовольствием. Рекомендую к просмотру всем любителям жанра!»</p>
-  </div>
-
-  <!-- Соцсети -->
-<div class="social-links" style="margin-top: 40px; text-align: center;">
-  <a href="https://t.me/film_kia" target="_blank" rel="noopener" title="Telegram" style="margin: 0 10px;">
-    <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
-      <path fill="#0088cc" d="M9.99 17.99l-.4-3.57 9.36-8.46-11.5 7.1-4.3-1.34 20.2-8.08-3.36 17.35-6.4-5.4-3.6 2.4z"/>
-    </svg>
-  </a>
-  
-  <a href="https://www.youtube.com/channel/UCp3sC6EPr6qhLKVMbA0S64A" target="_blank" rel="noopener" title="YouTube" style="margin: 0 10px;">
-    <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
-      <path fill="#FF0000" d="M23 7s-.2-1.5-.8-2.2c-.7-.8-1.6-.8-2-1C17.7 3.5 12 3.5 12 3.5s-5.7 0-8.2.3c-.5.2-1.3.2-2 1C1.2 5.5 1 7 1 7S.8 8.8.8 10.6v2.8C.8 15.2 1 17 1 17s.2 1.5.8 2.2c.7.8 1.6.8 2 1C6.3 20.5 12 20.5 12 20.5s5.7 0 8.2-.3c.5-.2 1.3-.2 2-1 .6-.7.8-2.2.8-2.2s.2-1.8.2-3.6v-2.8C23.2 8.8 23 7 23 7z"/>
-      <path fill="#FFFFFF" d="M10 15.5v-7l6 3.5-6 3.5z"/>
-    </svg>
-  </a>
-
-  <a href="https://www.facebook.com/groups/kino1" target="_blank" rel="noopener" title="Facebook" style="margin: 0 10px;">
-    <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
-      <path fill="#1877f2" d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.495v-9.294H9.847V11.04h2.972V8.414c0-2.937 1.794-4.541 4.414-4.541 1.256 0 2.337.094 2.652.135v3.074h-1.82c-1.429 0-1.705.679-1.705 1.673v2.195h3.409l-.444 3.667h-2.965V24h5.81C23.407 24 24 23.407 24 22.676V1.324C24 .593 23.407 0 22.676 0z"/>
-    </svg>
-  </a>
-</div>
-
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
@@ -221,30 +178,38 @@
       const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
       const credits = await creditsRes.json();
 
+      // Постер
       document.querySelector('.poster').src = movie.poster_path
         ? IMG_URL + movie.poster_path
         : 'https://via.placeholder.com/300x450?text=Нет+постера';
 
+      // Название + год
       document.querySelector('.title').textContent = `${movie.title} (${movie.release_date?.slice(0, 4) || ''})`;
 
+      // Дата выхода
       document.getElementById('releaseDate').textContent = movie.release_date
         ? `Дата выхода: ${movie.release_date}`
         : '';
 
+      // Режиссёр (первый в списке crew с job === 'Director')
       const director = credits.crew.find(member => member.job === 'Director');
       document.getElementById('director').textContent = director
         ? `Режиссёр: ${director.name}`
         : 'Режиссёр: информация отсутствует';
 
+      // Главные актеры (топ 5)
       const topActors = credits.cast.slice(0, 5).map(actor => actor.name).join(', ');
       document.getElementById('actors').textContent = topActors
         ? `В главных ролях: ${topActors}`
         : 'Информация об актёрах отсутствует';
 
+      // Описание
       document.querySelector('.description').textContent = movie.overview || 'Описание недоступно.';
 
+      // Рейтинг
       document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average?.toFixed(1) || 'нет'} (${movie.vote_count || 0} голосов)`;
 
+      // SEO-текст
       document.getElementById('seoText').innerHTML = generateSeoText(movie, director, topActors);
     }
 
@@ -259,6 +224,7 @@
       const directorName = director ? director.name : 'информация отсутствует';
       const actorsList = topActors || 'информация отсутствует';
 
+      // Ключевые слова
       const keywords = [title, 'фильм', year, 'смотреть онлайн', genres, directorName, 'трейлер', 'отзывы', 'рейтинг'];
 
       const phrases = [
@@ -273,7 +239,7 @@
       const shuffled = phrases.sort(() => 0.5 - Math.random());
 
       return `
-        <h2>«${title}»</h2>
+        <h2>Почему стоит посмотреть «${title}»</h2>
         <p>${shuffled.slice(0, 4).join(' ')}</p>
         <meta name="keywords" content="${keywords.join(', ')}" />
       `;
