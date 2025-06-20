@@ -1,5 +1,4 @@
-
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ru">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -113,7 +112,6 @@
       margin-top: 50px;
     }
     #similarMoviesList li {
-      cursor: pointer;
       width: 140px;
       background: #222;
       border-radius: 8px;
@@ -242,8 +240,7 @@
 
       if (trailer) {
         trailerKey = trailer.key;
-        // Попытка получить дату из трейлера (можно брать дату выхода фильма, если точной нет)
-        trailerUploadDate = new Date(movie.release_date).toISOString(); // Пример
+        trailerUploadDate = new Date(movie.release_date).toISOString(); 
       }
 
       renderTrailer(trailerKey);
@@ -282,7 +279,6 @@
     }
 
     function addJsonLd(json) {
-      // Удаляем старый скрипт с JSON-LD, если есть
       const oldScript = document.querySelector('script[type="application/ld+json"]');
       if (oldScript) oldScript.remove();
 
@@ -320,42 +316,28 @@
       const data = await res.json();
       const listEl = document.querySelector('#similarMoviesList ul');
       listEl.innerHTML = '';
+
       data.results.slice(0, 7).forEach(movie => {
         const li = document.createElement('li');
-        li.style.cursor = 'pointer';
-        li.style.width = '140px';
-        li.style.background = '#222';
-        li.style.borderRadius = '8px';
-        li.style.padding = '10px';
-        li.style.color = '#eee';
-        li.style.userSelect = 'none';
-        li.style.textAlign = 'center';
-        li.style.transition = 'background 0.3s';
+
+        // Ссылка на детальную страницу фильма с правильным URL
+        const link = document.createElement('a');
+        link.href = `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`;
+        link.style.color = '#eee';
+        link.style.textDecoration = 'none';
+        link.style.display = 'block';
 
         const img = document.createElement('img');
         img.src = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster';
         img.alt = movie.title;
-        img.style.width = '140px';
-        img.style.height = '180px';
-        img.style.borderRadius = '6px';
-        img.style.objectFit = 'cover';
-        img.style.marginBottom = '8px';
-        img.style.pointerEvents = 'none';
 
         const span = document.createElement('span');
         span.textContent = movie.title;
-        span.style.fontWeight = 'bold';
 
-        li.appendChild(img);
-        li.appendChild(span);
+        link.appendChild(img);
+        link.appendChild(span);
 
-        li.onclick = () => {
-          movieId = movie.id;
-          history.pushState(null, '', `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`);
-          loadMovie();
-          window.scrollTo(0, 0);
-        };
-
+        li.appendChild(link);
         listEl.appendChild(li);
       });
     }
