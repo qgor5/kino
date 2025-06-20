@@ -1,4 +1,5 @@
-<!DOCTYPE html> 
+
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -189,24 +190,7 @@
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-
-    // Универсальная функция для получения ID фильма из URL
-    function getMovieIdFromURL() {
-      const path = location.pathname; // например "/12345-название-фильма"
-      const parts = path.split('/').filter(Boolean);
-      if (parts.length === 0) return null;
-      const lastPart = parts[parts.length - 1];
-      const id = lastPart.split('-')[0];
-      if (!id || isNaN(Number(id))) return null;
-      return id;
-    }
-
-    let movieId = getMovieIdFromURL();
-
-    if (!movieId) {
-      alert('Фильм не найден');
-      window.location.href = '/index.html';
-    }
+    let movieId = location.pathname.split('/').pop().split('-')[0];
 
     const seoTextEl = document.getElementById('seoText');
     const videoWrapper = document.getElementById('videoWrapper');
@@ -258,7 +242,8 @@
 
       if (trailer) {
         trailerKey = trailer.key;
-        trailerUploadDate = new Date(movie.release_date).toISOString();
+        // Попытка получить дату из трейлера (можно брать дату выхода фильма, если точной нет)
+        trailerUploadDate = new Date(movie.release_date).toISOString(); // Пример
       }
 
       renderTrailer(trailerKey);
@@ -297,6 +282,7 @@
     }
 
     function addJsonLd(json) {
+      // Удаляем старый скрипт с JSON-LD, если есть
       const oldScript = document.querySelector('script[type="application/ld+json"]');
       if (oldScript) oldScript.remove();
 
@@ -375,7 +361,7 @@
     }
 
     window.onpopstate = () => {
-      movieId = getMovieIdFromURL();
+      movieId = location.pathname.split('/').pop().split('-')[0];
       loadMovie();
     };
 
