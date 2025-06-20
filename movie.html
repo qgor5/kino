@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TopKino — Детали фильма</title>
-  <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#111" />
   <meta name="description" content="Смотрите трейлер, описание и подробности фильма онлайн." />
 
   <!-- Open Graph -->
@@ -15,7 +13,7 @@
   <meta property="og:image" content="https://image.tmdb.org/t/p/w500/poster.jpg" />
   <meta property="og:url" content="https://topkino.netlify.app/" />
 
-  <!-- Twitter Card -->
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="TopKino — Детали фильма" />
   <meta name="twitter:description" content="Фильм онлайн. Трейлер, описание, актёры, рейтинг." />
@@ -29,106 +27,109 @@
     gtag('js', new Date());
     gtag('config', 'G-FPMXGR1HF9');
   </script>
-
-  <style>/* Стили как у тебя — не трогал */</style>
 </head>
 <body>
-  <!-- Страница как у тебя: постер, описание, трейлер и т.д. -->
+  <h1>Загрузка фильма...</h1>
 
-  <!-- JavaScript ниже автоматизирует всё -->
   <script>
-    const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-    let movieId = location.pathname.split('/').pop().split('-')[0];
+    document.addEventListener('DOMContentLoaded', async () => {
+      const API_KEY = '7cb67565ace3a08cd9d099c749787121';
+      const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-    async function loadMovie() {
-      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-      if (!movieRes.ok) return;
-      const movie = await movieRes.json();
+      const pathParts = location.pathname.split('/');
+      const slug = pathParts[pathParts.length - 1];
+      const movieId = slug.split('-')[0];
 
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
-      const credits = await creditsRes.json();
+      try {
+        const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+        if (!movieRes.ok) throw new Error('Фильм не найден');
+        const movie = await movieRes.json();
 
-      const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
-      const actors = credits.cast.slice(0, 3).map(a => a.name);
-      const genres = movie.genres.map(g => g.name);
-      const poster = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450';
-      const description = movie.overview;
+        const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+        const credits = await creditsRes.json();
 
-      // Обновляем title и meta
-      document.title = `${movie.title} (${movie.release_date.slice(0,4)}) — Смотреть онлайн`;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      metaDesc.content = `${movie.title} (${movie.release_date.slice(0,4)}): ${description.slice(0,160)}`;
+        const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
+        const actors = credits.cast.slice(0, 3).map(a => a.name);
+        const genres = movie.genres.map(g => g.name);
+        const poster = movie.poster_path ? IMG_URL + movie.poster_path : '';
+        const description = movie.overview || 'Описание недоступно';
+        const trailerRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+        const trailerData = await trailerRes.json();
+        const trailer = trailerData.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+        const trailerKey = trailer?.key || '';
+        const trailerUploadDate = new Date(movie.release_date).toISOString();
 
-      // Open Graph + Twitter
-      const ogTags = {
-        'og:title': `${movie.title} (${movie.release_date.slice(0,4)})`,
-        'og:description': description,
-        'og:image': poster,
-        'og:url': location.href,
-        'twitter:title': `${movie.title} (${movie.release_date.slice(0,4)})`,
-        'twitter:description': description,
-        'twitter:image': poster
-      };
-      for (const [prop, content] of Object.entries(ogTags)) {
-        let meta = document.querySelector(`meta[property="${prop}"], meta[name="${prop}"]`);
-        if (!meta) {
-          meta = document.createElement('meta');
-          if (prop.startsWith('og:')) meta.setAttribute('property', prop);
-          else meta.setAttribute('name', prop);
-          document.head.appendChild(meta);
-        }
-        meta.setAttribute('content', content);
+        // Обновляем title и description
+        document.title = `${movie.title} (${movie.release_date.slice(0,4)}) — Смотреть онлайн`;
+        const metaDesc = document.querySelector('meta[name="description"]');
+        metaDesc.content = `${movie.title} (${movie.release_date.slice(0,4)}): ${description.slice(0,160)}`;
+
+        // Обновляем OG и Twitter теги
+        const updateMeta = (selector, content) => {
+          const el = document.querySelector(selector);
+          if (el) el.setAttribute('content', content);
+        };
+        updateMeta('meta[property="og:title"]', movie.title);
+        updateMeta('meta[property="og:description"]', description);
+        updateMeta('meta[property="og:image"]', poster);
+        updateMeta('meta[property="og:url"]', location.href);
+        updateMeta('meta[name="twitter:title"]', movie.title);
+        updateMeta('meta[name="twitter:description"]', description);
+        updateMeta('meta[name="twitter:image"]', poster);
+
+        // Добавляем JSON-LD
+        const jsonLd = {
+          "@context": "https://schema.org",
+          "@type": "Movie",
+          "name": movie.title,
+          "image": poster,
+          "description": description,
+          "datePublished": movie.release_date,
+          "url": location.href,
+          "genre": genres,
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": movie.vote_average.toFixed(1),
+            "ratingCount": movie.vote_count.toString(),
+            "bestRating": "10",
+            "worstRating": "1"
+          },
+          "director": { "@type": "Person", "name": director },
+          "actor": actors.map(name => ({ "@type": "Person", "name": name })),
+          ...(trailerKey && {
+            "trailer": {
+              "@type": "VideoObject",
+              "name": `Трейлер фильма ${movie.title}`,
+              "description": `Официальный трейлер фильма ${movie.title}.`,
+              "thumbnailUrl": `https://img.youtube.com/vi/${trailerKey}/hqdefault.jpg`,
+              "uploadDate": trailerUploadDate,
+              "contentUrl": `https://www.youtube.com/watch?v=${trailerKey}`,
+              "embedUrl": `https://www.youtube.com/embed/${trailerKey}`
+            }
+          })
+        };
+        const ld = document.createElement('script');
+        ld.type = 'application/ld+json';
+        ld.textContent = JSON.stringify(jsonLd);
+        document.head.appendChild(ld);
+
+        document.body.innerHTML = `
+          <div style="text-align:center;max-width:700px;margin:40px auto;">
+            <img src="${poster}" alt="${movie.title}" style="width:300px;border-radius:8px;" />
+            <h1>${movie.title} (${movie.release_date.slice(0, 4)})</h1>
+            <p><strong>Жанр:</strong> ${genres.join(', ')}</p>
+            <p><strong>Режиссёр:</strong> ${director}</p>
+            <p><strong>Актёры:</strong> ${actors.join(', ')}</p>
+            <p><strong>Рейтинг:</strong> ${movie.vote_average.toFixed(1)} / 10 (${movie.vote_count} голосов)</p>
+            <p style="margin-top:20px;">${description}</p>
+            ${trailerKey ? `<div style="margin-top:30px;"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${trailerKey}" frameborder="0" allowfullscreen></iframe></div>` : ''}
+          </div>
+        `;
+      } catch (err) {
+        console.error(err);
+        document.body.innerHTML = `<h1 style="color:red;text-align:center;">Ошибка загрузки фильма</h1>`;
       }
-
-      // Трейлер
-      const videoRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const videos = await videoRes.json();
-      const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-      const trailerKey = trailer?.key || '';
-      const trailerUploadDate = new Date(movie.release_date).toISOString();
-
-      // JSON-LD
-      const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Movie",
-        "name": movie.title,
-        "image": poster,
-        "description": description,
-        "datePublished": movie.release_date,
-        "url": location.href,
-        "genre": genres,
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": movie.vote_average.toFixed(1),
-          "ratingCount": movie.vote_count.toString(),
-          "bestRating": "10",
-          "worstRating": "1"
-        },
-        "director": { "@type": "Person", "name": director },
-        "actor": actors.map(name => ({ "@type": "Person", "name": name })),
-        ...(trailerKey && {
-          "trailer": {
-            "@type": "VideoObject",
-            "name": `Трейлер фильма ${movie.title}`,
-            "description": `Официальный трейлер фильма ${movie.title}.`,
-            "thumbnailUrl": `https://img.youtube.com/vi/${trailerKey}/hqdefault.jpg`,
-            "uploadDate": trailerUploadDate,
-            "contentUrl": `https://www.youtube.com/watch?v=${trailerKey}`,
-            "embedUrl": `https://www.youtube.com/embed/${trailerKey}`
-          }
-        })
-      };
-
-      const old = document.querySelector('script[type="application/ld+json"]');
-      if (old) old.remove();
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.textContent = JSON.stringify(jsonLd);
-      document.head.appendChild(script);
-    }
-
-    loadMovie();
+    });
   </script>
 </body>
 </html>
