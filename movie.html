@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -9,7 +9,7 @@
     gtag('js', new Date());
     gtag('config', 'G-FPMXGR1HF9');
   </script>
-  
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TopKino — Детали фильма</title>
@@ -102,45 +102,121 @@
     .social-links a {
       margin: 0 10px;
     }
-    /* Актёры и похожие фильмы */
-    .actors-list, .similar-movies-list {
-      margin-top: 40px;
-    }
-    .actors-list h2, .similar-movies-list h2 {
-      color: #00aaff;
-      margin-bottom: 15px;
-    }
-    .actors-list ul, .similar-movies-list ul {
+    /* Стили для списка актёров */
+    #actorsList ul {
       list-style: none;
       padding: 0;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 15px;
     }
-    .actors-list li, .similar-movies-list li {
-      background: #222;
-      border-radius: 8px;
-      padding: 10px;
+    #actorsList li {
       width: 140px;
-      text-align: center;
       cursor: pointer;
-      transition: background 0.3s;
+      text-align: center;
+      border-radius: 8px;
+      background: #222;
+      padding: 10px;
+      transition: background-color 0.3s;
     }
-    .actors-list li:hover, .similar-movies-list li:hover {
+    #actorsList li:hover {
       background: #00aaff;
       color: #111;
     }
-    .actors-list img, .similar-movies-list img {
-      width: 100%;
+    #actorsList img {
+      width: 140px;
       height: 180px;
-      border-radius: 5px;
+      border-radius: 6px;
       object-fit: cover;
       margin-bottom: 8px;
+      user-select: none;
+      pointer-events: none;
     }
-    .actors-list a, .similar-movies-list a {
-      text-decoration: none;
-      color: inherit;
+    #actorsList span {
       display: block;
+      font-size: 14px;
+      font-weight: bold;
+      user-select: none;
+    }
+    /* Стили для похожих фильмов */
+    #similarMoviesList ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+    #similarMoviesList li {
+      width: 140px;
+      text-align: center;
+      border-radius: 8px;
+      background: #222;
+      padding: 10px;
+      transition: background-color 0.3s;
+    }
+    #similarMoviesList li:hover {
+      background: #00aaff;
+      color: #111;
+    }
+    #similarMoviesList img {
+      width: 140px;
+      height: 180px;
+      border-radius: 6px;
+      object-fit: cover;
+      margin-bottom: 8px;
+      user-select: none;
+      pointer-events: none;
+    }
+    #similarMoviesList span {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      user-select: none;
+    }
+    /* Модальное окно */
+    #actorModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      color: #eee;
+      padding: 30px 20px 20px 20px;
+      overflow-y: auto;
+      z-index: 9999;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    #actorModal img {
+      max-width: 250px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    #actorModal h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 28px;
+    }
+    #actorModal p {
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    #closeModal {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      font-size: 36px;
+      background: none;
+      border: none;
+      color: #eee;
+      cursor: pointer;
+      font-weight: bold;
+      line-height: 1;
+      padding: 0;
+      user-select: none;
+    }
+    #closeModal:hover {
+      color: #00aaff;
     }
   </style>
 </head>
@@ -154,7 +230,8 @@
       <h1 class="title"></h1>
       <p class="meta-info" id="releaseDate"></p>
       <p class="meta-info" id="director"></p>
-      <p class="meta-info" id="actors"></p>
+      <p class="meta-info" id="actors"><strong>Актёры:</strong></p>
+      <div id="actorsList"><ul></ul></div>
       <p class="description"></p>
       <p class="meta-info" id="rating"></p>
     </div>
@@ -165,19 +242,12 @@
     <div class="play-button"></div>
   </div>
 
-  <div class="seo-text" id="seoText"></div>
-
-  <!-- Актёры -->
-  <div class="actors-list" id="actorsList">
-    <h2>Актёры</h2>
-    <ul></ul>
-  </div>
-
-  <!-- Похожие фильмы -->
-  <div class="similar-movies-list" id="similarMoviesList">
+  <div id="similarMoviesList">
     <h2>Похожие фильмы</h2>
     <ul></ul>
   </div>
+
+  <div class="seo-text" id="seoText"></div>
 
   <div class="social-links">
     <a href="https://t.me/film_kia" target="_blank" rel="noopener" title="Telegram">
@@ -189,6 +259,16 @@
     <a href="https://www.facebook.com/groups/kino1" target="_blank" rel="noopener" title="Facebook">
       <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#1877f2" d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.495v-9.294H9.847V11.04h2.972V8.414c0-2.937 1.794-4.541 4.414-4.541 1.256 0 2.337.094 2.652.135v3.074h-1.82c-1.429 0-1.705.679-1.705 1.673v2.195h3.409l-.444 3.667h-2.965V24h5.81C23.407 24 24 23.407 24 22.676V1.324C24 .593 23.407 0 22.676 0z"/></svg>
     </a>
+  </div>
+
+  <!-- Модальное окно для актёра -->
+  <div id="actorModal" role="dialog" aria-modal="true" aria-labelledby="actorName" tabindex="-1">
+    <button id="closeModal" aria-label="Закрыть">×</button>
+    <h2 id="actorName"></h2>
+    <img id="actorPhoto" src="" alt="Фото актёра" />
+    <p id="actorBirthday"></p>
+    <p id="actorPlaceOfBirth"></p>
+    <p id="actorBiography"></p>
   </div>
 
   <script>
@@ -213,7 +293,7 @@
       document.querySelector('.title').textContent = `${movie.title} (${movie.release_date.slice(0,4)})`;
       document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date}`;
       document.getElementById('director').textContent = `Режиссёр: ${director}`;
-      document.getElementById('actors').textContent = `Актёры: ${actors.join(', ')}`;
+      // Здесь не выводим просто текст актеров, список ниже
       document.querySelector('.description').textContent = movie.overview;
       document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
 
@@ -294,7 +374,6 @@
           iframe.loading = 'lazy';
           iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
 
-          // Чтобы iframe занимал весь размер контейнера
           iframe.style.width = '100%';
           iframe.style.height = '100%';
           iframe.style.border = 'none';
@@ -304,7 +383,6 @@
       }
     }
 
-    // Загрузка актёров с кликабельностью
     async function loadActors() {
       const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
       const credits = await creditsRes.json();
@@ -314,10 +392,9 @@
 
       credits.cast.slice(0, 12).forEach(actor => {
         const li = document.createElement('li');
+        li.style.cursor = 'pointer';
 
-        const a = document.createElement('a');
-        a.href = `/person/${actor.id}`; // ссылка на страницу актёра (адаптируй под свой роутинг)
-        a.title = actor.name;
+        li.dataset.actorId = actor.id;
 
         const img = document.createElement('img');
         img.src = actor.profile_path ? IMG_URL + actor.profile_path : 'https://via.placeholder.com/140x180?text=No+Photo';
@@ -326,47 +403,93 @@
         const name = document.createElement('span');
         name.textContent = actor.name;
 
-        a.appendChild(img);
-        a.appendChild(name);
-        li.appendChild(a);
+        li.appendChild(img);
+        li.appendChild(name);
         actorsListEl.appendChild(li);
+      });
+
+      // Обработчик клика по актёру
+      actorsListEl.addEventListener('click', async (e) => {
+        let li = e.target.closest('li');
+        if (!li) return;
+        const actorId = li.dataset.actorId;
+        if (!actorId) return;
+
+        await showActorModal(actorId);
       });
     }
 
-    // Загрузка похожих фильмов с кликабельностью
     async function loadSimilarMovies() {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}&language=ru-RU&page=1`);
       const data = await res.json();
 
-      const similarListEl = document.querySelector('#similarMoviesList ul');
-      similarListEl.innerHTML = ''; // очистка
+      const listEl = document.querySelector('#similarMoviesList ul');
+      listEl.innerHTML = '';
 
-      data.results.slice(0, 10).forEach(movie => {
+      data.results.slice(0, 8).forEach(movie => {
         const li = document.createElement('li');
-
-        const a = document.createElement('a');
-        a.href = `/movie/${movie.id}`; // ссылка на страницу фильма (адаптируй под свой роутинг)
-        a.title = movie.title;
-
         const img = document.createElement('img');
         img.src = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster';
         img.alt = movie.title;
 
-        const title = document.createElement('span');
-        title.textContent = movie.title;
+        const span = document.createElement('span');
+        span.textContent = movie.title;
 
-        a.appendChild(img);
-        a.appendChild(title);
-        li.appendChild(a);
-        similarListEl.appendChild(li);
+        li.appendChild(img);
+        li.appendChild(span);
+
+        li.style.cursor = 'pointer';
+        li.onclick = () => {
+          // Перезагрузить страницу с новым фильмом (обновить location)
+          window.location.href = `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`;
+        };
+
+        listEl.appendChild(li);
       });
     }
+
+    async function showActorModal(actorId) {
+      const modal = document.getElementById('actorModal');
+      const nameEl = document.getElementById('actorName');
+      const photoEl = document.getElementById('actorPhoto');
+      const birthdayEl = document.getElementById('actorBirthday');
+      const placeOfBirthEl = document.getElementById('actorPlaceOfBirth');
+      const biographyEl = document.getElementById('actorBiography');
+
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/person/${actorId}?api_key=${API_KEY}&language=ru-RU`);
+        const data = await res.json();
+
+        nameEl.textContent = data.name || 'Имя не найдено';
+        photoEl.src = data.profile_path ? IMG_URL + data.profile_path : 'https://via.placeholder.com/200x300?text=No+Photo';
+        photoEl.alt = data.name || '';
+        birthdayEl.textContent = data.birthday ? `Дата рождения: ${data.birthday}` : '';
+        placeOfBirthEl.textContent = data.place_of_birth ? `Место рождения: ${data.place_of_birth}` : '';
+        biographyEl.textContent = data.biography || 'Биография отсутствует.';
+
+        modal.style.display = 'block';
+        modal.focus();
+      } catch (error) {
+        alert('Ошибка при загрузке данных актёра.');
+      }
+    }
+
+    // Закрытие модального окна
+    document.getElementById('closeModal').onclick = () => {
+      document.getElementById('actorModal').style.display = 'none';
+    };
+
+    // Закрытие по нажатию Esc
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape') {
+        document.getElementById('actorModal').style.display = 'none';
+      }
+    });
 
     loadMovie();
     loadTrailer();
     loadActors();
     loadSimilarMovies();
-
   </script>
 
 </body>
