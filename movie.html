@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <!-- Google tag (gtag.js) -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TopKino — Детали фильма</title>
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#111" />
+  <!-- Google tag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPMXGR1HF9"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -10,11 +15,6 @@
     gtag('config', 'G-FPMXGR1HF9');
   </script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TopKino — Детали фильма</title>
-  <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#111" />
   <style>
     body {
       margin: 0;
@@ -95,13 +95,6 @@
       margin-top: 0;
       color: #00aaff;
     }
-    .social-links {
-      margin-top: 40px;
-      text-align: center;
-    }
-    .social-links a {
-      margin: 0 10px;
-    }
     #similarMoviesList ul {
       list-style: none;
       padding: 0;
@@ -118,7 +111,6 @@
       border-radius: 8px;
       padding: 10px;
       color: #eee;
-      user-select: none;
       text-align: center;
       transition: background 0.3s;
     }
@@ -133,105 +125,15 @@
       object-fit: cover;
       margin-bottom: 8px;
       pointer-events: none;
-      user-select: none;
     }
     #similarMoviesList span {
       font-weight: bold;
       font-size: 14px;
-      display: block;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
   </style>
-  
-<script>
-  const API_KEY = '7cb67565ace3a08cd9d099c749787121'; // TMDb API ключ
-  const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-
-  function getMovieIdFromUrl() {
-    const path = window.location.pathname;
-    const lastPart = path.split('/').pop();
-    return lastPart.split('-')[0];
-  }
-
-  async function addJsonLd(json) {
-    const oldScript = document.querySelector('script[type="application/ld+json"]');
-    if (oldScript) oldScript.remove();
-
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.textContent = JSON.stringify(json, null, 2);
-    document.head.appendChild(script);
-  }
-
-  async function loadMovieData() {
-    try {
-      const movieId = getMovieIdFromUrl();
-
-      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-      if (!movieRes.ok) throw new Error('Фильм не найден');
-      const movie = await movieRes.json();
-
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
-      const credits = await creditsRes.json();
-
-      const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const videos = await videosRes.json();
-
-      const directorName = credits.crew.find(c => c.job === 'Director')?.name || 'Неизвестен';
-      const actorsList = credits.cast.slice(0, 5).map(actor => ({
-        "@type": "Person",
-        "name": actor.name
-      }));
-      const genresList = movie.genres.map(g => g.name);
-      const trailer = videos.results.find(v => v.type === "Trailer" && v.site === "YouTube");
-
-      const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Movie",
-        "name": movie.title,
-        "image": movie.poster_path ? IMG_URL + movie.poster_path : '',
-        "description": movie.overview,
-        "datePublished": movie.release_date,
-        "url": window.location.href,
-        "genre": genresList,
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": movie.vote_average.toFixed(1),
-          "ratingCount": movie.vote_count.toString(),
-          "bestRating": "10",
-          "worstRating": "1"
-        },
-        "director": {
-          "@type": "Person",
-          "name": directorName
-        },
-        "actor": actorsList
-      };
-
-      if (trailer) {
-        jsonLd.trailer = {
-          "@type": "VideoObject",
-          "name": `Трейлер фильма ${movie.title}`,
-          "description": `Официальный трейлер фильма ${movie.title}`,
-          "thumbnailUrl": `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`,
-          "uploadDate": movie.release_date,
-          "contentUrl": `https://www.youtube.com/watch?v=${trailer.key}`,
-          "embedUrl": `https://www.youtube.com/embed/${trailer.key}`
-        };
-      }
-
-      await addJsonLd(jsonLd);
-
-    } catch (error) {
-      console.error('Ошибка при загрузке данных фильма:', error);
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', loadMovieData);
-</script>
-  
 </head>
 <body>
 
@@ -256,19 +158,6 @@
 
   <div class="seo-text" id="seoText"></div>
 
-  <div class="social-links">
-    <a href="https://t.me/film_kia" target="_blank" rel="noopener" title="Telegram">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#0088cc" d="M9.99 17.99l-.4-3.57 9.36-8.46-11.5 7.1-4.3-1.34 20.2-8.08-3.36 17.35-6.4-5.4-3.6 2.4z"/></svg>
-    </a>
-    <a href="https://www.youtube.com/channel/UCp3sC6EPr6qhLKVMbA0S64A" target="_blank" rel="noopener" title="YouTube">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#FF0000" d="M23 7s-.2-1.5-.8-2.2c-.7-.8-1.6-.8-2-1C17.7 3.5 12 3.5 12 3.5s-5.7 0-8.2.3c-.5.2-1.3.2-2 1C1.2 5.5 1 7 1 7S.8 8.8.8 10.6v2.8C.8 15.2 1 17 1 17s.2 1.5.8 2.2c.7.8 1.6.8 2 1C6.3 20.5 12 20.5 12 20.5s5.7 0 8.2-.3c.5-.2 1.3-.2 2-1 .6-.7.8-2.2.8-2.2s.2-1.8.2-3.6v-2.8C23.2 8.8 23 7 23 7z"/><path fill="#FFF" d="M10 15.5v-7l6 3.5-6 3.5z"/></svg>
-    </a>
-    <a href="https://www.facebook.com/groups/kino1" target="_blank" rel="noopener" title="Facebook">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#1877f2" d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.495v-9.294H9.847V11.04h2.972V8.414c0-2.937 1.794-4.541 4.414-4.541 1.256 0 2.337.094 2.652.135v3.074h-1.82c-1.429 0-1.705.679-1.705 1.673v2.195h3.409l-.444 3.667h-2.965V24h5.81C23.407 24 24 23.407 24 22.676V1.324C24 .593 23.407 0 22.676 0z"/></svg>
-    </a>
-  </div>
-
-  <!-- Похожие фильмы -->
   <div id="similarMoviesList">
     <h2 style="color:#00aaff;">Похожие фильмы</h2>
     <ul></ul>
@@ -279,100 +168,9 @@
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
     let movieId = location.pathname.split('/').pop().split('-')[0];
 
-    const seoTextEl = document.getElementById('seoText');
-    const videoWrapper = document.getElementById('videoWrapper');
-    const videoThumb = document.getElementById('videoThumb');
-
-    async function loadMovie() {
-      const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
-      if (!movieRes.ok) {
-        alert('Фильм не найден');
-        return;
-      }
-      const movie = await movieRes.json();
-
-      const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
-      const credits = await creditsRes.json();
-
-      const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
-      const actors = credits.cast.slice(0, 3).map(a => a.name);
-      const genres = movie.genres.map(g => g.name);
-      const poster = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450';
-
-      // Заполнение контента страницы
-      document.querySelector('.poster').src = poster;
-      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date.slice(0,4)})`;
-      document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date}`;
-      document.getElementById('director').textContent = `Режиссёр: ${director}`;
-      document.getElementById('actors').textContent = `Актёры: ${actors.join(', ')}`;
-      document.querySelector('.description').textContent = movie.overview;
-      document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
-
-      // SEO текст
-      const seoKey = `seo-${movieId}`;
-      let seo = localStorage.getItem(seoKey);
-      if (!seo) {
-        seo = `<h2>${movie.title} — смотреть онлайн</h2>
-          <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p>
-          <p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов. Если вы любите ${genres.join(', ').toLowerCase()}, этот фильм вам точно понравится.</p>`;
-        localStorage.setItem(seoKey, seo);
-      }
-      seoTextEl.innerHTML = seo;
-
-      // Получаем трейлер и дату публикации трейлера
-      const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const videos = await videosRes.json();
-      const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-
-      let trailerKey = '';
-      let trailerUploadDate = '';
-
-      if (trailer) {
-        trailerKey = trailer.key;
-        // Попытка получить дату из трейлера (можно брать дату выхода фильма, если точной нет)
-        trailerUploadDate = new Date(movie.release_date).toISOString(); // Пример
-      }
-
-      renderTrailer(trailerKey);
-
-      // Добавляем schema.org JSON-LD в head
-      addJsonLd({
-        "@context": "https://schema.org",
-        "@type": "Movie",
-        "name": movie.title,
-        "image": poster,
-        "description": movie.overview,
-        "datePublished": movie.release_date,
-        "url": location.href,
-        "genre": genres,
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": movie.vote_average.toFixed(1),
-          "ratingCount": movie.vote_count.toString(),
-          "bestRating": "10",
-          "worstRating": "1"
-        },
-        "director": { "@type": "Person", "name": director },
-        "actor": actors.map(name => ({ "@type": "Person", "name": name })),
-        "trailer": trailerKey ? {
-          "@type": "VideoObject",
-          "name": `Трейлер фильма ${movie.title}`,
-          "description": `Официальный трейлер фильма ${movie.title}.`,
-          "thumbnailUrl": `https://img.youtube.com/vi/${trailerKey}/hqdefault.jpg`,
-          "uploadDate": trailerUploadDate,
-          "contentUrl": `https://www.youtube.com/watch?v=${trailerKey}`,
-          "embedUrl": `https://www.youtube.com/embed/${trailerKey}`
-        } : undefined
-      });
-
-      loadSimilarMovies();
-    }
-
-    function addJsonLd(json) {
-      // Удаляем старый скрипт с JSON-LD, если есть
+    async function addJsonLd(json) {
       const oldScript = document.querySelector('script[type="application/ld+json"]');
       if (oldScript) oldScript.remove();
-
       const script = document.createElement('script');
       script.type = 'application/ld+json';
       script.textContent = JSON.stringify(json);
@@ -380,10 +178,10 @@
     }
 
     function renderTrailer(key) {
+      const videoWrapper = document.getElementById('videoWrapper');
+      const videoThumb = document.getElementById('videoThumb');
       if (!key) {
         videoWrapper.style.display = 'none';
-        videoWrapper.onclick = null;
-        videoWrapper.innerHTML = '';
         return;
       }
       videoWrapper.style.display = 'block';
@@ -402,6 +200,76 @@
       };
     }
 
+    async function loadMovie() {
+      try {
+        const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+        const movie = await movieRes.json();
+
+        const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+        const credits = await creditsRes.json();
+
+        const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+        const videos = await videosRes.json();
+
+        const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
+        const actors = credits.cast.slice(0, 3).map(a => a.name);
+        const genres = movie.genres.map(g => g.name);
+        const poster = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450';
+
+        document.querySelector('.poster').src = poster;
+        document.querySelector('.title').textContent = `${movie.title} (${movie.release_date.slice(0,4)})`;
+        document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date}`;
+        document.getElementById('director').textContent = `Режиссёр: ${director}`;
+        document.getElementById('actors').textContent = `Актёры: ${actors.join(', ')}`;
+        document.querySelector('.description').textContent = movie.overview;
+        document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
+
+        const seoText = `
+          <h2>${movie.title} — смотреть онлайн</h2>
+          <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p>
+          <p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов. Если вы любите ${genres.join(', ').toLowerCase()}, этот фильм вам точно понравится.</p>`;
+        document.getElementById('seoText').innerHTML = seoText;
+
+        const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+        renderTrailer(trailer?.key || '');
+
+        await addJsonLd({
+          "@context": "https://schema.org",
+          "@type": "Movie",
+          "name": movie.title,
+          "image": poster,
+          "description": movie.overview,
+          "datePublished": movie.release_date,
+          "url": location.href,
+          "genre": genres,
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": movie.vote_average.toFixed(1),
+            "ratingCount": movie.vote_count.toString(),
+            "bestRating": "10",
+            "worstRating": "1"
+          },
+          "director": { "@type": "Person", "name": director },
+          "actor": actors.map(name => ({ "@type": "Person", "name": name })),
+          ...(trailer ? {
+            "trailer": {
+              "@type": "VideoObject",
+              "name": `Трейлер фильма ${movie.title}`,
+              "description": `Официальный трейлер фильма ${movie.title}`,
+              "thumbnailUrl": `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`,
+              "uploadDate": movie.release_date,
+              "contentUrl": `https://www.youtube.com/watch?v=${trailer.key}`,
+              "embedUrl": `https://www.youtube.com/embed/${trailer.key}`
+            }
+          } : {})
+        });
+
+        loadSimilarMovies();
+      } catch (e) {
+        console.error('Ошибка загрузки:', e);
+      }
+    }
+
     async function loadSimilarMovies() {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}&language=ru-RU&page=1`);
       const data = await res.json();
@@ -409,40 +277,15 @@
       listEl.innerHTML = '';
       data.results.slice(0, 7).forEach(movie => {
         const li = document.createElement('li');
-        li.style.cursor = 'pointer';
-        li.style.width = '140px';
-        li.style.background = '#222';
-        li.style.borderRadius = '8px';
-        li.style.padding = '10px';
-        li.style.color = '#eee';
-        li.style.userSelect = 'none';
-        li.style.textAlign = 'center';
-        li.style.transition = 'background 0.3s';
-
-        const img = document.createElement('img');
-        img.src = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster';
-        img.alt = movie.title;
-        img.style.width = '140px';
-        img.style.height = '180px';
-        img.style.borderRadius = '6px';
-        img.style.objectFit = 'cover';
-        img.style.marginBottom = '8px';
-        img.style.pointerEvents = 'none';
-
-        const span = document.createElement('span');
-        span.textContent = movie.title;
-        span.style.fontWeight = 'bold';
-
-        li.appendChild(img);
-        li.appendChild(span);
-
+        li.innerHTML = `
+          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster'}" alt="${movie.title}" />
+          <span>${movie.title}</span>`;
         li.onclick = () => {
           movieId = movie.id;
           history.pushState(null, '', `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`);
           loadMovie();
           window.scrollTo(0, 0);
         };
-
         listEl.appendChild(li);
       });
     }
