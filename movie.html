@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -17,92 +16,19 @@
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#111">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #eee;
-      padding: 15px;
-    }
-    a {
-      color: #00aaff;
-      text-decoration: none;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
-    .poster {
-      width: 300px;
-      height: 450px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      object-fit: cover;
-      background-color: #222;
-    }
-    .details {
-      flex: 1;
-      min-width: 280px;
-      max-width: 600px;
-    }
-    .video-wrapper {
-      margin: 40px auto 20px;
-      width: 100%;
-      max-width: 800px;
-      aspect-ratio: 16 / 9;
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #000;
-      cursor: pointer;
-    }
-    .video-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .play-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 64px;
-      height: 64px;
-      background: rgba(0,0,0,0.7);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .play-button::before {
-      content: '';
-      border-style: solid;
-      border-width: 12px 0 12px 20px;
-      border-color: transparent transparent transparent white;
-    }
-    .seo-text {
-      background: #1a1a1a;
-      padding: 20px;
-      margin-top: 40px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
-      line-height: 1.6;
-    }
-    .seo-text h2 {
-      margin-top: 0;
-      color: #00aaff;
-    }
-    .social-links {
-      margin-top: 40px;
-      text-align: center;
-    }
-    .social-links a {
-      margin: 0 10px;
-    }
+    body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #eee; padding: 15px; }
+    a { color: #00aaff; text-decoration: none; display: inline-block; margin-bottom: 20px; }
+    .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .poster { width: 300px; height: 450px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.5); object-fit: cover; background-color: #222; }
+    .details { flex: 1; min-width: 280px; max-width: 600px; }
+    .video-wrapper { margin: 40px auto 20px; width: 100%; max-width: 800px; aspect-ratio: 16 / 9; position: relative; border-radius: 8px; overflow: hidden; background: #000; cursor: pointer; }
+    .video-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .play-button { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .play-button::before { content: ''; border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent white; }
+    .seo-text { background: #1a1a1a; padding: 20px; margin-top: 40px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.3); line-height: 1.6; }
+    .seo-text h2 { margin-top: 0; color: #00aaff; }
+    .social-links { margin-top: 40px; text-align: center; }
+    .social-links a { margin: 0 10px; }
   </style>
 </head>
 <body>
@@ -160,99 +86,68 @@
 
       document.querySelector('.poster').src = poster;
       document.querySelector('.title').textContent = `${movie.title} (${movie.release_date.slice(0,4)})`;
+
+      // ✅ Добавлено:
+      setOGTags(movie, poster);
+
       document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date}`;
       document.getElementById('director').textContent = `Режиссёр: ${director}`;
       document.getElementById('actors').textContent = `Актёры: ${actors.join(', ')}`;
       document.querySelector('.description').textContent = movie.overview;
       document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
 
-      // SEO текст — сохраняется 1 раз
       const seoKey = `seo-${movieId}`;
       let seo = localStorage.getItem(seoKey);
       if (!seo) {
-        seo = `<h2>${movie.title} — смотреть онлайн</h2>
-        <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p>
-        <p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов. Если вы любите ${genres.join(', ').toLowerCase()}, этот фильм вам точно понравится.</p>`;
+        seo = `<h2>${movie.title} — смотреть онлайн</h2><p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p><p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов.</p>`;
         localStorage.setItem(seoKey, seo);
       }
       seoTextEl.innerHTML = seo;
-
-      // Schema.org JSON-LD
-      const schema = {
-        "@context": "https://schema.org",
-        "@type": "Movie",
-        "name": movie.title,
-        "description": movie.overview,
-        "datePublished": movie.release_date,
-        "url": location.href,
-        "image": poster,
-        "genre": genres,
-        "inLanguage": "ru",
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": movie.vote_average.toFixed(1),
-          "ratingCount": movie.vote_count,
-          "bestRating": "10",
-          "worstRating": "1"
-        },
-        "review": {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Кинообзор TopKino"
-          },
-          "datePublished": movie.release_date,
-          "reviewBody": `Рецензия на фильм «${movie.title}»: одна из лучших картин ${movie.release_date.slice(0,4)} года. Отличная игра актёров и сильная режиссура.`,
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "8",
-            "bestRating": "10",
-            "worstRating": "1"
-          }
-        },
-        "director": { "@type": "Person", "name": director },
-        "actor": actors.map(name => ({ "@type": "Person", "name": name })),
-        "publisher": {
-          "@type": "Organization",
-          "name": "TopKino",
-          "url": "https://topkino.netlify.app/",
-          "logo": { "@type": "ImageObject", "url": "https://topkino.netlify.app/logo.png" }
-        }
-      };
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.textContent = JSON.stringify(schema);
-      document.head.appendChild(script);
     }
 
-  async function loadTrailer() {
-  const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-  const data = await res.json();
-  const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-  if (trailer) {
-    const wrapper = document.getElementById('videoWrapper');
-    const thumb = document.getElementById('videoThumb');
-    thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
-    wrapper.style.display = 'block';
-    wrapper.onclick = () => {
-      wrapper.innerHTML = ''; // очищаем превью
+    // ✅ ВСТАВЛЕНА функция для Open Graph
+    function setOGTags(movie, poster) {
+      const head = document.head;
+      const ogTags = [
+        { property: 'og:title', content: `${movie.title} (${movie.release_date.slice(0,4)})` },
+        { property: 'og:description', content: movie.overview || 'Смотрите трейлер фильма на TopKino.' },
+        { property: 'og:image', content: poster },
+        { property: 'og:url', content: location.href },
+        { name: 'twitter:card', content: 'summary_large_image' }
+      ];
+      ogTags.forEach(tagData => {
+        const meta = document.createElement('meta');
+        if (tagData.property) meta.setAttribute('property', tagData.property);
+        if (tagData.name) meta.setAttribute('name', tagData.name);
+        meta.setAttribute('content', tagData.content);
+        head.appendChild(meta);
+      });
+    }
 
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
-      iframe.allowFullscreen = true;
-      iframe.loading = 'lazy';
-      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+    async function loadTrailer() {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+      const data = await res.json();
+      const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+      if (trailer) {
+        const wrapper = document.getElementById('videoWrapper');
+        const thumb = document.getElementById('videoThumb');
+        thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
+        wrapper.style.display = 'block';
+        wrapper.onclick = () => {
+          wrapper.innerHTML = '';
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
+          iframe.allowFullscreen = true;
+          iframe.loading = 'lazy';
+          iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.style.border = 'none';
+          wrapper.appendChild(iframe);
+        };
+      }
+    }
 
-      // Важно! Чтобы iframe занимал весь размер контейнера
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.border = 'none';
-
-      wrapper.appendChild(iframe);
-    };
-  }
-}
-    
     loadMovie();
     loadTrailer();
   </script>
