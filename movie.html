@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TopKino — Детали фильма</title>
-  <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#111" />
-
-  <!-- Google Tag -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPMXGR1HF9"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -16,39 +10,72 @@
     gtag('config', 'G-FPMXGR1HF9');
   </script>
 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TopKino — Детали фильма</title>
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#111" />
   <style>
     body {
-      margin: 0; font-family: Arial, sans-serif;
-      background: #111; color: #eee; padding: 15px;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      padding: 15px;
     }
-    a { color: #00aaff; text-decoration: none; margin-bottom: 20px; display: inline-block; }
+    a {
+      color: #00aaff;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
     .container {
-      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
     }
     .poster {
-      width: 300px; height: 450px; border-radius: 8px;
+      width: 300px;
+      height: 450px;
+      border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      object-fit: cover; background-color: #222;
+      object-fit: cover;
+      background-color: #222;
     }
     .details {
-      flex: 1; min-width: 280px; max-width: 600px;
+      flex: 1;
+      min-width: 280px;
+      max-width: 600px;
     }
     .video-wrapper {
       margin: 40px auto 20px;
-      width: 100%; max-width: 800px; aspect-ratio: 16 / 9;
-      position: relative; border-radius: 8px;
-      overflow: hidden; background: #000; cursor: pointer;
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+      cursor: pointer;
     }
     .video-wrapper img {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .play-button {
-      position: absolute; top: 50%; left: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      width: 64px; height: 64px;
+      width: 64px;
+      height: 64px;
       background: rgba(0,0,0,0.7);
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .play-button::before {
       content: '';
@@ -57,35 +84,64 @@
       border-color: transparent transparent transparent white;
     }
     .seo-text {
-      background: #1a1a1a; padding: 20px; margin-top: 40px;
-      border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      background: #1a1a1a;
+      padding: 20px;
+      margin-top: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
       line-height: 1.6;
     }
     .seo-text h2 {
-      margin-top: 0; color: #00aaff;
+      margin-top: 0;
+      color: #00aaff;
     }
     .social-links {
-      margin-top: 40px; text-align: center;
+      margin-top: 40px;
+      text-align: center;
     }
     .social-links a {
       margin: 0 10px;
     }
     #similarMoviesList ul {
-      list-style:none; padding:0; display:flex; flex-wrap:wrap;
-      gap:15px; justify-content:center;
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 50px;
     }
     #similarMoviesList li {
       cursor: pointer;
-      width: 140px; background: #222; border-radius: 8px;
-      padding: 10px; color: #eee; user-select: none;
-      text-align: center; transition: background-color 0.3s;
+      width: 140px;
+      background: #222;
+      border-radius: 8px;
+      padding: 10px;
+      color: #eee;
+      user-select: none;
+      text-align: center;
+      transition: background 0.3s;
     }
     #similarMoviesList li:hover {
-      background-color: #333;
+      background: #00aaff;
+      color: #111;
     }
     #similarMoviesList img {
-      width: 140px; height: 180px; border-radius: 6px;
-      object-fit: cover; margin-bottom: 8px; pointer-events: none;
+      width: 140px;
+      height: 180px;
+      border-radius: 6px;
+      object-fit: cover;
+      margin-bottom: 8px;
+      pointer-events: none;
+      user-select: none;
+    }
+    #similarMoviesList span {
+      font-weight: bold;
+      font-size: 14px;
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   </style>
 </head>
@@ -97,11 +153,11 @@
     <img class="poster" src="" alt="Постер фильма" />
     <div class="details">
       <h1 class="title"></h1>
-      <p id="releaseDate"></p>
-      <p id="director"></p>
-      <p id="actors"></p>
+      <p class="meta-info" id="releaseDate"></p>
+      <p class="meta-info" id="director"></p>
+      <p class="meta-info" id="actors"></p>
       <p class="description"></p>
-      <p id="rating"></p>
+      <p class="meta-info" id="rating"></p>
     </div>
   </div>
 
@@ -113,10 +169,19 @@
   <div class="seo-text" id="seoText"></div>
 
   <div class="social-links">
-    <!-- соцсети тут по твоему коду -->
+    <a href="https://t.me/film_kia" target="_blank" rel="noopener" title="Telegram">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#0088cc" d="M9.99 17.99l-.4-3.57 9.36-8.46-11.5 7.1-4.3-1.34 20.2-8.08-3.36 17.35-6.4-5.4-3.6 2.4z"/></svg>
+    </a>
+    <a href="https://www.youtube.com/channel/UCp3sC6EPr6qhLKVMbA0S64A" target="_blank" rel="noopener" title="YouTube">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#FF0000" d="M23 7s-.2-1.5-.8-2.2c-.7-.8-1.6-.8-2-1C17.7 3.5 12 3.5 12 3.5s-5.7 0-8.2.3c-.5.2-1.3.2-2 1C1.2 5.5 1 7 1 7S.8 8.8.8 10.6v2.8C.8 15.2 1 17 1 17s.2 1.5.8 2.2c.7.8 1.6.8 2 1C6.3 20.5 12 20.5 12 20.5s5.7 0 8.2-.3c.5-.2 1.3-.2 2-1 .6-.7.8-2.2.8-2.2s.2-1.8.2-3.6v-2.8C23.2 8.8 23 7 23 7z"/><path fill="#FFF" d="M10 15.5v-7l6 3.5-6 3.5z"/></svg>
+    </a>
+    <a href="https://www.facebook.com/groups/kino1" target="_blank" rel="noopener" title="Facebook">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#1877f2" d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.495v-9.294H9.847V11.04h2.972V8.414c0-2.937 1.794-4.541 4.414-4.541 1.256 0 2.337.094 2.652.135v3.074h-1.82c-1.429 0-1.705.679-1.705 1.673v2.195h3.409l-.444 3.667h-2.965V24h5.81C23.407 24 24 23.407 24 22.676V1.324C24 .593 23.407 0 22.676 0z"/></svg>
+    </a>
   </div>
 
-  <div id="similarMoviesList" style="margin-top:50px; text-align:center;">
+  <!-- Похожие фильмы -->
+  <div id="similarMoviesList">
     <h2 style="color:#00aaff;">Похожие фильмы</h2>
     <ul></ul>
   </div>
@@ -127,148 +192,126 @@
     let movieId = location.pathname.split('/').pop().split('-')[0];
 
     const seoTextEl = document.getElementById('seoText');
-
-    let jsonLdScript = null;
+    const videoWrapper = document.getElementById('videoWrapper');
+    const videoThumb = document.getElementById('videoThumb');
 
     async function loadMovie() {
       const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+      if (!movieRes.ok) {
+        alert('Фильм не найден');
+        return;
+      }
       const movie = await movieRes.json();
 
       const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
       const credits = await creditsRes.json();
 
       const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
-      const actors = credits.cast.slice(0, 5).map(a => a.name);
+      const actors = credits.cast.slice(0, 3).map(a => a.name);
       const genres = movie.genres.map(g => g.name);
       const poster = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450';
 
-      // Заполняем страницу
+      // Заполнение контента страницы
       document.querySelector('.poster').src = poster;
-      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date ? movie.release_date.slice(0,4) : '----'})`;
-      document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date || 'неизвестна'}`;
+      document.querySelector('.title').textContent = `${movie.title} (${movie.release_date.slice(0,4)})`;
+      document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date}`;
       document.getElementById('director').textContent = `Режиссёр: ${director}`;
-      document.getElementById('actors').textContent = `Актёры: ${actors.join(', ') || 'информация отсутствует'}`;
-      document.querySelector('.description').textContent = movie.overview || 'Описание отсутствует.';
-      document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average ? movie.vote_average.toFixed(1) : '-'} (${movie.vote_count || 0} голосов)`;
+      document.getElementById('actors').textContent = `Актёры: ${actors.join(', ')}`;
+      document.querySelector('.description').textContent = movie.overview;
+      document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
 
       // SEO текст
       const seoKey = `seo-${movieId}`;
       let seo = localStorage.getItem(seoKey);
       if (!seo) {
         seo = `<h2>${movie.title} — смотреть онлайн</h2>
-          <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date ? movie.release_date.slice(0, 4) : 'неизвестном'} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p>
-          <p>Оценка ${movie.vote_average ? movie.vote_average.toFixed(1) : '–'} на TMDB (${movie.vote_count || 0} голосов). Если любите ${genres.join(', ').toLowerCase()} — обязательно посмотрите.</p>`;
+          <p>Фильм «${movie.title}» в жанре ${genres.join(', ').toLowerCase()} вышел в ${movie.release_date.slice(0, 4)} году. Режиссёр — ${director}. В главных ролях: ${actors.join(', ')}. Сюжет: ${movie.overview}</p>
+          <p>Этот проект получил оценку ${movie.vote_average.toFixed(1)} на TMDB на основе ${movie.vote_count} голосов. Если вы любите ${genres.join(', ').toLowerCase()}, этот фильм вам точно понравится.</p>`;
         localStorage.setItem(seoKey, seo);
       }
       seoTextEl.innerHTML = seo;
 
-      // Удаляем предыдущий JSON-LD
-      if (jsonLdScript) {
-        jsonLdScript.remove();
-        jsonLdScript = null;
+      // Получаем трейлер и дату публикации трейлера
+      const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+      const videos = await videosRes.json();
+      const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+
+      let trailerKey = '';
+      let trailerUploadDate = '';
+
+      if (trailer) {
+        trailerKey = trailer.key;
+        // Попытка получить дату из трейлера (можно брать дату выхода фильма, если точной нет)
+        trailerUploadDate = new Date(movie.release_date).toISOString(); // Пример
       }
 
-      // Загружаем видео для JSON-LD
-      const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const videosData = await videosRes.json();
-      const trailer = videosData.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+      renderTrailer(trailerKey);
 
-      // Формируем расширенный JSON-LD
-      const schema = {
+      // Добавляем schema.org JSON-LD в head
+      addJsonLd({
         "@context": "https://schema.org",
         "@type": "Movie",
         "name": movie.title,
         "image": poster,
-        "description": movie.overview || '',
-        "datePublished": movie.release_date || '',
+        "description": movie.overview,
+        "datePublished": movie.release_date,
         "url": location.href,
         "genre": genres,
-        "inLanguage": "ru",
-        "director": {
-          "@type": "Person",
-          "name": director
-        },
-        "actor": actors.map(name => ({
-          "@type": "Person",
-          "name": name
-        })),
-        "aggregateRating": (movie.vote_count && movie.vote_average) ? {
+        "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": movie.vote_average.toFixed(1),
-          "ratingCount": movie.vote_count,
+          "ratingCount": movie.vote_count.toString(),
           "bestRating": "10",
           "worstRating": "1"
-        } : undefined,
-        "publisher": {
-          "@type": "Organization",
-          "name": "TopKino",
-          "url": "https://topkino.netlify.app/",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://topkino.netlify.app/logo.png"
-          }
-        }
-      };
-
-      if (trailer) {
-        schema.trailer = {
+        },
+        "director": { "@type": "Person", "name": director },
+        "actor": actors.map(name => ({ "@type": "Person", "name": name })),
+        "trailer": trailerKey ? {
           "@type": "VideoObject",
-          "name": `${movie.title} — официальный трейлер`,
-          "description": `Трейлер фильма ${movie.title}`,
-          "thumbnailUrl": `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`,
-          "uploadDate": trailer.published_at || '', // если есть, иначе ''
-          "contentUrl": `https://www.youtube.com/watch?v=${trailer.key}`,
-          "embedUrl": `https://www.youtube.com/embed/${trailer.key}`,
-          "publisher": {
-            "@type": "Organization",
-            "name": "TopKino",
-            "url": "https://topkino.netlify.app/"
-          }
-        };
-      }
+          "name": `Трейлер фильма ${movie.title}`,
+          "description": `Официальный трейлер фильма ${movie.title}.`,
+          "thumbnailUrl": `https://img.youtube.com/vi/${trailerKey}/hqdefault.jpg`,
+          "uploadDate": trailerUploadDate,
+          "contentUrl": `https://www.youtube.com/watch?v=${trailerKey}`,
+          "embedUrl": `https://www.youtube.com/embed/${trailerKey}`
+        } : undefined
+      });
 
-      // Очистка undefined полей
-      function clean(obj) {
-        for (const key in obj) {
-          if (obj[key] === undefined || obj[key] === null) {
-            delete obj[key];
-          } else if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
-            clean(obj[key]);
-          }
-        }
-      }
-      clean(schema);
-
-      jsonLdScript = document.createElement('script');
-      jsonLdScript.type = 'application/ld+json';
-      jsonLdScript.textContent = JSON.stringify(schema);
-      document.head.appendChild(jsonLdScript);
+      loadSimilarMovies();
     }
 
-    async function loadTrailer() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
-      const data = await res.json();
-      const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-      if (trailer) {
-        const wrapper = document.getElementById('videoWrapper');
-        const thumb = document.getElementById('videoThumb');
-        thumb.src = `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`;
-        wrapper.style.display = 'block';
-        wrapper.onclick = () => {
-          wrapper.innerHTML = ''; // очищаем превью
-          const iframe = document.createElement('iframe');
-          iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
-          iframe.allowFullscreen = true;
-          iframe.loading = 'lazy';
-          iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-          iframe.style.width = '100%';
-          iframe.style.height = '100%';
-          iframe.style.border = 'none';
-          wrapper.appendChild(iframe);
-        };
-      } else {
-        document.getElementById('videoWrapper').style.display = 'none';
+    function addJsonLd(json) {
+      // Удаляем старый скрипт с JSON-LD, если есть
+      const oldScript = document.querySelector('script[type="application/ld+json"]');
+      if (oldScript) oldScript.remove();
+
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(json);
+      document.head.appendChild(script);
+    }
+
+    function renderTrailer(key) {
+      if (!key) {
+        videoWrapper.style.display = 'none';
+        videoWrapper.onclick = null;
+        videoWrapper.innerHTML = '';
+        return;
       }
+      videoWrapper.style.display = 'block';
+      videoThumb.src = `https://img.youtube.com/vi/${key}/hqdefault.jpg`;
+      videoWrapper.onclick = () => {
+        videoWrapper.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${key}?autoplay=1`;
+        iframe.allowFullscreen = true;
+        iframe.loading = 'lazy';
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        videoWrapper.appendChild(iframe);
+      };
     }
 
     async function loadSimilarMovies() {
@@ -276,34 +319,52 @@
       const data = await res.json();
       const listEl = document.querySelector('#similarMoviesList ul');
       listEl.innerHTML = '';
-      data.results.slice(0,7).forEach(movie => {
+      data.results.slice(0, 7).forEach(movie => {
         const li = document.createElement('li');
+        li.style.cursor = 'pointer';
+        li.style.width = '140px';
+        li.style.background = '#222';
+        li.style.borderRadius = '8px';
+        li.style.padding = '10px';
+        li.style.color = '#eee';
+        li.style.userSelect = 'none';
+        li.style.textAlign = 'center';
+        li.style.transition = 'background 0.3s';
+
+        const img = document.createElement('img');
+        img.src = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster';
+        img.alt = movie.title;
+        img.style.width = '140px';
+        img.style.height = '180px';
+        img.style.borderRadius = '6px';
+        img.style.objectFit = 'cover';
+        img.style.marginBottom = '8px';
+        img.style.pointerEvents = 'none';
+
+        const span = document.createElement('span');
+        span.textContent = movie.title;
+        span.style.fontWeight = 'bold';
+
+        li.appendChild(img);
+        li.appendChild(span);
+
         li.onclick = () => {
           movieId = movie.id;
           history.pushState(null, '', `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`);
           loadMovie();
-          loadTrailer();
-          loadSimilarMovies();
           window.scrollTo(0, 0);
         };
-        li.innerHTML = `
-          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster'}" alt="${movie.title}">
-          <span style="font-weight:bold;">${movie.title}</span>
-        `;
+
         listEl.appendChild(li);
       });
     }
 
-    loadMovie();
-    loadTrailer();
-    loadSimilarMovies();
-
     window.onpopstate = () => {
       movieId = location.pathname.split('/').pop().split('-')[0];
       loadMovie();
-      loadTrailer();
-      loadSimilarMovies();
     };
+
+    loadMovie();
   </script>
 
 </body>
