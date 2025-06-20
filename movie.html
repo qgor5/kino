@@ -144,44 +144,6 @@
       text-overflow: ellipsis;
     }
   </style>
-  
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Movie",
-  "name": "Название фильма",
-  "image": "https://image.tmdb.org/t/p/w500/poster.jpg",
-  "description": "Описание фильма: захватывающий триллер с напряжённым сюжетом и великолепной актёрской игрой.",
-  "datePublished": "2024-06-20",
-  "url": "https://example.com/film/123",
-  "genre": ["Драма", "Триллер"],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "8.5",
-    "ratingCount": "1234",
-    "bestRating": "10",
-    "worstRating": "1"
-  },
-  "director": {
-    "@type": "Person",
-    "name": "Имя режиссёра"
-  },
-  "actor": [
-    { "@type": "Person", "name": "Актёр 1" },
-    { "@type": "Person", "name": "Актёр 2" }
-  ],
-  "trailer": {
-    "@type": "VideoObject",
-    "name": "Трейлер фильма",
-    "description": "Смотрите официальный трейлер фильма. Нас ждёт напряжённая история и великолепные актёры.",
-    "thumbnailUrl": "https://img.youtube.com/vi/ключ_видео/hqdefault.jpg",
-    "uploadDate": "2024-06-15T12:00:00+03:00",
-    "contentUrl": "https://www.youtube.com/watch?v=ключ_видео",
-    "embedUrl": "https://www.youtube.com/embed/ключ_видео"
-  }
-}
-</script>
-  
 </head>
 <body>
 
@@ -208,12 +170,15 @@
 
   <div class="social-links">
     <a href="https://t.me/film_kia" target="_blank" rel="noopener" title="Telegram">
+      <!-- Telegram Icon SVG -->
       <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#0088cc" d="M9.99 17.99l-.4-3.57 9.36-8.46-11.5 7.1-4.3-1.34 20.2-8.08-3.36 17.35-6.4-5.4-3.6 2.4z"/></svg>
     </a>
     <a href="https://www.youtube.com/channel/UCp3sC6EPr6qhLKVMbA0S64A" target="_blank" rel="noopener" title="YouTube">
+      <!-- YouTube Icon SVG -->
       <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#FF0000" d="M23 7s-.2-1.5-.8-2.2c-.7-.8-1.6-.8-2-1C17.7 3.5 12 3.5 12 3.5s-5.7 0-8.2.3c-.5.2-1.3.2-2 1C1.2 5.5 1 7 1 7S.8 8.8.8 10.6v2.8C.8 15.2 1 17 1 17s.2 1.5.8 2.2c.7.8 1.6.8 2 1C6.3 20.5 12 20.5 12 20.5s5.7 0 8.2-.3c.5-.2 1.3-.2 2-1 .6-.7.8-2.2.8-2.2s.2-1.8.2-3.6v-2.8C23.2 8.8 23 7 23 7z"/><path fill="#FFF" d="M10 15.5v-7l6 3.5-6 3.5z"/></svg>
     </a>
     <a href="https://www.facebook.com/groups/kino1" target="_blank" rel="noopener" title="Facebook">
+      <!-- Facebook Icon SVG -->
       <svg viewBox="0 0 24 24" width="32" height="32"><path fill="#1877f2" d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.495v-9.294H9.847V11.04h2.972V8.414c0-2.937 1.794-4.541 4.414-4.541 1.256 0 2.337.094 2.652.135v3.074h-1.82c-1.429 0-1.705.679-1.705 1.673v2.195h3.409l-.444 3.667h-2.965V24h5.81C23.407 24 24 23.407 24 22.676V1.324C24 .593 23.407 0 22.676 0z"/></svg>
     </a>
   </div>
@@ -240,7 +205,6 @@
         return;
       }
       const movie = await movieRes.json();
-
       const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
       const credits = await creditsRes.json();
 
@@ -249,7 +213,6 @@
       const genres = movie.genres.map(g => g.name);
       const poster = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450';
 
-      // Заполнение контента страницы
       document.querySelector('.poster').src = poster;
       document.querySelector('.title').textContent = `${movie.title} (${movie.release_date.slice(0,4)})`;
       document.getElementById('releaseDate').textContent = `Дата выхода: ${movie.release_date}`;
@@ -258,7 +221,6 @@
       document.querySelector('.description').textContent = movie.overview;
       document.getElementById('rating').textContent = `Рейтинг TMDB: ${movie.vote_average.toFixed(1)} (${movie.vote_count} голосов)`;
 
-      // SEO текст
       const seoKey = `seo-${movieId}`;
       let seo = localStorage.getItem(seoKey);
       if (!seo) {
@@ -269,23 +231,18 @@
       }
       seoTextEl.innerHTML = seo;
 
-      // Получаем трейлер и дату публикации трейлера
       const videosRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
       const videos = await videosRes.json();
       const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-
       let trailerKey = '';
       let trailerUploadDate = '';
-
       if (trailer) {
         trailerKey = trailer.key;
-        // Попытка получить дату из трейлера (можно брать дату выхода фильма, если точной нет)
-        trailerUploadDate = new Date(movie.release_date).toISOString(); // Пример
+        trailerUploadDate = new Date(movie.release_date).toISOString();
       }
 
       renderTrailer(trailerKey);
 
-      // Добавляем schema.org JSON-LD в head
       addJsonLd({
         "@context": "https://schema.org",
         "@type": "Movie",
@@ -319,10 +276,8 @@
     }
 
     function addJsonLd(json) {
-      // Удаляем старый скрипт с JSON-LD, если есть
       const oldScript = document.querySelector('script[type="application/ld+json"]');
       if (oldScript) oldScript.remove();
-
       const script = document.createElement('script');
       script.type = 'application/ld+json';
       script.textContent = JSON.stringify(json);
@@ -332,8 +287,6 @@
     function renderTrailer(key) {
       if (!key) {
         videoWrapper.style.display = 'none';
-        videoWrapper.onclick = null;
-        videoWrapper.innerHTML = '';
         return;
       }
       videoWrapper.style.display = 'block';
@@ -359,40 +312,19 @@
       listEl.innerHTML = '';
       data.results.slice(0, 7).forEach(movie => {
         const li = document.createElement('li');
-        li.style.cursor = 'pointer';
-        li.style.width = '140px';
-        li.style.background = '#222';
-        li.style.borderRadius = '8px';
-        li.style.padding = '10px';
-        li.style.color = '#eee';
-        li.style.userSelect = 'none';
-        li.style.textAlign = 'center';
-        li.style.transition = 'background 0.3s';
-
         const img = document.createElement('img');
         img.src = movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/140x180?text=No+Poster';
         img.alt = movie.title;
-        img.style.width = '140px';
-        img.style.height = '180px';
-        img.style.borderRadius = '6px';
-        img.style.objectFit = 'cover';
-        img.style.marginBottom = '8px';
-        img.style.pointerEvents = 'none';
-
         const span = document.createElement('span');
         span.textContent = movie.title;
-        span.style.fontWeight = 'bold';
-
         li.appendChild(img);
         li.appendChild(span);
-
         li.onclick = () => {
           movieId = movie.id;
           history.pushState(null, '', `/${movie.id}-${movie.title.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-')}`);
           loadMovie();
           window.scrollTo(0, 0);
         };
-
         listEl.appendChild(li);
       });
     }
