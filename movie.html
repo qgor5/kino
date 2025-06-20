@@ -144,43 +144,54 @@
       text-overflow: ellipsis;
     }
   </style>
-  
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Movie",
-  "name": "Название фильма",
-  "image": "https://image.tmdb.org/t/p/w500/poster.jpg",
-  "description": "Описание фильма: захватывающий триллер с напряжённым сюжетом и великолепной актёрской игрой.",
-  "datePublished": "2024-06-20",
-  "url": "https://example.com/film/123",
-  "genre": ["Драма", "Триллер"],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "8.5",
-    "ratingCount": "1234",
-    "bestRating": "10",
-    "worstRating": "1"
-  },
-  "director": {
-    "@type": "Person",
-    "name": "Имя режиссёра"
-  },
-  "actor": [
-    { "@type": "Person", "name": "Актёр 1" },
-    { "@type": "Person", "name": "Актёр 2" }
-  ],
-  "trailer": {
-    "@type": "VideoObject",
-    "name": "Трейлер фильма",
-    "description": "Смотрите официальный трейлер фильма. Нас ждёт напряжённая история и великолепные актёры.",
-    "thumbnailUrl": "https://img.youtube.com/vi/ключ_видео/hqdefault.jpg",
-    "uploadDate": "2024-06-15T12:00:00+03:00",
-    "contentUrl": "https://www.youtube.com/watch?v=ключ_видео",
-    "embedUrl": "https://www.youtube.com/embed/ключ_видео"
-  }
-}
-</script>
+
+  // Формируем JSON-LD
+        const jsonLd = {
+          "@context": "https://schema.org",
+          "@type": "Movie",
+          "name": movie.title,
+          "image": movie.poster_path ? IMG_URL + movie.poster_path : '',
+          "description": movie.overview,
+          "datePublished": movie.release_date,
+          "url": window.location.href,
+          "genre": genresList,
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": movie.vote_average.toFixed(1),
+            "ratingCount": movie.vote_count.toString(),
+            "bestRating": "10",
+            "worstRating": "1"
+          },
+          "director": {
+            "@type": "Person",
+            "name": directorName
+          },
+          "actor": actorsList
+        };
+
+        if (trailer) {
+          jsonLd.trailer = {
+            "@type": "VideoObject",
+            "name": `Трейлер фильма ${movie.title}`,
+            "description": `Официальный трейлер фильма ${movie.title}`,
+            "thumbnailUrl": `https://img.youtube.com/vi/${trailer.key}/hqdefault.jpg`,
+            "uploadDate": movie.release_date,
+            "contentUrl": `https://www.youtube.com/watch?v=${trailer.key}`,
+            "embedUrl": `https://www.youtube.com/embed/${trailer.key}`
+          };
+        }
+
+        // Вставляем JSON-LD в head
+        await addJsonLd(jsonLd);
+
+      } catch (error) {
+        console.error('Ошибка при загрузке данных фильма:', error);
+      }
+    }
+
+    // Загружаем данные при загрузке страницы
+    window.addEventListener('DOMContentLoaded', loadMovieData);
+  </script>
   
 </head>
 <body>
