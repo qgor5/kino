@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TopKino — Грешники</title>
+  <meta name="description" content="1932 год. После долгих лет отсутствия близнецы Смок и Стэк возвращаются в родной городок в дельте Миссисипи. Они успели повоевать в траншеях Первой мировой, а потом стали гангстерами в Чикаго. Братья выкупают у белого расиста территорию с хозяйственными постройками, чтобы открыть там музыкальный бар для рабочих с плантации. Гвоздь программы на открытии — сын проповедника, которому близнецы когда-то подарили гитару, и он играет блюз так хорошо, что привлекает внимание оказавшегося поблизости ирландского вампира.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#111">
+  <style>
+    /* Стили (тут вставь свои) */
+  </style>
+</head>
+<body>
+  <a href="/index.html">← Назад к списку фильмов</a>
+  <div class="container">
+    <img class="poster" src="https://image.tmdb.org/t/p/w500/b4fkclIIC7IYrcysTgCc8Kmltc1.jpg" alt="Постер фильма">
+    <div class="details">
+      <h1 class="title">Грешники (2025)</h1>
+      <p class="meta-info" id="releaseDate">Дата выхода: 2025-04-16</p>
+      <p class="meta-info" id="director">Режиссёр: Райан Куглер</p>
+      <p class="meta-info" id="actors">Актёры: Майкл Б. Джордан, Хейли Стайнфелд, Майлз Кэйтон</p>
+      <p class="description">1932 год. После долгих лет отсутствия близнецы Смок и Стэк возвращаются в родной городок в дельте Миссисипи. Они успели повоевать в траншеях Первой мировой, а потом стали гангстерами в Чикаго. Братья выкупают у белого расиста территорию с хозяйственными постройками, чтобы открыть там музыкальный бар для рабочих с плантации. Гвоздь программы на открытии — сын проповедника, которому близнецы когда-то подарили гитару, и он играет блюз так хорошо, что привлекает внимание оказавшегося поблизости ирландского вампира.</p>
+      <p class="meta-info" id="rating">Рейтинг TMDB: 7.6 (1546 голосов)</p>
+    </div>
+  </div>
+
+  
+    <div class="video-wrapper" id="videoWrapper">
+      <img id="videoThumb" src="https://img.youtube.com/vi/r4QpeRNEsoM/hqdefault.jpg" alt="Трейлер">
+      <div class="play-button"></div>
+    </div>
+    <script>
+      document.getElementById('videoWrapper').onclick = function () {
+        this.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/r4QpeRNEsoM?autoplay=1';
+        iframe.allowFullscreen = true;
+        iframe.loading = 'lazy';
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        this.appendChild(iframe);
+      };
+    </script>
+  
+
+  <div class="seo-text" id="seoText">
+    <h2>Грешники — смотреть онлайн</h2>
+    <p>Фильм «Грешники» в жанре ужасы, триллер, фэнтези вышел в 2025 году. Режиссёр — Райан Куглер. В главных ролях: Майкл Б. Джордан, Хейли Стайнфелд, Майлз Кэйтон. Сюжет: 1932 год. После долгих лет отсутствия близнецы Смок и Стэк возвращаются в родной городок в дельте Миссисипи. Они успели повоевать в траншеях Первой мировой, а потом стали гангстерами в Чикаго. Братья выкупают у белого расиста территорию с хозяйственными постройками, чтобы открыть там музыкальный бар для рабочих с плантации. Гвоздь программы на открытии — сын проповедника, которому близнецы когда-то подарили гитару, и он играет блюз так хорошо, что привлекает внимание оказавшегося поблизости ирландского вампира.</p>
+    <p>Этот проект получил оценку 7.6 на TMDB на основе 1546 голосов. Если вы любите ужасы, триллер, фэнтези, этот фильм вам точно понравится.</p>
+  </div>
+</body>
+</html>

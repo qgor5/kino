@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TopKino — Лило и Стич</title>
+  <meta name="description" content="История маленькой девочки, живущей на Гавайах, и замаскированного инопланетянина, который помогает ей спасти свою разрушенную семью.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#111">
+  <style>
+    /* Стили (тут вставь свои) */
+  </style>
+</head>
+<body>
+  <a href="/index.html">← Назад к списку фильмов</a>
+  <div class="container">
+    <img class="poster" src="https://image.tmdb.org/t/p/w500/bRB9ApGPhY7NtUQ33yZG828rbus.jpg" alt="Постер фильма">
+    <div class="details">
+      <h1 class="title">Лило и Стич (2025)</h1>
+      <p class="meta-info" id="releaseDate">Дата выхода: 2025-05-17</p>
+      <p class="meta-info" id="director">Режиссёр: Dean Fleischer Camp</p>
+      <p class="meta-info" id="actors">Актёры: Майя Кеалоха, Сидни Агудонг, Крис Сандерс</p>
+      <p class="description">История маленькой девочки, живущей на Гавайах, и замаскированного инопланетянина, который помогает ей спасти свою разрушенную семью.</p>
+      <p class="meta-info" id="rating">Рейтинг TMDB: 7.1 (669 голосов)</p>
+    </div>
+  </div>
+
+  
+    <div class="video-wrapper" id="videoWrapper">
+      <img id="videoThumb" src="https://img.youtube.com/vi/6IxJCDbHcFU/hqdefault.jpg" alt="Трейлер">
+      <div class="play-button"></div>
+    </div>
+    <script>
+      document.getElementById('videoWrapper').onclick = function () {
+        this.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/6IxJCDbHcFU?autoplay=1';
+        iframe.allowFullscreen = true;
+        iframe.loading = 'lazy';
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        this.appendChild(iframe);
+      };
+    </script>
+  
+
+  <div class="seo-text" id="seoText">
+    <h2>Лило и Стич — смотреть онлайн</h2>
+    <p>Фильм «Лило и Стич» в жанре семейный, фантастика, комедия, приключения вышел в 2025 году. Режиссёр — Dean Fleischer Camp. В главных ролях: Майя Кеалоха, Сидни Агудонг, Крис Сандерс. Сюжет: История маленькой девочки, живущей на Гавайах, и замаскированного инопланетянина, который помогает ей спасти свою разрушенную семью.</p>
+    <p>Этот проект получил оценку 7.1 на TMDB на основе 669 голосов. Если вы любите семейный, фантастика, комедия, приключения, этот фильм вам точно понравится.</p>
+  </div>
+</body>
+</html>

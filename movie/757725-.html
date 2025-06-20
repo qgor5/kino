@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TopKino — Лига теней</title>
+  <meta name="description" content="Когда-то Кира и Дэвид были лидерами секретной организации наемников, но нарушили одно из главных правил — влюбились друг в друга. Отныне их ждет жизнь в подполье и воспитание сына в бегах. За их головы назначена награда, а на хвосте у них — самые опасные наемники в мире. Теперь им придется вооружиться всем своим опытом, чтобы остаться в живых.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#111">
+  <style>
+    /* Стили (тут вставь свои) */
+  </style>
+</head>
+<body>
+  <a href="/index.html">← Назад к списку фильмов</a>
+  <div class="container">
+    <img class="poster" src="https://image.tmdb.org/t/p/w500/s15EJR0q1MCCokTHiZqBqSvDyOF.jpg" alt="Постер фильма">
+    <div class="details">
+      <h1 class="title">Лига теней (2025)</h1>
+      <p class="meta-info" id="releaseDate">Дата выхода: 2025-05-01</p>
+      <p class="meta-info" id="director">Режиссёр: Joe Carnahan</p>
+      <p class="meta-info" id="actors">Актёры: Kerry Washington, Омар Си, Jahleel Kamara</p>
+      <p class="description">Когда-то Кира и Дэвид были лидерами секретной организации наемников, но нарушили одно из главных правил — влюбились друг в друга. Отныне их ждет жизнь в подполье и воспитание сына в бегах. За их головы назначена награда, а на хвосте у них — самые опасные наемники в мире. Теперь им придется вооружиться всем своим опытом, чтобы остаться в живых.</p>
+      <p class="meta-info" id="rating">Рейтинг TMDB: 6.4 (79 голосов)</p>
+    </div>
+  </div>
+
+  
+    <div class="video-wrapper" id="videoWrapper">
+      <img id="videoThumb" src="https://img.youtube.com/vi/qM_Oz_UItEs/hqdefault.jpg" alt="Трейлер">
+      <div class="play-button"></div>
+    </div>
+    <script>
+      document.getElementById('videoWrapper').onclick = function () {
+        this.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/qM_Oz_UItEs?autoplay=1';
+        iframe.allowFullscreen = true;
+        iframe.loading = 'lazy';
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        this.appendChild(iframe);
+      };
+    </script>
+  
+
+  <div class="seo-text" id="seoText">
+    <h2>Лига теней — смотреть онлайн</h2>
+    <p>Фильм «Лига теней» в жанре боевик, драма, триллер вышел в 2025 году. Режиссёр — Joe Carnahan. В главных ролях: Kerry Washington, Омар Си, Jahleel Kamara. Сюжет: Когда-то Кира и Дэвид были лидерами секретной организации наемников, но нарушили одно из главных правил — влюбились друг в друга. Отныне их ждет жизнь в подполье и воспитание сына в бегах. За их головы назначена награда, а на хвосте у них — самые опасные наемники в мире. Теперь им придется вооружиться всем своим опытом, чтобы остаться в живых.</p>
+    <p>Этот проект получил оценку 6.4 на TMDB на основе 79 голосов. Если вы любите боевик, драма, триллер, этот фильм вам точно понравится.</p>
+  </div>
+</body>
+</html>

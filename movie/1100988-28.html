@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TopKino — 28 лет спустя</title>
+  <meta name="description" content="28 лет в Великобритании бушует вирус, превращающий заражённых в агрессивных плотоядных тварей. В этом ужасном мире маленький мальчик пытается найти врача для умирающей мамы.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#111">
+  <style>
+    /* Стили (тут вставь свои) */
+  </style>
+</head>
+<body>
+  <a href="/index.html">← Назад к списку фильмов</a>
+  <div class="container">
+    <img class="poster" src="https://image.tmdb.org/t/p/w500/59trRsv4JLZN5MCUrdMnLka0IXk.jpg" alt="Постер фильма">
+    <div class="details">
+      <h1 class="title">28 лет спустя (2025)</h1>
+      <p class="meta-info" id="releaseDate">Дата выхода: 2025-06-18</p>
+      <p class="meta-info" id="director">Режиссёр: Дэнни Бойл</p>
+      <p class="meta-info" id="actors">Актёры: Alfie Williams, Аарон Тейлор-Джонсон, Джоди Комер</p>
+      <p class="description">28 лет в Великобритании бушует вирус, превращающий заражённых в агрессивных плотоядных тварей. В этом ужасном мире маленький мальчик пытается найти врача для умирающей мамы.</p>
+      <p class="meta-info" id="rating">Рейтинг TMDB: 7.5 (64 голосов)</p>
+    </div>
+  </div>
+
+  
+    <div class="video-wrapper" id="videoWrapper">
+      <img id="videoThumb" src="https://img.youtube.com/vi/XomaFN2BYEk/hqdefault.jpg" alt="Трейлер">
+      <div class="play-button"></div>
+    </div>
+    <script>
+      document.getElementById('videoWrapper').onclick = function () {
+        this.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/XomaFN2BYEk?autoplay=1';
+        iframe.allowFullscreen = true;
+        iframe.loading = 'lazy';
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        this.appendChild(iframe);
+      };
+    </script>
+  
+
+  <div class="seo-text" id="seoText">
+    <h2>28 лет спустя — смотреть онлайн</h2>
+    <p>Фильм «28 лет спустя» в жанре ужасы, триллер, фантастика вышел в 2025 году. Режиссёр — Дэнни Бойл. В главных ролях: Alfie Williams, Аарон Тейлор-Джонсон, Джоди Комер. Сюжет: 28 лет в Великобритании бушует вирус, превращающий заражённых в агрессивных плотоядных тварей. В этом ужасном мире маленький мальчик пытается найти врача для умирающей мамы.</p>
+    <p>Этот проект получил оценку 7.5 на TMDB на основе 64 голосов. Если вы любите ужасы, триллер, фантастика, этот фильм вам точно понравится.</p>
+  </div>
+</body>
+</html>
