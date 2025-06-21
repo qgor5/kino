@@ -1,0 +1,37 @@
+body {
+  background-color: #121212;
+  color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+header, footer {
+  text-align: center;
+  padding: 1em;
+  background: #1e1e1e;
+}
+h1 {
+  font-size: 1.8em;
+}
+.trailer-card {
+  margin: 20px;
+  padding: 10px;
+  background: #1f1f1f;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(255,255,255,0.1);
+}
+iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 10px;
+}
+.watch-button {
+  display: inline-block;
+  background: #ff4444;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  text-decoration: none;
+}
