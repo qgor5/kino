@@ -1,99 +1,135 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Kino Top — трейлеры и обзоры фильмов 2025</title>
-  <meta name="description" content="Трейлеры, обзоры и топ-10 лучших фильмов 2025 года. Новинки кино каждый день.">
-  <meta name="keywords" content="трейлеры фильмов, обзоры кино, лучшие фильмы 2025, Kino Top">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TopKino — Детали фильма</title>
+  <meta name="description" content="Смотрите трейлер, описание и подробности фильма онлайн." />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Kino Top — трейлеры и обзоры фильмов">
-  <meta property="og:description" content="Смотри лучшие трейлеры и рецензии который стоит посмотреть 2025 года.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://kinotop.neocities.org/preview.jpg">
-  <meta property="og:url" content="https://kinotop.neocities.org/">
+  <meta property="og:type" content="video.movie" />
+  <meta property="og:title" content="TopKino — Детали фильма" />
+  <meta property="og:description" content="Смотрите трейлер, описание и подробности фильма онлайн." />
+  <meta property="og:image" content="https://image.tmdb.org/t/p/w500/poster.jpg" />
+  <meta property="og:url" content="https://topkino.netlify.app/" />
 
-  <link rel="stylesheet" href="style.css">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="TopKino — Детали фильма" />
+  <meta name="twitter:description" content="Фильм онлайн. Трейлер, описание, актёры, рейтинг." />
+  <meta name="twitter:image" content="https://image.tmdb.org/t/p/w500/poster.jpg" />
+
+  <!-- Google tag -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPMXGR1HF9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-FPMXGR1HF9');
+  </script>
 </head>
 <body>
-  <header>
-    <h1>Kino Top</h1>
-    <nav>
-      <a href="index.html">Главная</a>
-      <a href="trailer1.html">Трейлер</a>
-      <a href="review1.html">Обзор</a>
-    </nav>
-  </header>
+  <h1>Загрузка фильма...</h1>
 
-  <main>
-    <!-- Блок с картинкой и ссылкой на статью -->
-    <section class="featured-article" style="margin-bottom: 30px;">
-      <div style="text-align: center;">
-        <a href="https://kinotop.neocities.org/nobody-2-2025-action-movie-review" style="text-decoration: none; color: inherit;">
-          <img
-            src="https://kinotop.neocities.org/Kino.png"
-            alt="Kino"
-            style="max-width: 100%; height: auto; display: inline-block;"
-            loading="lazy"
-            width="600"
-          />
-          <h2>Обзор фильма Nobody 2 (2025) — захватывающий боевик</h2>
-        </a>
-      </div>
-    </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const API_KEY = '7cb67565ace3a08cd9d099c749787121';
+      const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-    <h2>🔥 Новые трейлеры</h2>
-    <div class="video">
-      <iframe src="https://www.youtube.com/embed/-8KXwsf8zNk"
-              title="Nobody 2 (2025) трейлер"
-              loading="lazy"
-              allowfullscreen
-              style="width:100%; max-width:720px; height:405px; display:block; margin: 0 auto;">
-      </iframe>
-      <p style="text-align:center;">
-        <a href="trailer1.html">Смотреть трейлер: Nobody 2 (2025)</a>
-      </p>
-    </div>
+      const pathParts = location.pathname.split('/');
+      const slug = pathParts[pathParts.length - 1];
+      const movieId = slug.split('-')[0];
 
-    <h2>📝 Последние обзоры</h2>
-    <p><a href="review1.html">Обзор: Название фильма — стоит ли смотреть?</a></p>
+      try {
+        const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`);
+        if (!movieRes.ok) throw new Error('Фильм не найден');
+        const movie = await movieRes.json();
 
-    <section class="about-site">
-      <h2>Лучшие фильмы, трейлеры и новинки кино — всё в одном месте</h2>
-      <p>Иногда после долгого дня так хочется просто включить что-то интересное и отдохнуть. Но что именно посмотреть? Мы здесь, чтобы помочь Вам выбрать. На этом сайте Вы найдёте всё самое актуальное из мира кино — свежие трейлеры, новинки фильмов, честные обзоры и подборки лучших картин для уютного вечера.</p>
+        const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`);
+        const credits = await creditsRes.json();
 
-      <p>Что Вы найдёте на Kinotop:</p>
-      <ul>
-        <li>Новинки кино 2025 года и самые ожидаемые премьеры;</li>
-        <li>Трейлеры фильмов, которые только вышли или вот-вот появятся в прокате;</li>
-        <li>Обзоры без спойлеров — коротко, по делу и честно;</li>
-        <li>Подборки фильмов по жанрам и настроению: ужасы, боевики, фантастика, мелодрамы, комедии;</li>
-        <li>Рекомендации для вечернего просмотра, фильмов вдвоём, с друзьями или всей семьёй;</li>
-        <li>Новости из мира кино — что снимается, что выходит, что стоит внимания.</li>
-      </ul>
+        const director = credits.crew.find(p => p.job === 'Director')?.name || 'Неизвестен';
+        const actors = credits.cast.slice(0, 3).map(a => a.name);
+        const genres = movie.genres.map(g => g.name);
+        const poster = movie.poster_path ? IMG_URL + movie.poster_path : '';
+        const description = movie.overview || 'Описание недоступно';
+        const trailerRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=ru-RU`);
+        const trailerData = await trailerRes.json();
+        const trailer = trailerData.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+        const trailerKey = trailer?.key || '';
+        const trailerUploadDate = new Date(movie.release_date).toISOString();
 
-      <p>Наш сайт — это не просто каталог фильмов. Это место, где кино оживает. Мы пишем только то, что сами смотрим и рекомендуем от души. Здесь нет сухих рецензий и бессмысленных рейтингов — только живое мнение, понятный язык и настоящая любовь к хорошему кино.</p>
+        // Обновляем title и description
+        document.title = `${movie.title} (${movie.release_date.slice(0,4)}) — Смотреть онлайн`;
+        const metaDesc = document.querySelector('meta[name="description"]');
+        metaDesc.content = `${movie.title} (${movie.release_date.slice(0,4)}): ${description.slice(0,160)}`;
 
-      <p>Сайт быстро загружается с любого устройства, будь то смартфон, планшет или компьютер. Мы сделали всё, чтобы Вы не теряли ни секунды и сразу находили то, что хочется посмотреть. Обновления появляются каждый день — заходите почаще, всегда будет что-то новое!</p>
+        // Обновляем OG и Twitter теги
+        const updateMeta = (selector, content) => {
+          const el = document.querySelector(selector);
+          if (el) el.setAttribute('content', content);
+        };
+        updateMeta('meta[property="og:title"]', movie.title);
+        updateMeta('meta[property="og:description"]', description);
+        updateMeta('meta[property="og:image"]', poster);
+        updateMeta('meta[property="og:url"]', location.href);
+        updateMeta('meta[name="twitter:title"]', movie.title);
+        updateMeta('meta[name="twitter:description"]', description);
+        updateMeta('meta[name="twitter:image"]', poster);
 
-      <p>Популярные темы, которые ищут и которые Вы найдёте у нас:</p>
-      <ul>
-        <li>Что посмотреть вечером?</li>
-        <li>Лучшие фильмы 2025 года;</li>
-        <li>Самые интересные трейлеры;</li>
-        <li>Новинки кино сегодня;</li>
-        <li>Подборки по жанру: триллеры, романтика, драмы;</li>
-        <li>Обзоры фильмов на один вечер;</li>
-        <li>Фильмы, которые стоит ждать.</li>
-      </ul>
+        // Добавляем JSON-LD
+        const jsonLd = {
+          "@context": "https://schema.org",
+          "@type": "Movie",
+          "name": movie.title,
+          "image": poster,
+          "description": description,
+          "datePublished": movie.release_date,
+          "url": location.href,
+          "genre": genres,
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": movie.vote_average.toFixed(1),
+            "ratingCount": movie.vote_count.toString(),
+            "bestRating": "10",
+            "worstRating": "1"
+          },
+          "director": { "@type": "Person", "name": director },
+          "actor": actors.map(name => ({ "@type": "Person", "name": name })),
+          ...(trailerKey && {
+            "trailer": {
+              "@type": "VideoObject",
+              "name": `Трейлер фильма ${movie.title}`,
+              "description": `Официальный трейлер фильма ${movie.title}.`,
+              "thumbnailUrl": `https://img.youtube.com/vi/${trailerKey}/hqdefault.jpg`,
+              "uploadDate": trailerUploadDate,
+              "contentUrl": `https://www.youtube.com/watch?v=${trailerKey}`,
+              "embedUrl": `https://www.youtube.com/embed/${trailerKey}`
+            }
+          })
+        };
+        const ld = document.createElement('script');
+        ld.type = 'application/ld+json';
+        ld.textContent = JSON.stringify(jsonLd);
+        document.head.appendChild(ld);
 
-      <p>Если Вы любите кино — Вы дома. Kinotop создан для таких, как Вы. Заходите, читайте, выбирайте, смотрите, делитесь с друзьями. И пусть каждый вечер будет как премьера!</p>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Kino Top. Все права защищены.</p>
-  </footer>
+        document.body.innerHTML = `
+          <div style="text-align:center;max-width:700px;margin:40px auto;">
+            <img src="${poster}" alt="${movie.title}" style="width:300px;border-radius:8px;" />
+            <h1>${movie.title} (${movie.release_date.slice(0, 4)})</h1>
+            <p><strong>Жанр:</strong> ${genres.join(', ')}</p>
+            <p><strong>Режиссёр:</strong> ${director}</p>
+            <p><strong>Актёры:</strong> ${actors.join(', ')}</p>
+            <p><strong>Рейтинг:</strong> ${movie.vote_average.toFixed(1)} / 10 (${movie.vote_count} голосов)</p>
+            <p style="margin-top:20px;">${description}</p>
+            ${trailerKey ? `<div style="margin-top:30px;"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${trailerKey}" frameborder="0" allowfullscreen></iframe></div>` : ''}
+          </div>
+        `;
+      } catch (err) {
+        console.error(err);
+        document.body.innerHTML = `<h1 style="color:red;text-align:center;">Ошибка загрузки фильма</h1>`;
+      }
+    });
+  </script>
 </body>
 </html>
