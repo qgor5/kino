@@ -65,50 +65,6 @@
       background-color: #00aaff;
       color: #111;
     }
-    nav .dropdown {
-      position: relative;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #333;
-      min-width: 160px;
-      max-height: 260px;
-      overflow-y: auto;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.9);
-      border-radius: 8px;
-      margin-top: 8px;
-      z-index: 10000;
-      scrollbar-width: thin;
-      scrollbar-color: #00aaff transparent;
-    }
-    .dropdown-content::-webkit-scrollbar {
-      width: 6px;
-    }
-    .dropdown-content::-webkit-scrollbar-thumb {
-      background-color: #00aaff;
-      border-radius: 4px;
-    }
-    .dropdown-content button {
-      width: 100%;
-      padding: 10px 15px;
-      background: none;
-      border: none;
-      color: #eee;
-      text-align: left;
-      cursor: pointer;
-      font-size: 1rem;
-      user-select: none;
-      transition: background-color 0.3s;
-    }
-    .dropdown-content button:hover,
-    .dropdown-content button.active {
-      background-color: #00aaff;
-      color: #111;
-    }
-    .show {
-      display: block;
-    }
     main {
       max-width: 900px;
       margin: 30px auto 0;
@@ -193,16 +149,10 @@
 </head>
 <body>
 
-  <!-- Навигация сверху -->
+  <!-- Навигация сверху без жанров -->
   <nav>
     <a href="https://topkino.netlify.app/" class="active">Главная</a>
     <a href="https://topkino.netlify.app/" >Фильмы</a>
-    <div class="dropdown">
-      <button class="dropbtn" onclick="toggleDropdown('genre-menu')">Жанры ⮟</button>
-      <div class="dropdown-content" id="genre-menu">
-        <!-- Жанры будут сюда подгружаться скриптом -->
-      </div>
-    </div>
   </nav>
 
   <!-- Содержание -->
@@ -276,13 +226,6 @@
   </main>
 
   <script>
-    // Навигация — переключение выпадающего меню жанров (имитация)
-    function toggleDropdown(id) {
-      const menu = document.getElementById(id);
-      if (!menu) return;
-      menu.classList.toggle('show');
-    }
-
     // Ленивая загрузка YouTube плеера при клике
     const ytPlayer = document.getElementById('youtube-player');
     ytPlayer.addEventListener('click', () => {
@@ -296,90 +239,30 @@
       ytPlayer.innerHTML = '';
       ytPlayer.appendChild(iframe);
     });
-
-    // Пример заполнения меню жанров (по API на твоей главной делается)
-    // Здесь просто заглушка для демонстрации
-    const genreMenu = document.getElementById('genre-menu');
-    const genres = ['Боевик', 'Комедия', 'Драма', 'Триллер', 'Ужасы', 'Фантастика'];
-    genres.forEach(g => {
-      const btn = document.createElement('button');
-      btn.textContent = g;
-      btn.onclick = () => alert(`Переход к жанру: ${g} (реализовать переход)`);
-      genreMenu.appendChild(btn);
-    });
   </script>
 
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Movie",
-  "name": "Карате Кид 2025",
-  "alternateName": "Karate Kid 2025",
-  "url": "https://topkino.netlify.app/karate-kid-2025.html",
-  "image": "https://topkino.netlify.app/images/karate-kid-2025-poster.jpg",  <!-- URL постера -->
-  "description": "Фильм 'Карате Кид 2025' — история о взрослении и боевых искусствах в современном мегаполисе. Алексей учится карате под руководством мудрого наставника и побеждает в масштабном турнире.",
-  "datePublished": "2025-06-20",  <!-- дата премьеры -->
-  "duration": "PT2H10M",  <!-- длительность: 2 часа 10 минут -->
-  "inLanguage": "ru",
-  "genre": ["Боевик", "Драма", "Спорт"],  <!-- жанры -->
-  "director": {
-    "@type": "Person",
-    "name": "Алексей Иванов"
-  },
-  "actor": [
-    {
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Карате Кид 2025: обзор, сюжет, актёры и сравнение с классикой",
+    "description": "Подробный обзор фильма Карате Кид 2025 года: сюжет, актёры, режиссура и сравнение с оригиналом 1990 и ремейком 2010. Уникальный экспертный анализ Виктора Исаева.",
+    "author": {
       "@type": "Person",
-      "name": "Иван Петров",
-      "roleName": "Алексей"
+      "name": "Виктор Исаев"
     },
-    {
-      "@type": "Person",
-      "name": "Александр Смирнов",
-      "roleName": "Наставник"
-    },
-    {
-      "@type": "Person",
-      "name": "Марина Козлова",
-      "roleName": "Подруга Алексея"
-    }
-  ],
-  "productionCompany": {
-    "@type": "Organization",
-    "name": "TopKino Studios"
-  },
-  "countryOfOrigin": {
-    "@type": "Country",
-    "name": "Россия"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "8.4",
-    "ratingCount": "1524",
-    "bestRating": "10",
-    "worstRating": "1"
-  },
-  "trailer": {
-    "@type": "VideoObject",
-    "name": "Трейлер фильма Карате Кид 2025",
-    "description": "Официальный трейлер фильма 'Карате Кид 2025'.",
-    "thumbnailUrl": "https://img.youtube.com/vi/BbcqNa3M_kU/hqdefault.jpg",
-    "uploadDate": "2025-05-15T12:00:00+03:00",
-    "duration": "PT2M30S",
-    "contentUrl": "https://youtu.be/BbcqNa3M_kU",
-    "embedUrl": "https://www.youtube.com/embed/BbcqNa3M_kU",
     "publisher": {
       "@type": "Organization",
       "name": "TopKino",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://topkino.netlify.app/logo.png",
-        "width": 250,
-        "height": 60
+        "url": "https://topkino.netlify.app/logo.png"
       }
-    }
+    },
+    "datePublished": "2025-06-21",
+    "mainEntityOfPage": "https://topkino.netlify.app/karate-kid-2025.html"
   }
-}
-</script>
+  </script>
 
 </body>
 </html>
