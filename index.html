@@ -2,310 +2,252 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TopKino — Популярные фильмы</title>
+  <title>Популярные фильмы - TopKino</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #111;
+      background: #121212;
       color: #eee;
+      margin: 0; padding: 0;
     }
-
     header {
-      position: sticky;
-      top: 0;
       background: #222;
-      padding: 10px 15px;
-      z-index: 1000;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-    }
-
-    header h1 {
-      font-size: 1.4rem;
-      margin: 0 0 10px 0;
+      padding: 15px 20px;
       text-align: center;
     }
-
+    header h1 {
+      margin: 0 0 10px 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
     nav {
       display: flex;
-      justify-content: center;
-    }
-
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropbtn {
-      background: #444;
-      color: white;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      border: none;
-      border-radius: 18px;
-      cursor: pointer;
-    }
-
-    .dropbtn:hover {
-      background-color: #00aaff;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #333;
-      min-width: 180px;
-      max-height: 250px;
-      overflow-y: auto;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-      z-index: 1;
-      border-radius: 6px;
-      margin-top: 5px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      justify-content: flex-start;
+      gap: 10px;
+      padding-bottom: 5px;
       scrollbar-width: thin;
-      scrollbar-color: #00aaff transparent;
+      scrollbar-color: #39f transparent;
     }
-
-    .dropdown-content::-webkit-scrollbar {
-      width: 6px;
+    nav::-webkit-scrollbar {
+      height: 6px;
     }
-
-    .dropdown-content::-webkit-scrollbar-thumb {
-      background-color: #00aaff;
-      border-radius: 4px;
+    nav::-webkit-scrollbar-thumb {
+      background-color: #39f;
+      border-radius: 3px;
     }
-
-    .dropdown-content button {
-      color: white;
-      padding: 10px 16px;
-      text-align: left;
-      background: none;
+    nav button {
+      flex: 0 0 auto;
+      background: #444;
       border: none;
-      width: 100%;
-      font-size: 0.9rem;
+      padding: 10px 18px;
+      border-radius: 20px;
+      color: #eee;
       cursor: pointer;
-    }
-
-    .dropdown-content button:hover,
-    .dropdown-content button.active {
-      background-color: #00aaff;
-    }
-
-    .show {
-      display: block;
-    }
-
-    .scroll-indicator {
-      text-align: center;
       font-size: 1rem;
-      color: #888;
-      padding: 5px 0 0;
+      white-space: nowrap;
+      transition: background 0.3s;
     }
-
+    nav button:hover,
+    nav button.active {
+      background: #39f;
+      color: white;
+    }
     main {
+      max-width: 1200px;
+      margin: 0 auto 40px auto;
+      padding: 0 15px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-      padding: 15px;
+      gap: 15px;
     }
-
     .movie {
-      background: #1d1d1d;
+      background: #1e1e1e;
       border-radius: 8px;
       overflow: hidden;
-      text-align: center;
-      text-decoration: none;
-      color: #fff;
-      box-shadow: 0 0 6px rgba(0,0,0,0.4);
+      box-shadow: 0 0 8px rgba(0,0,0,0.7);
+      cursor: pointer;
       transition: transform 0.3s;
+      text-decoration: none;
+      color: inherit;
     }
-
     .movie:hover {
-      transform: scale(1.03);
+      transform: scale(1.05);
     }
-
     .movie img {
       width: 100%;
+      display: block;
       height: 210px;
       object-fit: cover;
-      display: block;
     }
-
     .movie-title {
-      padding: 8px;
-      font-size: 0.9rem;
-      min-height: 45px;
-    }
-
-    footer {
+      padding: 8px 10px;
+      font-size: 1rem;
       text-align: center;
-      padding: 15px;
+      height: 48px;
+      overflow: hidden;
+    }
+    footer {
       background: #222;
-      color: #aaa;
-      font-size: 0.8rem;
+      padding: 15px 20px;
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
     }
 
+    /* Адаптивность */
     @media (max-width: 768px) {
       header h1 {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
       }
-
-      .dropbtn {
-        padding: 8px 12px;
-        font-size: 0.8rem;
+      nav button {
+        padding: 8px 14px;
+        font-size: 0.9rem;
       }
-
       main {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        padding: 0 10px;
       }
-
       .movie img {
         height: 180px;
+      }
+      .movie-title {
+        font-size: 0.9rem;
+        height: 44px;
       }
     }
 
     @media (max-width: 480px) {
       header h1 {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
       }
-
-      .dropbtn {
-        padding: 7px 10px;
-        font-size: 0.75rem;
+      nav button {
+        padding: 7px 12px;
+        font-size: 0.85rem;
       }
-
       main {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 10px;
+        padding: 0 8px;
+        gap: 12px;
       }
-
       .movie img {
         height: 160px;
+      }
+      .movie-title {
+        font-size: 0.85rem;
+        height: 40px;
       }
     }
   </style>
 </head>
 <body>
-
   <header>
     <h1>Популярные фильмы</h1>
-    <nav>
-      <div class="dropdown">
-        <button class="dropbtn" onclick="toggleDropdown()">Жанры ⮟</button>
-        <div class="dropdown-content" id="genres-menu">
-          <!-- Жанры появятся здесь -->
-        </div>
-        <div class="scroll-indicator">⮟ прокрутите ⮟</div>
-      </div>
+    <nav id="genres-menu">
+      <!-- Жанры появятся здесь -->
     </nav>
   </header>
 
   <main id="movies-container">
-    <!-- Фильмы загружаются сюда -->
+    <!-- Фильмы появятся здесь -->
   </main>
 
   <footer>
-    © 2025 TopKino. Все права защищены.
+    <small>© 2025 TopKino. Все права защищены.</small>
   </footer>
 
   <script>
     const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w300';
+    const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w300';
     const genresMenu = document.getElementById('genres-menu');
     const moviesContainer = document.getElementById('movies-container');
+
     let currentGenreId = null;
 
-    function toggleDropdown() {
-      document.getElementById("genres-menu").classList.toggle("show");
-    }
-
-    window.onclick = function(event) {
-      if (!event.target.matches('.dropbtn')) {
-        const dropdowns = document.getElementsByClassName("dropdown-content");
-        for (let i = 0; i < dropdowns.length; i++) {
-          const openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-        }
+    async function fetchGenres() {
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
+        if (!res.ok) throw new Error('Ошибка загрузки жанров');
+        const data = await res.json();
+        displayGenres(data.genres);
+      } catch (e) {
+        genresMenu.innerHTML = `<p style="color:red;">${e.message}</p>`;
       }
     }
 
-    async function fetchGenres() {
-      const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
-      const data = await res.json();
-      displayGenres(data.genres);
-    }
-
     function displayGenres(genres) {
-      genresMenu.innerHTML = '';
-
       const allBtn = document.createElement('button');
       allBtn.textContent = 'Все фильмы';
       allBtn.classList.add('active');
-      allBtn.onclick = () => {
+      allBtn.addEventListener('click', () => {
         currentGenreId = null;
-        setActiveGenre(allBtn);
-        fetchMovies();
-      };
+        setActiveButton(allBtn);
+        fetchAndDisplayMovies();
+      });
       genresMenu.appendChild(allBtn);
 
       genres.forEach(genre => {
         const btn = document.createElement('button');
         btn.textContent = genre.name;
-        btn.onclick = () => {
+        btn.dataset.genreId = genre.id;
+        btn.addEventListener('click', () => {
           currentGenreId = genre.id;
-          setActiveGenre(btn);
-          fetchMovies(genre.id);
-        };
+          setActiveButton(btn);
+          fetchAndDisplayMovies(currentGenreId);
+        });
         genresMenu.appendChild(btn);
       });
     }
 
-    function setActiveGenre(activeBtn) {
-      genresMenu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+    function setActiveButton(activeBtn) {
+      const buttons = genresMenu.querySelectorAll('button');
+      buttons.forEach(btn => btn.classList.remove('active'));
       activeBtn.classList.add('active');
     }
 
-    async function fetchMovies(genreId = null) {
-      let url = genreId
-        ? `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc`
-        : `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU`;
+    async function fetchAndDisplayMovies(genreId = null) {
+      let url;
+      if (genreId) {
+        url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc&page=1`;
+      } else {
+        url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`;
+      }
 
-      const res = await fetch(url);
-      const data = await res.json();
-      displayMovies(data.results);
-    }
-
-    function slugify(text) {
-      return text.toString().toLowerCase()
-        .replace(/[^\w\s-]/g, '')       // Remove all non-word chars
-        .replace(/\s+/g, '-')           // Replace spaces with -
-        .replace(/--+/g, '-');          // Replace multiple - with single -
+      try {
+        moviesContainer.innerHTML = '<p style="text-align:center;">Загрузка...</p>';
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Ошибка загрузки фильмов');
+        const data = await res.json();
+        displayMovies(data.results);
+      } catch (e) {
+        moviesContainer.innerHTML = `<p style="color:red; text-align:center;">${e.message}</p>`;
+      }
     }
 
     function displayMovies(movies) {
       moviesContainer.innerHTML = '';
+      if (!movies.length) {
+        moviesContainer.innerHTML = '<p style="text-align:center;">Фильмы не найдены.</p>';
+        return;
+      }
+
       movies.forEach(movie => {
-        const slug = slugify(movie.title);
-        const card = document.createElement('a');
-        card.href = `movie/${movie.id}-${slug}`; // SEO-ссылка
-        card.className = 'movie';
-        card.innerHTML = `
-          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
+        const movieEl = document.createElement('a');
+        movieEl.classList.add('movie');
+        movieEl.href = `movie.html?id=${movie.id}`;
+        movieEl.target = '_self';
+        movieEl.innerHTML = `
+          <img src="${movie.poster_path ? IMG_BASE_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
           <div class="movie-title">${movie.title}</div>
         `;
-        moviesContainer.appendChild(card);
+        moviesContainer.appendChild(movieEl);
       });
     }
 
     fetchGenres();
-    fetchMovies();
+    fetchAndDisplayMovies();
   </script>
-
 </body>
 </html>
