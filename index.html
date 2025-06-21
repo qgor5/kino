@@ -4,9 +4,84 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TopKino — Популярные фильмы</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+    }
+    .movie {
+      display: inline-block;
+      width: 160px;
+      margin: 10px;
+      text-align: center;
+      background: #1d1d1d;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 6px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
+    }
+    .movie:hover {
+      transform: scale(1.05);
+    }
+    .movie img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+    }
+    .movie-title {
+      padding: 8px;
+      font-size: 0.9rem;
+      min-height: 45px;
+    }
+  </style>
 </head>
 <body>
   <h1>Популярные фильмы</h1>
-  <a href="movie/1289601-boets-luchshiy-iz-luchshih.html">Боец: Лучший из лучших</a>
+  <div id="movies-container"></div>
+
+  <script>
+    const API_KEY = '7cb67565ace3a08cd9d099c749787121';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w300';
+
+    function slugify(text) {
+      return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+    }
+
+    async function fetchMovies() {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU`);
+      const data = await res.json();
+      displayMovies(data.results);
+    }
+
+    function displayMovies(movies) {
+      const container = document.getElementById('movies-container');
+      container.innerHTML = '';
+      movies.forEach(movie => {
+        const slug = slugify(movie.title);
+        const href = `movie/${movie.id}-${slug}.html`;
+        const card = document.createElement('a');
+        card.href = href;
+        card.className = 'movie';
+        card.innerHTML = `
+          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}">
+          <div class="movie-title">${movie.title}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    fetchMovies();
+  </script>
 </body>
 </html>
