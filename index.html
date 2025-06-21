@@ -1,87 +1,99 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TopKino — Популярные фильмы</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #eee;
-      padding: 20px;
-      margin: 0;
-    }
-    h1 {
-      text-align: center;
-    }
-    .movie {
-      display: inline-block;
-      width: 160px;
-      margin: 10px;
-      text-align: center;
-      background: #1d1d1d;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 0 6px rgba(0,0,0,0.4);
-      transition: transform 0.3s;
-    }
-    .movie:hover {
-      transform: scale(1.05);
-    }
-    .movie img {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-    }
-    .movie-title {
-      padding: 8px;
-      font-size: 0.9rem;
-      min-height: 45px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Kino Top — трейлеры и обзоры фильмов 2025</title>
+  <meta name="description" content="Трейлеры, обзоры и топ-10 лучших фильмов 2025 года. Новинки кино каждый день.">
+  <meta name="keywords" content="трейлеры фильмов, обзоры кино, лучшие фильмы 2025, Kino Top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Kino Top — трейлеры и обзоры фильмов">
+  <meta property="og:description" content="Смотри лучшие трейлеры и рецензии который стоит посмотреть 2025 года.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://kinotop.neocities.org/preview.jpg">
+  <meta property="og:url" content="https://kinotop.neocities.org/">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Популярные фильмы</h1>
-  <div id="movies-container"></div>
+  <header>
+    <h1>Kino Top</h1>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="trailer1.html">Трейлер</a>
+      <a href="review1.html">Обзор</a>
+    </nav>
+  </header>
 
-  <script>
-    const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w300';
+  <main>
+    <!-- Блок с картинкой и ссылкой на статью -->
+    <section class="featured-article" style="margin-bottom: 30px;">
+      <div style="text-align: center;">
+        <a href="https://kinotop.neocities.org/nobody-2-2025-action-movie-review" style="text-decoration: none; color: inherit;">
+          <img
+            src="https://kinotop.neocities.org/Kino.png"
+            alt="Kino"
+            style="max-width: 100%; height: auto; display: inline-block;"
+            loading="lazy"
+            width="600"
+          />
+          <h2>Обзор фильма Nobody 2 (2025) — захватывающий боевик</h2>
+        </a>
+      </div>
+    </section>
 
-    function slugify(text) {
-      return text.toString().toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w\-]+/g, '')
-        .replace(/\-\-+/g, '-')
-        .replace(/^-+/, '')
-        .replace(/-+$/, '');
-    }
+    <h2>🔥 Новые трейлеры</h2>
+    <div class="video">
+      <iframe src="https://www.youtube.com/embed/-8KXwsf8zNk"
+              title="Nobody 2 (2025) трейлер"
+              loading="lazy"
+              allowfullscreen
+              style="width:100%; max-width:720px; height:405px; display:block; margin: 0 auto;">
+      </iframe>
+      <p style="text-align:center;">
+        <a href="trailer1.html">Смотреть трейлер: Nobody 2 (2025)</a>
+      </p>
+    </div>
 
-    async function fetchMovies() {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU`);
-      const data = await res.json();
-      displayMovies(data.results);
-    }
+    <h2>📝 Последние обзоры</h2>
+    <p><a href="review1.html">Обзор: Название фильма — стоит ли смотреть?</a></p>
 
-    function displayMovies(movies) {
-      const container = document.getElementById('movies-container');
-      container.innerHTML = '';
-      movies.forEach(movie => {
-        const slug = slugify(movie.title);
-        const href = `movie/${movie.id}-${slug}.html`;
-        const card = document.createElement('a');
-        card.href = href;
-        card.className = 'movie';
-        card.innerHTML = `
-          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}">
-          <div class="movie-title">${movie.title}</div>
-        `;
-        container.appendChild(card);
-      });
-    }
+    <section class="about-site">
+      <h2>Лучшие фильмы, трейлеры и новинки кино — всё в одном месте</h2>
+      <p>Иногда после долгого дня так хочется просто включить что-то интересное и отдохнуть. Но что именно посмотреть? Мы здесь, чтобы помочь Вам выбрать. На этом сайте Вы найдёте всё самое актуальное из мира кино — свежие трейлеры, новинки фильмов, честные обзоры и подборки лучших картин для уютного вечера.</p>
 
-    fetchMovies();
-  </script>
+      <p>Что Вы найдёте на Kinotop:</p>
+      <ul>
+        <li>Новинки кино 2025 года и самые ожидаемые премьеры;</li>
+        <li>Трейлеры фильмов, которые только вышли или вот-вот появятся в прокате;</li>
+        <li>Обзоры без спойлеров — коротко, по делу и честно;</li>
+        <li>Подборки фильмов по жанрам и настроению: ужасы, боевики, фантастика, мелодрамы, комедии;</li>
+        <li>Рекомендации для вечернего просмотра, фильмов вдвоём, с друзьями или всей семьёй;</li>
+        <li>Новости из мира кино — что снимается, что выходит, что стоит внимания.</li>
+      </ul>
+
+      <p>Наш сайт — это не просто каталог фильмов. Это место, где кино оживает. Мы пишем только то, что сами смотрим и рекомендуем от души. Здесь нет сухих рецензий и бессмысленных рейтингов — только живое мнение, понятный язык и настоящая любовь к хорошему кино.</p>
+
+      <p>Сайт быстро загружается с любого устройства, будь то смартфон, планшет или компьютер. Мы сделали всё, чтобы Вы не теряли ни секунды и сразу находили то, что хочется посмотреть. Обновления появляются каждый день — заходите почаще, всегда будет что-то новое!</p>
+
+      <p>Популярные темы, которые ищут и которые Вы найдёте у нас:</p>
+      <ul>
+        <li>Что посмотреть вечером?</li>
+        <li>Лучшие фильмы 2025 года;</li>
+        <li>Самые интересные трейлеры;</li>
+        <li>Новинки кино сегодня;</li>
+        <li>Подборки по жанру: триллеры, романтика, драмы;</li>
+        <li>Обзоры фильмов на один вечер;</li>
+        <li>Фильмы, которые стоит ждать.</li>
+      </ul>
+
+      <p>Если Вы любите кино — Вы дома. Kinotop создан для таких, как Вы. Заходите, читайте, выбирайте, смотрите, делитесь с друзьями. И пусть каждый вечер будет как премьера!</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Kino Top. Все права защищены.</p>
+  </footer>
 </body>
 </html>
