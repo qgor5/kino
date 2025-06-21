@@ -2,9 +2,10 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TopKino — Популярные фильмы</title>
   <style>
+    /* Твой стиль, как был */
     * {
       box-sizing: border-box;
     }
@@ -14,7 +15,6 @@
       background: #111;
       color: #eee;
     }
-
     header {
       position: sticky;
       top: 0;
@@ -23,46 +23,81 @@
       z-index: 1000;
       box-shadow: 0 2px 4px rgba(0,0,0,0.6);
     }
-
     header h1 {
       font-size: 1.4rem;
       margin: 0 0 10px 0;
       text-align: center;
     }
-
     nav {
-      overflow-x: auto;
-      white-space: nowrap;
-      padding: 5px 0;
       display: flex;
-      gap: 10px;
+      justify-content: center;
     }
-
-    nav button {
-      flex: 0 0 auto;
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropbtn {
       background: #444;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9rem;
       border: none;
-      color: #eee;
       border-radius: 18px;
-      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .dropbtn:hover {
+      background-color: #00aaff;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      min-width: 180px;
+      max-height: 250px;
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      z-index: 1;
+      border-radius: 6px;
+      margin-top: 5px;
+      scrollbar-width: thin;
+      scrollbar-color: #00aaff transparent;
+    }
+    .dropdown-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    .dropdown-content::-webkit-scrollbar-thumb {
+      background-color: #00aaff;
+      border-radius: 4px;
+    }
+    .dropdown-content button {
+      color: white;
+      padding: 10px 16px;
+      text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
       font-size: 0.9rem;
       cursor: pointer;
-      transition: background 0.3s;
     }
-
-    nav button.active,
-    nav button:hover {
-      background: #00aaff;
-      color: #fff;
+    .dropdown-content button:hover,
+    .dropdown-content button.active {
+      background-color: #00aaff;
     }
-
+    .show {
+      display: block;
+    }
+    .scroll-indicator {
+      text-align: center;
+      font-size: 1rem;
+      color: #888;
+      padding: 5px 0 0;
+    }
     main {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 12px;
       padding: 15px;
     }
-
     .movie {
       background: #1d1d1d;
       border-radius: 8px;
@@ -73,24 +108,20 @@
       box-shadow: 0 0 6px rgba(0,0,0,0.4);
       transition: transform 0.3s;
     }
-
     .movie:hover {
       transform: scale(1.03);
     }
-
     .movie img {
       width: 100%;
       height: 210px;
       object-fit: cover;
       display: block;
     }
-
     .movie-title {
       padding: 8px;
       font-size: 0.9rem;
       min-height: 45px;
     }
-
     footer {
       text-align: center;
       padding: 15px;
@@ -98,42 +129,33 @@
       color: #aaa;
       font-size: 0.8rem;
     }
-
-    /* Адаптивность */
     @media (max-width: 768px) {
       header h1 {
         font-size: 1.2rem;
       }
-
-      nav button {
+      .dropbtn {
         padding: 8px 12px;
         font-size: 0.8rem;
       }
-
       main {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
-
       .movie img {
         height: 180px;
       }
     }
-
     @media (max-width: 480px) {
       header h1 {
         font-size: 1.1rem;
       }
-
-      nav button {
+      .dropbtn {
         padding: 7px 10px;
         font-size: 0.75rem;
       }
-
       main {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 10px;
       }
-
       .movie img {
         height: 160px;
       }
@@ -144,8 +166,14 @@
 
   <header>
     <h1>Популярные фильмы</h1>
-    <nav id="genres-menu">
-      <!-- Жанры появятся здесь -->
+    <nav>
+      <div class="dropdown">
+        <button class="dropbtn" onclick="toggleDropdown()">Жанры ⮟</button>
+        <div class="dropdown-content" id="genres-menu">
+          <!-- Жанры появятся здесь -->
+        </div>
+        <div class="scroll-indicator">⮟ прокрутите ⮟</div>
+      </div>
     </nav>
   </header>
 
@@ -162,8 +190,23 @@
     const IMG_URL = 'https://image.tmdb.org/t/p/w300';
     const genresMenu = document.getElementById('genres-menu');
     const moviesContainer = document.getElementById('movies-container');
-
     let currentGenreId = null;
+
+    function toggleDropdown() {
+      document.getElementById("genres-menu").classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+          const openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
 
     async function fetchGenres() {
       const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
@@ -172,6 +215,8 @@
     }
 
     function displayGenres(genres) {
+      genresMenu.innerHTML = '';
+
       const allBtn = document.createElement('button');
       allBtn.textContent = 'Все фильмы';
       allBtn.classList.add('active');
@@ -199,6 +244,15 @@
       activeBtn.classList.add('active');
     }
 
+    function slugify(text) {
+      return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Заменяем пробелы на тире
+        .replace(/[^\w\-]+/g, '')       // Удаляем всё, кроме букв, цифр и тире
+        .replace(/\-\-+/g, '-')         // Заменяем несколько тире на один
+        .replace(/^-+/, '')             // Удаляем тире в начале
+        .replace(/-+$/, '');            // Удаляем тире в конце
+    }
+
     async function fetchMovies(genreId = null) {
       let url = genreId
         ? `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc`
@@ -212,8 +266,11 @@
     function displayMovies(movies) {
       moviesContainer.innerHTML = '';
       movies.forEach(movie => {
+        const slug = slugify(movie.title);
+        // Формируем URL с ID в начале:
+        const href = `movie/${movie.id}-${slug}.html`;
         const card = document.createElement('a');
-        card.href = `movie.html?id=${movie.id}`;
+        card.href = href;
         card.className = 'movie';
         card.innerHTML = `
           <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
