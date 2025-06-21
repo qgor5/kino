@@ -1,0 +1,2 @@
+/movie/:id-:slug /movie.html?id=:id 200
+/* /index.html 200
