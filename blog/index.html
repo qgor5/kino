@@ -1,120 +1,438 @@
-<div id="posts-container" class="posts-grid"></div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TopKino — Блог о кино, новости и обзоры</title>
+  <meta name="description" content="Последние новости кино, обзоры фильмов и статьи о мире кино на TopKino. Читай блог и будь в курсе самых интересных новинок." />
+  <meta name="keywords" content="блог кино, обзоры фильмов, новости кино, статьи о кино, TopKino" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://topkino.netlify.app/blog/index.html" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background: #222;
+      padding: 10px 15px;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.7);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      flex-grow: 1;
+      color: #00aaff;
+      user-select: none;
+    }
+    nav {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .dropbtn {
+      background: #444;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    .dropbtn:hover,
+    .dropbtn.active {
+      background-color: #00aaff;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      min-width: 180px;
+      max-height: 250px;
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.7);
+      z-index: 10;
+      border-radius: 6px;
+      margin-top: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #00aaff transparent;
+    }
+    .dropdown-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    .dropdown-content::-webkit-scrollbar-thumb {
+      background-color: #00aaff;
+      border-radius: 4px;
+    }
+    .dropdown-content button {
+      color: white;
+      padding: 10px 16px;
+      text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
+      font-size: 0.9rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    .dropdown-content button:hover,
+    .dropdown-content button.active {
+      background-color: #00aaff;
+    }
+    .show {
+      display: block;
+    }
+    main {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 15px;
+    }
+    .post-card {
+      background: #1d1d1d;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      overflow: hidden;
+      text-decoration: none;
+      color: #eee;
+      user-select: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .post-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px #00aaff;
+    }
+    .post-image {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-bottom: 1px solid #222;
+    }
+    .post-title {
+      padding: 10px 12px;
+      font-size: 1.1rem;
+      flex-grow: 1;
+    }
+    .post-excerpt {
+      padding: 0 12px 12px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
+      color: #aaa;
+      font-size: 0.8rem;
+      user-select: none;
+      margin-top: 30px;
+    }
+    .seo-text {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      line-height: 1.6;
+      color: #ddd;
+      font-size: 1rem;
+    }
+    .seo-text h2 {
+      margin-top: 0;
+      color: #00aaff;
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.3rem;
+      }
+      .dropbtn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+      .post-image {
+        height: 120px;
+      }
+    }
+    @media (max-width: 480px) {
+      header {
+        justify-content: center;
+        gap: 10px;
+      }
+      header h1 {
+        font-size: 1.1rem;
+      }
+      .dropbtn {
+        padding: 7px 10px;
+        font-size: 0.75rem;
+      }
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+      }
+      .post-image {
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>TopKino</h1>
+  <nav>
+    <button class="dropbtn" id="btn-popular" onclick="window.location.href='/'" aria-label="Популярные фильмы">Популярные фильмы</button>
+
+    <button class="dropbtn active" id="btn-blog" onclick="window.location.href='/blog/index.html'" aria-current="page">Блог</button>
+
+    <div class="dropdown" id="year-dropdown">
+      <button class="dropbtn" onclick="toggleDropdown('year-menu')" aria-haspopup="true" aria-expanded="false">Фильмы по годам ⮟</button>
+      <div class="dropdown-content" id="year-menu" role="menu" aria-label="Года фильмов"></div>
+    </div>
+
+    <div class="dropdown" id="genre-dropdown">
+      <button class="dropbtn" onclick="toggleDropdown('genre-menu')" aria-haspopup="true" aria-expanded="false">Жанры ⮟</button>
+      <div class="dropdown-content" id="genre-menu" role="menu" aria-label="Жанры фильмов"></div>
+    </div>
+  </nav>
+</header>
+
+<main id="posts-container" role="main" aria-label="Список статей блога">
+
+  <!-- Пример карточек статей с микроразметкой Article -->
+  <article class="post-card" itemscope itemtype="https://schema.org/Article">
+    <a href="karate-kid-2025.html" itemprop="url" title="Обзор фильма Карате Кид 2025">
+      <img src="https://image.tmdb.org/t/p/w300/your_image_path.jpg" alt="Постер фильма Карате Кид 2025" class="post-image" itemprop="image" />
+      <h2 class="post-title" itemprop="headline">Обзор фильма Карате Кид 2025</h2>
+      <p class="post-excerpt" itemprop="description">Подробный разбор нового фильма "Карате Кид 2025", актеры, сюжет и мнение критиков.</p>
+      <meta itemprop="author" content="TopKino" />
+      <meta itemprop="datePublished" content="2025-06-22" />
+      <meta itemprop="dateModified" content="2025-06-22" />
+      <meta itemprop="publisher" content="TopKino" />
+    </a>
+  </article>
+
+  <article class="post-card" itemscope itemtype="https://schema.org/Article">
+    <a href="some-other-article.html" itemprop="url" title="Другая статья блога">
+      <img src="https://via.placeholder.com/300x140?text=No+Image" alt="Другая статья блога" class="post-image" itemprop="image" />
+      <h2 class="post-title" itemprop="headline">Другая статья блога</h2>
+      <p class="post-excerpt" itemprop="description">Краткое описание другой интересной статьи на нашем кино-блоге.</p>
+      <meta itemprop="author" content="TopKino" />
+      <meta itemprop="datePublished" content="2025-06-01" />
+      <meta itemprop="dateModified" content="2025-06-01" />
+      <meta itemprop="publisher" content="TopKino" />
+    </a>
+  </article>
+
+</main>
+
+<section class="seo-text" aria-label="SEO текст">
+  <h2>Новости кино и интересные статьи в блоге TopKino</h2>
+  <p>Добро пожаловать в блог TopKino — ваш источник свежих новостей киноиндустрии, обзоров новых фильмов и глубоких статей о киноискусстве. Мы тщательно отбираем контент, чтобы вы всегда были в курсе последних новинок и трендов.</p>
+  <p>В нашем блоге вы найдете подробные рецензии, аналитику, интервью с актерами и режиссерами, а также советы для киноманов. Наши материалы написаны с любовью и профессионализмом, чтобы каждый посетитель получил максимум пользы и удовольствия.</p>
+  <p>Следите за обновлениями, делитесь понравившимися статьями и погружайтесь в захватывающий мир кино вместе с TopKino!</p>
+</section>
+
+<footer>
+  © 2025 TopKino. Все права защищены.
+</footer>
 
 <script>
-  const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-  const IMG_URL = 'https://image.tmdb.org/t/p/w300';
+  function toggleDropdown(id) {
+    const menu = document.getElementById(id);
+    if (!menu) return;
 
-  // Подгрузка фильмов
-  async function loadUpcomingMovies() {
-    const res = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=ru-RU&page=1`);
-    return (await res.json()).results;
+    // Закрыть все остальные dropdown
+    document.querySelectorAll('.dropdown-content').forEach(dc => {
+      if (dc !== menu) dc.classList.remove('show');
+    });
+
+    menu.classList.toggle('show');
+
+    // Обновляем aria-expanded у кнопок
+    document.querySelectorAll('.dropdown > button').forEach(btn => {
+      const expanded = btn.nextElementSibling.classList.contains('show');
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
   }
 
-  // Подгрузка сериалов в эфире
-  async function loadOnAirTV() {
-    const res = await fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=${API_KEY}&language=ru-RU&page=1`);
-    return (await res.json()).results;
-  }
+  function populateYears() {
+    const yearMenu = document.getElementById('year-menu');
+    yearMenu.innerHTML = '';
 
-  // Фильтрация анимационных фильмов среди новинок (Animation жанр id=16)
-  async function loadUpcomingAnimations() {
-    const movies = await loadUpcomingMovies();
-    return movies.filter(movie => movie.genre_ids.includes(16));
-  }
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear - 9;
 
-  function createPostElement(item, type) {
-    const title = type === 'tv' ? item.name : item.title;
-    const date = item.release_date || item.first_air_date || 'Дата неизвестна';
-    const year = date.slice(0, 4);
-    const overview = item.overview || '';
-    const slug = title.toLowerCase().replace(/[^a-zа-яё0-9]+/gi, '-');
-    const link = `/${item.id}-${slug}.html`;
+    const allBtn = document.createElement('button');
+    allBtn.textContent = 'Все года';
+    allBtn.classList.add('active');
+    allBtn.onclick = () => {
+      alert('Функция фильтрации по годам пока не реализована.');
+      closeAllDropdowns();
+    };
+    yearMenu.appendChild(allBtn);
 
-    const el = document.createElement('article');
-    el.className = 'post-card';
-    el.innerHTML = `
-      <a href="${link}" title="${title}">
-        <img src="${item.poster_path ? IMG_URL + item.poster_path : 'https://via.placeholder.com/300x450?text=No+Image'}" alt="Постер ${title}" class="post-image" />
-        <h2 class="post-title">${title} (${year})</h2>
-        <p class="post-excerpt">${overview.length > 150 ? overview.slice(0,150) + '...' : overview}</p>
-        <p class="post-type">${type === 'movie' ? 'Фильм' : type === 'tv' ? 'Сериал' : 'Мультфильм'}</p>
-      </a>
-    `;
-    return el;
-  }
-
-  async function loadAll() {
-    const container = document.getElementById('posts-container');
-    container.innerHTML = '';
-
-    // Заголовки секций
-    const sections = [
-      { title: 'Новинки фильмов', items: await loadUpcomingMovies(), type: 'movie' },
-      { title: 'Новинки сериалов', items: await loadOnAirTV(), type: 'tv' },
-      { title: 'Новинки мультфильмов', items: await loadUpcomingAnimations(), type: 'animation' }
-    ];
-
-    for (const section of sections) {
-      const header = document.createElement('h2');
-      header.textContent = section.title;
-      header.style.color = '#00aaff';
-      header.style.marginTop = '40px';
-      container.appendChild(header);
-
-      const grid = document.createElement('div');
-      grid.style.display = 'flex';
-      grid.style.flexWrap = 'wrap';
-      grid.style.gap = '20px';
-      grid.style.justifyContent = 'center';
-
-      section.items.slice(0, 7).forEach(item => {
-        const postEl = createPostElement(item, section.type === 'animation' ? 'movie' : section.type);
-        grid.appendChild(postEl);
-      });
-
-      container.appendChild(grid);
+    for(let y = currentYear; y >= startYear; y--) {
+      const btn = document.createElement('button');
+      btn.textContent = y;
+      btn.onclick = () => {
+        alert(`Функция фильтрации по году ${y} пока не реализована.`);
+        closeAllDropdowns();
+      };
+      yearMenu.appendChild(btn);
     }
   }
 
-  loadAll();
+  async function fetchGenres() {
+    const genreMenu = document.getElementById('genre-menu');
+    try {
+      const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=7cb67565ace3a08cd9d099c749787121&language=ru-RU`);
+      if (!res.ok) throw new Error('Ошибка загрузки жанров');
+      const data = await res.json();
+      genreMenu.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Все жанры';
+      allBtn.classList.add('active');
+      allBtn.onclick = () => {
+        alert('Функция фильтрации по жанрам пока не реализована.');
+        closeAllDropdowns();
+      };
+      genreMenu.appendChild(allBtn);
+
+      data.genres.forEach(genre => {
+        const btn = document.createElement('button');
+        btn.textContent = genre.name;
+        btn.onclick = () => {
+          alert(`Функция фильтрации по жанру "${genre.name}" пока не реализована.`);
+          closeAllDropdowns();
+        };
+        genreMenu.appendChild(btn);
+      });
+
+    } catch (e) {
+      genreMenu.innerHTML = '<div style="padding: 10px; color: #f00;">Ошибка загрузки жанров</div>';
+      console.error(e);
+    }
+  }
+
+  function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
+  }
+
+  // Закрывать меню при клике вне его
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      closeAllDropdowns();
+    }
+  }
+
+  // Инициализация меню
+  populateYears();
+  fetchGenres();
 </script>
 
-<style>
-  #posts-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 15px;
-  }
-  .post-card {
-    background: #222;
-    border-radius: 8px;
-    width: 300px;
-    padding: 10px;
-    box-sizing: border-box;
-    color: #eee;
-    box-shadow: 0 0 8px rgba(0,0,0,0.5);
-    transition: transform 0.2s ease;
-    user-select: none;
-  }
-  .post-card:hover {
-    transform: translateY(-5px);
-  }
-  .post-image {
-    width: 100%;
-    border-radius: 6px;
-    object-fit: cover;
-  }
-  .post-title {
-    margin: 10px 0 5px;
-    font-size: 1.1rem;
-  }
-  .post-excerpt {
-    font-size: 0.9rem;
-    color: #ccc;
-  }
-  .post-type {
-    font-size: 0.85rem;
-    color: #00aaff;
-    margin-top: 5px;
-  }
-</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://topkino.netlify.app/#website",
+      "url": "https://topkino.netlify.app/",
+      "name": "TopKino",
+      "publisher": {
+        "@type": "Organization",
+        "name": "TopKino"
+      }
+    },
+    {
+      "@type": "CollectionPage",
+      "name": "Блог о кино — статьи и новости | TopKino",
+      "url": "https://topkino.netlify.app/blog/index.html",
+      "description": "Блог с новостями, обзорами и статьями о кино на TopKino.",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Главная",
+            "item": "https://topkino.netlify.app/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Блог",
+            "item": "https://topkino.netlify.app/blog/index.html"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Article",
+      "headline": "Обзор фильма Карате Кид 2025",
+      "image": "https://image.tmdb.org/t/p/w300/your_image_path.jpg",
+      "author": {
+        "@type": "Organization",
+        "name": "TopKino"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "TopKino"
+      },
+      "datePublished": "2025-06-22",
+      "dateModified": "2025-06-22",
+      "url": "https://topkino.netlify.app/blog/karate-kid-2025.html",
+      "description": "Подробный разбор нового фильма \"Карате Кид 2025\", актеры, сюжет и мнение критиков."
+    },
+    {
+      "@type": "Article",
+      "headline": "Другая статья блога",
+      "image": "https://via.placeholder.com/300x140?text=No+Image",
+      "author": {
+        "@type": "Organization",
+        "name": "TopKino"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "TopKino"
+      },
+      "datePublished": "2025-06-01",
+      "dateModified": "2025-06-01",
+      "url": "https://topkino.netlify.app/blog/some-other-article.html",
+      "description": "Краткое описание другой интересной статьи на нашем кино-блоге."
+    }
+  ]
+}
+</script>
+
+</body>
+</html>
