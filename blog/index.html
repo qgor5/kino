@@ -210,7 +210,6 @@
   <h1>TopKino</h1>
   <nav>
     <button class="dropbtn" id="btn-popular" onclick="window.location.href='/'" aria-label="Популярные фильмы">Популярные фильмы</button>
-
     <button class="dropbtn active" id="btn-blog" onclick="window.location.href='/blog/index.html'" aria-current="page">Блог</button>
 
     <div class="dropdown" id="year-dropdown">
@@ -226,7 +225,7 @@
 </header>
 
 <main id="posts-container" role="main" aria-label="Список статей блога">
-  <!-- Здесь скрипт подгрузит карточки -->
+  <!-- Карточки статей подгружаются сюда -->
 </main>
 
 <section class="seo-text" aria-label="SEO текст">
@@ -327,64 +326,31 @@
     }
   }
 
-  // ======== Список статей для подгрузки =========
+  // Пример статичных данных для блога — замени URL и данные на свои реальные
   const articles = [
-    { url: 'karate-kid-2025.html' },
-    { url: 'some-other-article.html' }
+    {
+      url: "karate-kid-2025.html",
+      title: "Обзор фильма Карате Кид 2025",
+      description: "Подробный разбор нового фильма \"Карате Кид 2025\", актеры, сюжет и мнение критиков.",
+      image: "https://image.tmdb.org/t/p/w300/your_image_path.jpg",
+      datePublished: "2025-06-22",
+      dateModified: "2025-06-22"
+    },
+    {
+      url: "some-other-article.html",
+      title: "Другая статья блога",
+      description: "Краткое описание другой интересной статьи на нашем кино-блоге.",
+      image: "https://via.placeholder.com/300x140?text=No+Image",
+      datePublished: "2025-06-01",
+      dateModified: "2025-06-01"
+    }
   ];
 
-  async function fetchArticleData(url) {
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`Ошибка загрузки: ${url}`);
-      const text = await res.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'text/html');
-
-      // Заголовок: берем og:title, иначе <title>
-      const title = doc.querySelector('meta[property="og:title"]')?.content
-                  || doc.querySelector('title')?.textContent
-                  || 'Без названия';
-
-      // Описание: og:description или meta description
-      const description = doc.querySelector('meta[property="og:description"]')?.content
-                        || doc.querySelector('meta[name="description"]')?.content
-                        || 'Описание отсутствует';
-
-      // Картинка: og:image, иначе первая картинка статьи/main/img
-      let image = doc.querySelector('meta[property="og:image"]')?.content;
-      if (!image) {
-        const imgEl = doc.querySelector('article img, main img, img');
-        if (imgEl) image = imgEl.src || imgEl.getAttribute('src');
-      }
-      if (!image) {
-        image = 'https://via.placeholder.com/300x140?text=No+Image';
-      }
-
-      // Можно, если нужно, добавить дату публикации и модификации (например, meta[name="date"] или другие)
-      const datePublished = doc.querySelector('meta[name="datePublished"]')?.content
-                          || doc.querySelector('meta[property="article:published_time"]')?.content
-                          || '';
-
-      const dateModified = doc.querySelector('meta[name="dateModified"]')?.content
-                          || doc.querySelector('meta[property="article:modified_time"]')?.content
-                          || datePublished;
-
-      return { title, description, image, url, datePublished, dateModified };
-    } catch (e) {
-      console.error('Ошибка при загрузке статьи:', url, e);
-      return null;
-    }
-  }
-
-  async function renderPosts() {
+  function renderPosts() {
     const container = document.getElementById('posts-container');
-    container.innerHTML = ''; // очистить перед добавлением
+    container.innerHTML = '';
 
-    for (const article of articles) {
-      const data = await fetchArticleData(article.url);
-      if (!data) continue;
-
+    for (const data of articles) {
       const articleEl = document.createElement('article');
       articleEl.className = 'post-card';
       articleEl.setAttribute('itemscope', '');
@@ -396,16 +362,16 @@
           <h2 class="post-title" itemprop="headline">${data.title}</h2>
           <p class="post-excerpt" itemprop="description">${data.description}</p>
           <meta itemprop="author" content="TopKino" />
-          ${data.datePublished ? `<meta itemprop="datePublished" content="${data.datePublished}"/>` : ''}
-          ${data.dateModified ? `<meta itemprop="dateModified" content="${data.dateModified}"/>` : ''}
+          <meta itemprop="datePublished" content="${data.datePublished}" />
+          <meta itemprop="dateModified" content="${data.dateModified}" />
           <meta itemprop="publisher" content="TopKino" />
         </a>
       `;
+
       container.appendChild(articleEl);
     }
   }
 
-  // Инициализация
   document.addEventListener('DOMContentLoaded', () => {
     populateYears();
     fetchGenres();
