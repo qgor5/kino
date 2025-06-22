@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Блог — TopKino</title>
-  <meta name="description" content="Блог TopKino — интересные статьи о фильмах, новинках и трейлерах.">
+  <title>Блог — Статьи о фильмах | TopKino</title>
+  <meta name="description" content="Читайте интересные статьи о фильмах, обзоры, новости кино и рекомендации на TopKino.">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#111">
   <link rel="canonical" href="https://topkino.netlify.app/blog/" />
+
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -22,6 +23,7 @@
       padding: 10px 15px;
       z-index: 1000;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 2px 6px rgba(0,0,0,0.7);
@@ -30,53 +32,63 @@
       margin: 0;
       font-size: 1.5rem;
       color: #00aaff;
+      user-select: none;
     }
     nav {
       display: flex;
       gap: 12px;
+      flex-wrap: wrap;
     }
     nav a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 18px;
       background: #444;
-      transition: 0.3s;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      border-radius: 18px;
+      text-decoration: none;
+      transition: background-color 0.3s;
     }
-    nav a:hover, nav a.active {
-      background: #00aaff;
+    nav a:hover,
+    nav a.active {
+      background-color: #00aaff;
     }
     main {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 20px;
       padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
     }
-    .article {
+    .post-card {
       background: #1d1d1d;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      box-shadow: 0 0 6px rgba(0,0,0,0.5);
       text-decoration: none;
-      color: #fff;
-      transition: 0.3s;
+      color: white;
+      transition: transform 0.3s;
     }
-    .article:hover {
+    .post-card:hover {
       transform: scale(1.03);
       box-shadow: 0 0 12px #00aaff;
     }
-    .article img {
+    .post-card img {
       width: 100%;
-      height: 160px;
+      height: 140px;
       object-fit: cover;
-      border-bottom: 1px solid #333;
+      display: block;
     }
-    .article-title {
-      padding: 10px;
+    .post-content {
+      padding: 12px;
+    }
+    .post-title {
       font-size: 1rem;
-      text-align: center;
+      margin: 0 0 10px;
+      color: #00aaff;
+    }
+    .post-excerpt {
+      font-size: 0.9rem;
+      color: #ccc;
+      line-height: 1.4;
     }
     footer {
       text-align: center;
@@ -89,23 +101,29 @@
   </style>
 </head>
 <body>
+
   <header>
     <h1>TopKino</h1>
     <nav>
       <a href="/index.html">Главная</a>
-      <a href="/blog/index.html" class="active">Блог</a>
+      <a href="/blog/" class="active">Блог</a>
     </nav>
   </header>
 
   <main>
-    <a href="/blog/karate-kid-2025.html" class="article">
-      <img src="https://image.tmdb.org/t/p/w500/2uiZrEqb8JqjBhQOZWicQeE1n2v.jpg" alt="Каратэ пацан 2025">
-      <div class="article-title">Каратэ Кид 2025 — Всё о новом фильме</div>
+    <!-- Пример одной статьи -->
+    <a href="/blog/karate-kid-2025.html" class="post-card">
+      <img src="https://image.tmdb.org/t/p/w500/4Zy6uJtqNmfvG3QtYhYV5rKY5Zf.jpg" alt="Каратэ-пацан 2025">
+      <div class="post-content">
+        <h2 class="post-title">Каратэ-пацан (2025): Всё, что известно</h2>
+        <p class="post-excerpt">Узнайте подробности о новом фильме «Каратэ-пацан 2025» — актёры, дата выхода, сюжет и сравнение с оригиналом.</p>
+      </div>
     </a>
   </main>
 
   <footer>
     © 2025 TopKino. Все права защищены.
   </footer>
+
 </body>
 </html>
