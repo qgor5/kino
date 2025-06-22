@@ -9,7 +9,6 @@
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://topkino.netlify.app/blog/index.html" />
   <style>
-    /* Твои стили без изменений */
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -136,6 +135,7 @@
       padding: 10px 12px;
       font-size: 1.1rem;
       flex-grow: 1;
+      color: #fff; /* Сделал белый цвет заголовка */
     }
     .post-excerpt {
       padding: 0 12px 12px;
@@ -210,6 +210,7 @@
   <h1>TopKino</h1>
   <nav>
     <button class="dropbtn" id="btn-popular" onclick="window.location.href='/'" aria-label="Популярные фильмы">Популярные фильмы</button>
+
     <button class="dropbtn active" id="btn-blog" onclick="window.location.href='/blog/index.html'" aria-current="page">Блог</button>
 
     <div class="dropdown" id="year-dropdown">
@@ -225,7 +226,32 @@
 </header>
 
 <main id="posts-container" role="main" aria-label="Список статей блога">
-  <!-- Карточки статей подгружаются сюда -->
+
+  <!-- Пример карточек статей с микроразметкой Article -->
+  <article class="post-card" itemscope itemtype="https://schema.org/Article">
+    <a href="karate-kid-2025.html" itemprop="url" title="Обзор фильма Карате Кид 2025">
+      <img src="https://image.tmdb.org/t/p/w300/your_image_path.jpg" alt="Постер фильма Карате Кид 2025" class="post-image" itemprop="image" />
+      <h2 class="post-title" itemprop="headline">Обзор фильма Карате Кид 2025</h2>
+      <p class="post-excerpt" itemprop="description">Подробный разбор нового фильма "Карате Кид 2025", актеры, сюжет и мнение критиков.</p>
+      <meta itemprop="author" content="TopKino" />
+      <meta itemprop="datePublished" content="2025-06-22" />
+      <meta itemprop="dateModified" content="2025-06-22" />
+      <meta itemprop="publisher" content="TopKino" />
+    </a>
+  </article>
+
+  <article class="post-card" itemscope itemtype="https://schema.org/Article">
+    <a href="some-other-article.html" itemprop="url" title="Другая статья блога">
+      <img src="https://via.placeholder.com/300x140?text=No+Image" alt="Другая статья блога" class="post-image" itemprop="image" />
+      <h2 class="post-title" itemprop="headline">Другая статья блога</h2>
+      <p class="post-excerpt" itemprop="description">Краткое описание другой интересной статьи на нашем кино-блоге.</p>
+      <meta itemprop="author" content="TopKino" />
+      <meta itemprop="datePublished" content="2025-06-01" />
+      <meta itemprop="dateModified" content="2025-06-01" />
+      <meta itemprop="publisher" content="TopKino" />
+    </a>
+  </article>
+
 </main>
 
 <section class="seo-text" aria-label="SEO текст">
@@ -244,12 +270,14 @@
     const menu = document.getElementById(id);
     if (!menu) return;
 
+    // Закрыть все остальные dropdown
     document.querySelectorAll('.dropdown-content').forEach(dc => {
       if (dc !== menu) dc.classList.remove('show');
     });
 
     menu.classList.toggle('show');
 
+    // Обновляем aria-expanded у кнопок
     document.querySelectorAll('.dropdown > button').forEach(btn => {
       const expanded = btn.nextElementSibling.classList.contains('show');
       btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
@@ -267,7 +295,7 @@
     allBtn.textContent = 'Все года';
     allBtn.classList.add('active');
     allBtn.onclick = () => {
-      alert('Функция фильтрации по годам пока не реализована.');
+      window.location.href = '/'; // или твоя страница со всеми фильмами
       closeAllDropdowns();
     };
     yearMenu.appendChild(allBtn);
@@ -276,7 +304,7 @@
       const btn = document.createElement('button');
       btn.textContent = y;
       btn.onclick = () => {
-        alert(`Функция фильтрации по году ${y} пока не реализована.`);
+        window.location.href = `/year/${y}`; // поправь под свой роут
         closeAllDropdowns();
       };
       yearMenu.appendChild(btn);
@@ -295,7 +323,7 @@
       allBtn.textContent = 'Все жанры';
       allBtn.classList.add('active');
       allBtn.onclick = () => {
-        alert('Функция фильтрации по жанрам пока не реализована.');
+        window.location.href = '/'; // или страница всех фильмов
         closeAllDropdowns();
       };
       genreMenu.appendChild(allBtn);
@@ -304,7 +332,8 @@
         const btn = document.createElement('button');
         btn.textContent = genre.name;
         btn.onclick = () => {
-          alert(`Функция фильтрации по жанру "${genre.name}" пока не реализована.`);
+          const genreSlug = genre.name.toLowerCase().replace(/\s+/g, '-');
+          window.location.href = `/genre/${genreSlug}`;
           closeAllDropdowns();
         };
         genreMenu.appendChild(btn);
@@ -320,63 +349,16 @@
     document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
   }
 
+  // Закрывать меню при клике вне его
   window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
       closeAllDropdowns();
     }
   }
 
-  // Пример статичных данных для блога — замени URL и данные на свои реальные
-  const articles = [
-    {
-      url: "karate-kid-2025.html",
-      title: "Обзор фильма Карате Кид 2025",
-      description: "Подробный разбор нового фильма \"Карате Кид 2025\", актеры, сюжет и мнение критиков.",
-      image: "https://image.tmdb.org/t/p/w300/your_image_path.jpg",
-      datePublished: "2025-06-22",
-      dateModified: "2025-06-22"
-    },
-    {
-      url: "some-other-article.html",
-      title: "Другая статья блога",
-      description: "Краткое описание другой интересной статьи на нашем кино-блоге.",
-      image: "https://via.placeholder.com/300x140?text=No+Image",
-      datePublished: "2025-06-01",
-      dateModified: "2025-06-01"
-    }
-  ];
-
-  function renderPosts() {
-    const container = document.getElementById('posts-container');
-    container.innerHTML = '';
-
-    for (const data of articles) {
-      const articleEl = document.createElement('article');
-      articleEl.className = 'post-card';
-      articleEl.setAttribute('itemscope', '');
-      articleEl.setAttribute('itemtype', 'https://schema.org/Article');
-
-      articleEl.innerHTML = `
-        <a href="${data.url}" itemprop="url" title="${data.title}">
-          <img src="${data.image}" alt="${data.title}" class="post-image" itemprop="image" loading="lazy" />
-          <h2 class="post-title" itemprop="headline">${data.title}</h2>
-          <p class="post-excerpt" itemprop="description">${data.description}</p>
-          <meta itemprop="author" content="TopKino" />
-          <meta itemprop="datePublished" content="${data.datePublished}" />
-          <meta itemprop="dateModified" content="${data.dateModified}" />
-          <meta itemprop="publisher" content="TopKino" />
-        </a>
-      `;
-
-      container.appendChild(articleEl);
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    populateYears();
-    fetchGenres();
-    renderPosts();
-  });
+  // Инициализация меню
+  populateYears();
+  fetchGenres();
 </script>
 
 <script type="application/ld+json">
