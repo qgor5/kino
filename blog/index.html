@@ -9,6 +9,7 @@
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://topkino.netlify.app/blog/index.html" />
   <style>
+    /* Твои стили без изменений */
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -135,7 +136,6 @@
       padding: 10px 12px;
       font-size: 1.1rem;
       flex-grow: 1;
-      color: #fff; /* Сделал белый цвет заголовка */
     }
     .post-excerpt {
       padding: 0 12px 12px;
@@ -226,32 +226,7 @@
 </header>
 
 <main id="posts-container" role="main" aria-label="Список статей блога">
-
-  <!-- Пример карточек статей с микроразметкой Article -->
-  <article class="post-card" itemscope itemtype="https://schema.org/Article">
-    <a href="karate-kid-2025.html" itemprop="url" title="Обзор фильма Карате Кид 2025">
-      <img src="https://image.tmdb.org/t/p/w300/your_image_path.jpg" alt="Постер фильма Карате Кид 2025" class="post-image" itemprop="image" />
-      <h2 class="post-title" itemprop="headline">Обзор фильма Карате Кид 2025</h2>
-      <p class="post-excerpt" itemprop="description">Подробный разбор нового фильма "Карате Кид 2025", актеры, сюжет и мнение критиков.</p>
-      <meta itemprop="author" content="TopKino" />
-      <meta itemprop="datePublished" content="2025-06-22" />
-      <meta itemprop="dateModified" content="2025-06-22" />
-      <meta itemprop="publisher" content="TopKino" />
-    </a>
-  </article>
-
-  <article class="post-card" itemscope itemtype="https://schema.org/Article">
-    <a href="some-other-article.html" itemprop="url" title="Другая статья блога">
-      <img src="https://via.placeholder.com/300x140?text=No+Image" alt="Другая статья блога" class="post-image" itemprop="image" />
-      <h2 class="post-title" itemprop="headline">Другая статья блога</h2>
-      <p class="post-excerpt" itemprop="description">Краткое описание другой интересной статьи на нашем кино-блоге.</p>
-      <meta itemprop="author" content="TopKino" />
-      <meta itemprop="datePublished" content="2025-06-01" />
-      <meta itemprop="dateModified" content="2025-06-01" />
-      <meta itemprop="publisher" content="TopKino" />
-    </a>
-  </article>
-
+  <!-- Здесь скрипт подгрузит карточки -->
 </main>
 
 <section class="seo-text" aria-label="SEO текст">
@@ -270,14 +245,12 @@
     const menu = document.getElementById(id);
     if (!menu) return;
 
-    // Закрыть все остальные dropdown
     document.querySelectorAll('.dropdown-content').forEach(dc => {
       if (dc !== menu) dc.classList.remove('show');
     });
 
     menu.classList.toggle('show');
 
-    // Обновляем aria-expanded у кнопок
     document.querySelectorAll('.dropdown > button').forEach(btn => {
       const expanded = btn.nextElementSibling.classList.contains('show');
       btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
@@ -295,7 +268,7 @@
     allBtn.textContent = 'Все года';
     allBtn.classList.add('active');
     allBtn.onclick = () => {
-      window.location.href = '/'; // или твоя страница со всеми фильмами
+      alert('Функция фильтрации по годам пока не реализована.');
       closeAllDropdowns();
     };
     yearMenu.appendChild(allBtn);
@@ -304,7 +277,7 @@
       const btn = document.createElement('button');
       btn.textContent = y;
       btn.onclick = () => {
-        window.location.href = `/year/${y}`; // поправь под свой роут
+        alert(`Функция фильтрации по году ${y} пока не реализована.`);
         closeAllDropdowns();
       };
       yearMenu.appendChild(btn);
@@ -323,7 +296,7 @@
       allBtn.textContent = 'Все жанры';
       allBtn.classList.add('active');
       allBtn.onclick = () => {
-        window.location.href = '/'; // или страница всех фильмов
+        alert('Функция фильтрации по жанрам пока не реализована.');
         closeAllDropdowns();
       };
       genreMenu.appendChild(allBtn);
@@ -332,8 +305,7 @@
         const btn = document.createElement('button');
         btn.textContent = genre.name;
         btn.onclick = () => {
-          const genreSlug = genre.name.toLowerCase().replace(/\s+/g, '-');
-          window.location.href = `/genre/${genreSlug}`;
+          alert(`Функция фильтрации по жанру "${genre.name}" пока не реализована.`);
           closeAllDropdowns();
         };
         genreMenu.appendChild(btn);
@@ -349,16 +321,96 @@
     document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
   }
 
-  // Закрывать меню при клике вне его
   window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
       closeAllDropdowns();
     }
   }
 
-  // Инициализация меню
-  populateYears();
-  fetchGenres();
+  // ======== Список статей для подгрузки =========
+  const articles = [
+    { url: 'karate-kid-2025.html' },
+    { url: 'some-other-article.html' }
+  ];
+
+  async function fetchArticleData(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Ошибка загрузки: ${url}`);
+      const text = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+
+      // Заголовок: берем og:title, иначе <title>
+      const title = doc.querySelector('meta[property="og:title"]')?.content
+                  || doc.querySelector('title')?.textContent
+                  || 'Без названия';
+
+      // Описание: og:description или meta description
+      const description = doc.querySelector('meta[property="og:description"]')?.content
+                        || doc.querySelector('meta[name="description"]')?.content
+                        || 'Описание отсутствует';
+
+      // Картинка: og:image, иначе первая картинка статьи/main/img
+      let image = doc.querySelector('meta[property="og:image"]')?.content;
+      if (!image) {
+        const imgEl = doc.querySelector('article img, main img, img');
+        if (imgEl) image = imgEl.src || imgEl.getAttribute('src');
+      }
+      if (!image) {
+        image = 'https://via.placeholder.com/300x140?text=No+Image';
+      }
+
+      // Можно, если нужно, добавить дату публикации и модификации (например, meta[name="date"] или другие)
+      const datePublished = doc.querySelector('meta[name="datePublished"]')?.content
+                          || doc.querySelector('meta[property="article:published_time"]')?.content
+                          || '';
+
+      const dateModified = doc.querySelector('meta[name="dateModified"]')?.content
+                          || doc.querySelector('meta[property="article:modified_time"]')?.content
+                          || datePublished;
+
+      return { title, description, image, url, datePublished, dateModified };
+    } catch (e) {
+      console.error('Ошибка при загрузке статьи:', url, e);
+      return null;
+    }
+  }
+
+  async function renderPosts() {
+    const container = document.getElementById('posts-container');
+    container.innerHTML = ''; // очистить перед добавлением
+
+    for (const article of articles) {
+      const data = await fetchArticleData(article.url);
+      if (!data) continue;
+
+      const articleEl = document.createElement('article');
+      articleEl.className = 'post-card';
+      articleEl.setAttribute('itemscope', '');
+      articleEl.setAttribute('itemtype', 'https://schema.org/Article');
+
+      articleEl.innerHTML = `
+        <a href="${data.url}" itemprop="url" title="${data.title}">
+          <img src="${data.image}" alt="${data.title}" class="post-image" itemprop="image" loading="lazy" />
+          <h2 class="post-title" itemprop="headline">${data.title}</h2>
+          <p class="post-excerpt" itemprop="description">${data.description}</p>
+          <meta itemprop="author" content="TopKino" />
+          ${data.datePublished ? `<meta itemprop="datePublished" content="${data.datePublished}"/>` : ''}
+          ${data.dateModified ? `<meta itemprop="dateModified" content="${data.dateModified}"/>` : ''}
+          <meta itemprop="publisher" content="TopKino" />
+        </a>
+      `;
+      container.appendChild(articleEl);
+    }
+  }
+
+  // Инициализация
+  document.addEventListener('DOMContentLoaded', () => {
+    populateYears();
+    fetchGenres();
+    renderPosts();
+  });
 </script>
 
 <script type="application/ld+json">
