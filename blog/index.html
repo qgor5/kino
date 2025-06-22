@@ -4,78 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TopKino — Блог о кино, новости и обзоры</title>
-  <meta name="description" content="Последние новости кино, обзоры фильмов и статьи о мире кино на TopKino." />
   <style>
-    /* Кратко стили, чтобы карточки красиво отображались */
     body {
+      font-family: Arial, sans-serif;
       background: #111;
       color: #eee;
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 15px;
+      margin: 20px;
     }
     main {
-      max-width: 1200px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 15px;
     }
     .post-card {
-      background: #1d1d1d;
+      background: #222;
       border-radius: 8px;
+      width: 280px;
       overflow: hidden;
-      box-shadow: 0 0 6px rgba(0,0,0,0.6);
-      display: flex;
-      flex-direction: column;
+      box-shadow: 0 0 10px #00aaff44;
       text-decoration: none;
       color: #eee;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
     }
     .post-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 12px #00aaff;
+      box-shadow: 0 0 15px #00aaffaa;
     }
     .post-image {
       width: 100%;
-      height: 140px;
+      height: 160px;
       object-fit: cover;
-      border-bottom: 1px solid #222;
+      background: #333;
     }
     .post-title {
-      padding: 10px 12px;
-      font-size: 1.1rem;
-      font-weight: bold;
+      font-size: 1.2rem;
+      padding: 10px;
       flex-grow: 1;
     }
-    .post-excerpt {
-      padding: 0 12px 12px;
+    .post-description {
       font-size: 0.9rem;
+      padding: 0 10px 10px;
       color: #ccc;
-    }
-    .post-date {
-      padding: 0 12px 12px;
-      font-size: 0.8rem;
-      color: #666;
-      font-style: italic;
     }
   </style>
 </head>
 <body>
 
-  <h1>Блог TopKino — последние статьи</h1>
-  <main id="posts-container" aria-live="polite" aria-label="Список статей блога">
-    <!-- Карточки появятся здесь -->
-  </main>
+<main id="posts-container" aria-label="Список статей блога">
+  <!-- Здесь появятся карточки -->
+</main>
 
 <script>
-  // Список статей — файлы из папки /blog/
-  const articlesList = [
-    'karate-kid-2025.html',
-    'some-other-article.html'
-    // Добавляй сюда имена файлов статей
+  // Список статей с URL
+  const articles = [
+    { url: 'https://topkino.netlify.app/blog/karate-kid-2025.html' },
+    { url: 'https://topkino.netlify.app/blog/some-other-article.html' }
   ];
-
-  const container = document.getElementById('posts-container');
 
   async function loadArticleMeta(url) {
     try {
@@ -83,11 +67,9 @@
       if (!res.ok) throw new Error(`Ошибка загрузки: ${url}`);
       const text = await res.text();
 
-      // Парсим HTML как DOM
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, 'text/html');
 
-      // Читаем теги meta для данных
       const title = doc.querySelector('meta[property="og:title"]')?.content
                     || doc.querySelector('title')?.textContent
                     || 'Без названия';
@@ -96,70 +78,48 @@
                           || doc.querySelector('meta[property="og:description"]')?.content
                           || 'Описание отсутствует';
 
-      const image = doc.querySelector('meta[property="og:image"]')?.content
-                    || 'https://via.placeholder.com/300x140?text=No+Image';
+      let image = doc.querySelector('meta[property="og:image"]')?.content;
 
-      const datePublished = doc.querySelector('meta[itemprop="datePublished"]')?.content
-                            || doc.querySelector('meta[name="date"]')?.content
-                            || '';
+      if (!image) {
+        const firstImg = doc.querySelector('article img, main img, img');
+        if (firstImg) {
+          image = firstImg.src || firstImg.getAttribute('src');
+        }
+      }
 
-      return { title, description, image, url, datePublished };
-    } catch(e) {
-      console.error(e);
+      if (!image) {
+        image = 'https://via.placeholder.com/280x160?text=No+Image';
+      }
+
+      return { title, description, image, url };
+    } catch (e) {
+      console.error('Ошибка загрузки статьи:', url, e);
       return null;
     }
   }
 
-  function createPostCard({title, description, image, url, datePublished}) {
-    const a = document.createElement('a');
-    a.className = 'post-card';
-    a.href = url;
-    a.title = title;
-    a.setAttribute('itemtype', 'https://schema.org/Article');
-    a.setAttribute('itemscope', '');
-    a.setAttribute('itemprop', 'url');
+  async function renderPosts() {
+    const container = document.getElementById('posts-container');
+    for (const article of articles) {
+      const meta = await loadArticleMeta(article.url);
+      if (!meta) continue;
 
-    const img = document.createElement('img');
-    img.className = 'post-image';
-    img.src = image;
-    img.alt = title;
-    img.setAttribute('itemprop', 'image');
+      const a = document.createElement('a');
+      a.href = meta.url;
+      a.className = 'post-card';
+      a.title = meta.title;
 
-    const h2 = document.createElement('h2');
-    h2.className = 'post-title';
-    h2.textContent = title;
-    h2.setAttribute('itemprop', 'headline');
+      a.innerHTML = `
+        <img src="${meta.image}" alt="Изображение статьи: ${meta.title}" class="post-image" loading="lazy" />
+        <h2 class="post-title">${meta.title}</h2>
+        <p class="post-description">${meta.description}</p>
+      `;
 
-    const pDesc = document.createElement('p');
-    pDesc.className = 'post-excerpt';
-    pDesc.textContent = description;
-    pDesc.setAttribute('itemprop', 'description');
-
-    a.appendChild(img);
-    a.appendChild(h2);
-    a.appendChild(pDesc);
-
-    if(datePublished) {
-      const pDate = document.createElement('p');
-      pDate.className = 'post-date';
-      pDate.textContent = `Опубликовано: ${new Date(datePublished).toLocaleDateString('ru-RU')}`;
-      a.appendChild(pDate);
-    }
-
-    return a;
-  }
-
-  async function init() {
-    for(const article of articlesList) {
-      const meta = await loadArticleMeta('/blog/' + article);
-      if(meta) {
-        const card = createPostCard(meta);
-        container.appendChild(card);
-      }
+      container.appendChild(a);
     }
   }
 
-  init();
+  renderPosts();
 </script>
 
 </body>
