@@ -2,12 +2,12 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Блог — Статьи о фильмах | TopKino</title>
-  <meta name="description" content="Читайте интересные статьи о фильмах, обзоры, новости кино и рекомендации на TopKino.">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://topkino.netlify.app/blog/" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TopKino — Блог</title>
+  <meta name="description" content="Блог о кино — обзоры, новости и статьи на TopKino" />
+  <meta name="keywords" content="блог кино, статьи о фильмах, новости кино, обзоры фильмов, TopKino" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://topkino.netlify.app/blog/index.html" />
   <style>
     * { box-sizing: border-box; }
     body {
@@ -15,6 +15,8 @@
       font-family: Arial, sans-serif;
       background: #111;
       color: #eee;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     header {
       position: sticky;
@@ -22,15 +24,16 @@
       background: #222;
       padding: 10px 15px;
       z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.7);
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.7);
     }
     header h1 {
       margin: 0;
       font-size: 1.5rem;
+      flex-grow: 1;
       color: #00aaff;
       user-select: none;
     }
@@ -39,56 +42,103 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-    nav a {
+    .dropbtn {
       background: #444;
       color: white;
       padding: 8px 16px;
       font-size: 0.95rem;
+      border: none;
       border-radius: 18px;
-      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
       transition: background-color 0.3s;
     }
-    nav a:hover,
-    nav a.active {
+    .dropbtn:hover,
+    .dropbtn.active {
       background-color: #00aaff;
     }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      min-width: 180px;
+      max-height: 250px;
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.7);
+      z-index: 10;
+      border-radius: 6px;
+      margin-top: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #00aaff transparent;
+    }
+    .dropdown-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    .dropdown-content::-webkit-scrollbar-thumb {
+      background-color: #00aaff;
+      border-radius: 4px;
+    }
+    .dropdown-content button {
+      color: white;
+      padding: 10px 16px;
+      text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
+      font-size: 0.9rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    .dropdown-content button:hover,
+    .dropdown-content button.active {
+      background-color: #00aaff;
+    }
+    .show {
+      display: block;
+    }
     main {
-      padding: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 15px;
     }
     .post-card {
       background: #1d1d1d;
       border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.6);
       overflow: hidden;
-      box-shadow: 0 0 6px rgba(0,0,0,0.5);
       text-decoration: none;
-      color: white;
-      transition: transform 0.3s;
+      color: #eee;
+      user-select: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
     }
     .post-card:hover {
-      transform: scale(1.03);
+      transform: scale(1.05);
       box-shadow: 0 0 12px #00aaff;
     }
-    .post-card img {
+    .post-image {
       width: 100%;
       height: 140px;
       object-fit: cover;
-      display: block;
-    }
-    .post-content {
-      padding: 12px;
+      border-bottom: 1px solid #222;
     }
     .post-title {
-      font-size: 1rem;
-      margin: 0 0 10px;
-      color: #00aaff;
+      padding: 10px 12px;
+      font-size: 1.1rem;
+      flex-grow: 1;
     }
     .post-excerpt {
+      padding: 0 12px 12px;
       font-size: 0.9rem;
       color: #ccc;
-      line-height: 1.4;
     }
     footer {
       text-align: center;
@@ -96,34 +146,178 @@
       background: #222;
       color: #aaa;
       font-size: 0.8rem;
+      user-select: none;
       margin-top: 30px;
+    }
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.3rem;
+      }
+      .dropbtn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+      .post-image {
+        height: 120px;
+      }
+    }
+    @media (max-width: 480px) {
+      header {
+        justify-content: center;
+        gap: 10px;
+      }
+      header h1 {
+        font-size: 1.1rem;
+      }
+      .dropbtn {
+        padding: 7px 10px;
+        font-size: 0.75rem;
+      }
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+      }
+      .post-image {
+        height: 100px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>TopKino</h1>
-    <nav>
-      <a href="/index.html">Главная</a>
-      <a href="/blog/" class="active">Блог</a>
-    </nav>
-  </header>
+<header>
+  <h1>TopKino</h1>
+  <nav>
+    <button class="dropbtn" id="btn-popular" onclick="window.location.href='/'">Популярные фильмы</button>
 
-  <main>
-    <!-- Пример одной статьи -->
-    <a href="/blog/karate-kid-2025.html" class="post-card">
-      <img src="https://image.tmdb.org/t/p/w500/4Zy6uJtqNmfvG3QtYhYV5rKY5Zf.jpg" alt="Каратэ-пацан 2025">
-      <div class="post-content">
-        <h2 class="post-title">Каратэ-пацан (2025): Всё, что известно</h2>
-        <p class="post-excerpt">Узнайте подробности о новом фильме «Каратэ-пацан 2025» — актёры, дата выхода, сюжет и сравнение с оригиналом.</p>
+    <button class="dropbtn active" id="btn-blog" onclick="window.location.href='/blog/index.html'">Блог</button>
+
+    <div class="dropdown" id="year-dropdown">
+      <button class="dropbtn" onclick="toggleDropdown('year-menu')">Фильмы по годам ⮟</button>
+      <div class="dropdown-content" id="year-menu">
+        <!-- Года сюда -->
       </div>
-    </a>
-  </main>
+    </div>
 
-  <footer>
-    © 2025 TopKino. Все права защищены.
-  </footer>
+    <div class="dropdown" id="genre-dropdown">
+      <button class="dropbtn" onclick="toggleDropdown('genre-menu')">Жанры ⮟</button>
+      <div class="dropdown-content" id="genre-menu">
+        <!-- Жанры сюда -->
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="posts-container">
+  <!-- Пример постов блога -->
+  <a href="karate-kid-2025.html" class="post-card" title="Обзор фильма Карате Кид 2025">
+    <img src="https://image.tmdb.org/t/p/w300/your_image_path.jpg" alt="Карате Кид 2025" class="post-image" />
+    <div class="post-title">Обзор фильма Карате Кид 2025</div>
+    <div class="post-excerpt">Подробный разбор нового фильма "Карате Кид 2025", актеры, сюжет и мнение критиков.</div>
+  </a>
+
+  <a href="some-other-article.html" class="post-card" title="Другая статья блога">
+    <img src="https://via.placeholder.com/300x140?text=No+Image" alt="Другая статья" class="post-image" />
+    <div class="post-title">Другая статья блога</div>
+    <div class="post-excerpt">Краткое описание другой интересной статьи на нашем кино-блоге.</div>
+  </a>
+</main>
+
+<footer>
+  © 2025 TopKino. Все права защищены.
+</footer>
+
+<script>
+  function toggleDropdown(id) {
+    const menu = document.getElementById(id);
+    if (!menu) return;
+
+    // Закрыть все остальные dropdown
+    document.querySelectorAll('.dropdown-content').forEach(dc => {
+      if (dc !== menu) dc.classList.remove('show');
+    });
+
+    menu.classList.toggle('show');
+  }
+
+  function populateYears() {
+    const yearMenu = document.getElementById('year-menu');
+    yearMenu.innerHTML = '';
+
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear - 9;
+
+    const allBtn = document.createElement('button');
+    allBtn.textContent = 'Все года';
+    allBtn.classList.add('active');
+    allBtn.onclick = () => {
+      alert('Функция фильтрации по годам пока не реализована.');
+      closeAllDropdowns();
+    };
+    yearMenu.appendChild(allBtn);
+
+    for(let y = currentYear; y >= startYear; y--) {
+      const btn = document.createElement('button');
+      btn.textContent = y;
+      btn.onclick = () => {
+        alert(`Функция фильтрации по году ${y} пока не реализована.`);
+        closeAllDropdowns();
+      };
+      yearMenu.appendChild(btn);
+    }
+  }
+
+  async function fetchGenres() {
+    const genreMenu = document.getElementById('genre-menu');
+    try {
+      const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=7cb67565ace3a08cd9d099c749787121&language=ru-RU`);
+      if (!res.ok) throw new Error('Ошибка загрузки жанров');
+      const data = await res.json();
+      genreMenu.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Все жанры';
+      allBtn.classList.add('active');
+      allBtn.onclick = () => {
+        alert('Функция фильтрации по жанрам пока не реализована.');
+        closeAllDropdowns();
+      };
+      genreMenu.appendChild(allBtn);
+
+      data.genres.forEach(genre => {
+        const btn = document.createElement('button');
+        btn.textContent = genre.name;
+        btn.onclick = () => {
+          alert(`Функция фильтрации по жанру "${genre.name}" пока не реализована.`);
+          closeAllDropdowns();
+        };
+        genreMenu.appendChild(btn);
+      });
+
+    } catch (e) {
+      genreMenu.innerHTML = '<div style="padding: 10px; color: #f00;">Ошибка загрузки жанров</div>';
+      console.error(e);
+    }
+  }
+
+  function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
+  }
+
+  // Закрывать меню при клике вне его
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      closeAllDropdowns();
+    }
+  }
+
+  // Инициализация
+  populateYears();
+  fetchGenres();
+</script>
 
 </body>
 </html>
