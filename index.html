@@ -1,294 +1,464 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TopKino — Главная</title>
+
+  <!-- SEO и соцсети -->
+  <meta name="description" content="Смотрите трейлеры лучших и популярных фильмов, узнавайте о новинках и рейтингах. Подборка самых свежих кинотрейлеров.">
+  <meta name="keywords" content="трейлеры фильмов, смотреть трейлеры, новинки кино, рейтинг фильмов, лучшие трейлеры, TopKino">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://topkino.netlify.app/" />
+
+  <meta property="og:title" content="TopKino — Трейлеры популярных фильмов" />
+  <meta property="og:description" content="Смотрите трейлеры фильмов, узнавайте новинки кино и рейтинги. Подборка лучших трейлеров на TopKino." />
+  <meta property="og:image" content="https://topkino.netlify.app/logo.png" />
+  <meta property="og:url" content="https://topkino.netlify.app/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TopKino — Трейлеры популярных фильмов</title>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FPMXGR1HF9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-FPMXGR1HF9');
+</script>
+
   <style>
+    * { box-sizing: border-box; }
     body {
-      margin: 0; padding: 0; font-family: Arial, sans-serif; background: #111; color: #eee;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     header {
+      position: sticky;
+      top: 0;
       background: #222;
-      padding: 10px 20px;
+      padding: 10px 15px;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.7);
       display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    header nav {
-      display: flex;
-      gap: 15px;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: space-between;
     }
-    header nav > div, header nav > a {
-      cursor: pointer;
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      flex-grow: 1;
+      color: #00aaff;
+      user-select: none;
+    }
+    nav {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .dropdown {
       position: relative;
-      padding: 8px 12px;
-      background: #333;
-      border-radius: 6px;
+    }
+    .dropbtn {
+      background: #444;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
       user-select: none;
       transition: background-color 0.3s;
-      color: #00aaff;
-      font-weight: bold;
     }
-    header nav > div:hover, header nav > a:hover {
-      background: #00aaff;
-      color: #111;
+    .dropbtn:hover,
+    .dropbtn.active {
+      background-color: #00aaff;
     }
-    /* Выпадающее меню */
     .dropdown-content {
       display: none;
       position: absolute;
-      top: 100%;
-      left: 0;
-      background: #222;
-      min-width: 150px;
-      border-radius: 6px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.7);
-      z-index: 1000;
-      max-height: 200px;
+      background-color: #333;
+      min-width: 180px;
+      max-height: 250px;
       overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.7);
+      z-index: 10;
+      border-radius: 6px;
+      margin-top: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #00aaff transparent;
     }
-    .dropdown-content div {
-      padding: 8px 12px;
-      cursor: pointer;
-      color: #eee;
+    .dropdown-content::-webkit-scrollbar {
+      width: 6px;
     }
-    .dropdown-content div:hover {
-      background: #00aaff;
-      color: #111;
+    .dropdown-content::-webkit-scrollbar-thumb {
+      background-color: #00aaff;
+      border-radius: 4px;
     }
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    /* Горизонтальная прокрутка жанров */
-    .genres-scroll {
-      margin: 10px 0;
-      overflow-x: auto;
-      white-space: nowrap;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #444;
-    }
-    .genres-scroll span {
-      display: inline-block;
-      padding: 6px 14px;
-      margin-right: 10px;
-      background: #333;
-      border-radius: 20px;
+    .dropdown-content button {
+      color: white;
+      padding: 10px 16px;
+      text-align: left;
+      background: none;
+      border: none;
+      width: 100%;
+      font-size: 0.9rem;
       cursor: pointer;
       user-select: none;
-      color: #00aaff;
-      font-weight: 600;
       transition: background-color 0.3s;
     }
-    .genres-scroll span:hover, .genres-scroll span.active {
-      background: #00aaff;
-      color: #111;
+    .dropdown-content button:hover,
+    .dropdown-content button.active {
+      background-color: #00aaff;
     }
-
-    /* Сетка фильмов */
-    #moviesGrid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
+    .show {
+      display: block;
+    }
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
       padding: 20px;
-      max-width: 1200px;
-      margin: auto;
     }
-    .movie-card {
-      width: 180px;
-      background: #222;
+    .movie {
+      background: #1d1d1d;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      cursor: pointer;
-      transition: transform 0.2s;
-      color: #eee;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      transition: transform 0.3s, box-shadow 0.3s;
       user-select: none;
     }
-    .movie-card:hover {
-      transform: translateY(-5px);
+    .movie:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px #00aaff;
     }
-    .movie-card img {
+    .movie img {
       width: 100%;
-      height: 270px;
+      height: 210px;
       object-fit: cover;
-    }
-    .movie-info {
-      padding: 10px;
+      display: block;
+      border-bottom: 1px solid #222;
     }
     .movie-title {
-      font-size: 1rem;
-      margin: 0 0 6px 0;
+      padding: 8px 6px;
+      font-size: 0.9rem;
+      min-height: 45px;
+      line-height: 1.2;
     }
-    .movie-date {
-      font-size: 0.85rem;
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
       color: #aaa;
+      font-size: 0.8rem;
+      user-select: none;
+      margin-top: 30px;
+    }
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.3rem;
+      }
+      .dropbtn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+      .movie img {
+        height: 180px;
+      }
+    }
+    @media (max-width: 480px) {
+      header {
+        justify-content: center;
+        gap: 10px;
+      }
+      header h1 {
+        font-size: 1.1rem;
+      }
+      .dropbtn {
+        padding: 7px 10px;
+        font-size: 0.75rem;
+      }
+      main {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+      }
+      .movie img {
+        height: 160px;
+      }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <nav>
-    <a href="#" id="nav-popular">Популярные фильмы</a>
-    <div class="dropdown" id="nav-by-year">
-      Фильмы по годам
-      <div class="dropdown-content" id="year-list"></div>
-    </div>
-    <a href="#" id="nav-upcoming">Новинки фильмов</a>
-    <a href="#" id="nav-tv">Сериалы</a>
-    <a href="#" id="nav-animation">Мультфильмы</a>
-  </nav>
-</header>
+  <header>
+    <h1>TopKino</h1>
+    <nav>
+      <button class="dropbtn active" id="btn-popular" onclick="loadPopular()">Популярные фильмы</button>
+      <button class="dropbtn" id="btn-blog" onclick="window.location.href='/blog/index.html'">Блог</button>
 
-<div class="genres-scroll" id="genresScroll"></div>
+      <div class="dropdown" id="year-dropdown">
+        <button class="dropbtn" onclick="toggleDropdown('year-menu')">Фильмы по годам ⮟</button>
+        <div class="dropdown-content" id="year-menu">
+          <!-- Года сюда -->
+        </div>
+      </div>
 
-<main>
-  <div id="moviesGrid"></div>
-</main>
+      <div class="dropdown" id="genre-dropdown">
+        <button class="dropbtn" onclick="toggleDropdown('genre-menu')">Жанры ⮟</button>
+        <div class="dropdown-content" id="genre-menu">
+          <!-- Жанры сюда -->
+        </div>
+      </div>
+    </nav>
+  </header>
 
-<script>
-  const API_KEY = '7cb67565ace3a08cd9d099c749787121';
-  const IMG_URL = 'https://image.tmdb.org/t/p/w300';
+  <main id="movies-container">
+    <!-- Фильмы здесь -->
+  </main>
 
-  // Загрузить жанры из API TMDb
-  async function loadGenres() {
-    const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
-    const data = await res.json();
-    return data.genres;
-  }
+    <section style="max-width: 800px; margin: 40px auto; font-size: 1rem; line-height: 1.6; color: #ccc; padding: 0 10px;">
+  <h1 style="font-size: 1.5rem; color: #00aaff;">Смотреть трейлеры фильмов 2025 онлайн — TopKino</h1>
+  <p>
+    Добро пожаловать на <strong>TopKino</strong> — сайт, где вы можете смотреть трейлеры новых и популярных фильмов 2025 года онлайн. Мы собрали самые ожидаемые новинки кино, лучшие трейлеры, фильмы по жанрам и годам выпуска.
+  </p>
+  <p>
+    Смотрите свежие кинопремьеры, выбирайте по жанрам: боевики, комедии, триллеры, ужасы, драмы, фантастика и многое другое. Все трейлеры представлены в отличном качестве и доступны без регистрации.
+  </p>
+  <p>
+    Следите за мировыми киноновинками на <strong>TopKino</strong> — у нас всегда актуальные трейлеры, рейтинги и подборки лучших фильмов.
+  </p>
+</section>
 
-  // Создать горизонтальный список жанров
-  async function renderGenres() {
-    const genres = await loadGenres();
-    const container = document.getElementById('genresScroll');
-    container.innerHTML = '';
-    genres.forEach(genre => {
-      const span = document.createElement('span');
-      span.textContent = genre.name;
-      span.dataset.genreId = genre.id;
-      span.onclick = () => loadMoviesByGenre(genre.id, genre.name, span);
-      container.appendChild(span);
-    });
-  }
+  <footer>
+    © 2025 TopKino. Все права защищены.
+  </footer>
 
-  // Загрузка фильмов по жанру
-  async function loadMoviesByGenre(genreId, genreName, el) {
-    setActiveGenre(el);
-    const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc&page=1`);
-    const data = await res.json();
-    renderMovies(data.results, `Жанр: ${genreName}`);
-  }
+  <script>
+    const API_KEY = '7cb67565ace3a08cd9d099c749787121';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w300';
 
-  // Загрузка популярных фильмов
-  async function loadPopularMovies() {
-    setActiveNav('nav-popular');
-    const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`);
-    const data = await res.json();
-    renderMovies(data.results, 'Популярные фильмы');
-  }
+    const moviesContainer = document.getElementById('movies-container');
+    const genreMenu = document.getElementById('genre-menu');
+    const yearMenu = document.getElementById('year-menu');
 
-  // Загрузка новинок фильмов
-  async function loadUpcomingMovies() {
-    setActiveNav('nav-upcoming');
-    const res = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=ru-RU&page=1`);
-    const data = await res.json();
-    renderMovies(data.results, 'Новинки фильмов');
-  }
+    let currentFilter = 'popular'; // popular, year, genre
+    let currentGenreId = null;
+    let currentYear = null;
 
-  // Загрузка сериалов
-  async function loadTVShows() {
-    setActiveNav('nav-tv');
-    const res = await fetch(`https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=ru-RU&page=1`);
-    const data = await res.json();
-    renderMovies(data.results, 'Популярные сериалы', true);
-  }
-
-  // Загрузка мультфильмов (анимация)
-  async function loadAnimations() {
-    setActiveNav('nav-animation');
-    const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=16&sort_by=popularity.desc&page=1`);
-    const data = await res.json();
-    renderMovies(data.results, 'Популярные мультфильмы');
-  }
-
-  // Загрузка фильмов по году
-  async function loadMoviesByYear(year) {
-    setActiveNav('nav-by-year');
-    const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&primary_release_year=${year}&sort_by=popularity.desc&page=1`);
-    const data = await res.json();
-    renderMovies(data.results, `Фильмы ${year} года`);
-  }
-
-  // Рендер фильмов на страницу
-  function renderMovies(movies, sectionTitle, isTV = false) {
-    const container = document.getElementById('moviesGrid');
-    container.innerHTML = `<h2 style="width:100%; text-align:center; color:#00aaff;">${sectionTitle}</h2>`;
-
-    movies.forEach(movie => {
-      const title = isTV ? movie.name : movie.title;
-      const date = movie.release_date || movie.first_air_date || '';
-      const year = date.slice(0,4) || '';
-      const slug = title.toLowerCase().replace(/[^a-zа-яё0-9]+/gi, '-');
-      const link = `/${movie.id}-${slug}.html`;
-
-      const card = document.createElement('div');
-      card.className = 'movie-card';
-      card.innerHTML = `
-        <a href="${link}" style="color: inherit; text-decoration:none;">
-          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Image'}" alt="${title}">
-          <div class="movie-info">
-            <h3 class="movie-title">${title} ${year ? '(' + year + ')' : ''}</h3>
-            <p class="movie-date">${date}</p>
-          </div>
-        </a>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  // Меняем активный жанр в списке
-  function setActiveGenre(el) {
-    document.querySelectorAll('#genresScroll span').forEach(span => span.classList.remove('active'));
-    if (el) el.classList.add('active');
-  }
-
-  // Меняем активный пункт меню
-  function setActiveNav(id) {
-    document.querySelectorAll('header nav > a, header nav > div').forEach(el => el.classList.remove('active'));
-    const el = document.getElementById(id);
-    if (el) el.classList.add('active');
-    setActiveGenre(null);
-  }
-
-  // Рендерим список годов в выпадающем меню
-  function renderYearList() {
-    const yearList = document.getElementById('year-list');
-    yearList.innerHTML = '';
-    const currentYear = new Date().getFullYear();
-    for(let y = currentYear; y >= currentYear - 5; y--) {
-      const div = document.createElement('div');
-      div.textContent = y;
-      div.onclick = () => loadMoviesByYear(y);
-      yearList.appendChild(div);
+    // Транслитерация для SEO URL
+    function transliterate(str) {
+      const ru = ['а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',' '];
+      const en = ['a','b','v','g','d','e','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','ts','ch','sh','sch','','y','','e','yu','ya','-'];
+      return str.toLowerCase().split('').map(c => {
+        const index = ru.indexOf(c);
+        return index >= 0 ? en[index] : c;
+      }).join('').replace(/[^a-z0-9\-]/g, '');
     }
-  }
 
-  // Инициализация
-  async function init() {
-    await renderGenres();
-    renderYearList();
-    loadPopularMovies(); // по умолчанию загружаем популярные фильмы
-  }
+    // Переключение выпадающих меню
+    function toggleDropdown(id) {
+      const menu = document.getElementById(id);
+      if (!menu) return;
 
-  init();
+      // Закрыть остальные
+      document.querySelectorAll('.dropdown-content').forEach(dc => {
+        if (dc !== menu) dc.classList.remove('show');
+      });
 
-</script>
+      menu.classList.toggle('show');
+    }
 
+    // Закрыть меню при клике вне
+    window.onclick = function(e) {
+      if (!e.target.matches('.dropbtn')) {
+        document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
+      }
+    }
+
+    // Загружаем жанры и года
+    async function initMenus() {
+      await fetchGenres();
+      populateYears();
+    }
+
+    async function fetchGenres() {
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ru-RU`);
+        if (!res.ok) throw new Error('Ошибка сети');
+        const data = await res.json();
+        displayGenres(data.genres);
+      } catch (e) {
+        genreMenu.innerHTML = '<p style="padding:10px; color:#f55;">Не удалось загрузить жанры</p>';
+      }
+    }
+
+    function displayGenres(genres) {
+      genreMenu.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Все жанры';
+      allBtn.classList.add('active');
+      allBtn.onclick = () => {
+        currentFilter = 'popular';
+        currentGenreId = null;
+        updateActiveButton('genre-menu', allBtn);
+        loadPopular();
+        closeAllDropdowns();
+      };
+      genreMenu.appendChild(allBtn);
+
+      genres.forEach(g => {
+        const btn = document.createElement('button');
+        btn.textContent = g.name;
+        btn.onclick = () => {
+          currentFilter = 'genre';
+          currentGenreId = g.id;
+          updateActiveButton('genre-menu', btn);
+          loadMoviesByGenre(g.id);
+          closeAllDropdowns();
+        };
+        genreMenu.appendChild(btn);
+      });
+    }
+
+    function populateYears() {
+      yearMenu.innerHTML = '';
+
+      const currentYearNum = new Date().getFullYear();
+      const startYear = currentYearNum - 9; // последние 10 лет
+
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Все года';
+      allBtn.classList.add('active');
+      allBtn.onclick = () => {
+        currentFilter = 'popular';
+        currentYear = null;
+        updateActiveButton('year-menu', allBtn);
+        loadPopular();
+        closeAllDropdowns();
+      };
+      yearMenu.appendChild(allBtn);
+
+      for(let y = currentYearNum; y >= startYear; y--) {
+        const btn = document.createElement('button');
+        btn.textContent = y;
+        btn.onclick = () => {
+          currentFilter = 'year';
+          currentYear = y;
+          updateActiveButton('year-menu', btn);
+          loadMoviesByYear(y);
+          closeAllDropdowns();
+        };
+        yearMenu.appendChild(btn);
+      }
+    }
+
+    function updateActiveButton(menuId, activeBtn) {
+      const menu = document.getElementById(menuId);
+      menu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+      activeBtn.classList.add('active');
+    }
+
+    function closeAllDropdowns() {
+      document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
+    }
+
+    // Загрузить популярные фильмы (24 фильма)
+    async function loadPopular() {
+      highlightMainButton('btn-popular');
+      try {
+        // Первая страница (20 фильмов)
+        const res1 = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`);
+        if (!res1.ok) throw new Error('Ошибка сети');
+        const data1 = await res1.json();
+
+        // Вторая страница (следующие 20 фильмов)
+        const res2 = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ru-RU&page=2`);
+        if (!res2.ok) throw new Error('Ошибка сети');
+        const data2 = await res2.json();
+
+        // Объединяем и берём первые 24
+        const movies = data1.results.concat(data2.results).slice(0, 24);
+
+        displayMovies(movies);
+      } catch(e) {
+        moviesContainer.innerHTML = '<p style="color:#f55; padding:10px;">Не удалось загрузить популярные фильмы</p>';
+      }
+    }
+
+    // Загрузить фильмы по жанру
+    async function loadMoviesByGenre(genreId) {
+      removeMainButtonHighlight();
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&with_genres=${genreId}&sort_by=popularity.desc&page=1`);
+        if (!res.ok) throw new Error('Ошибка сети');
+        const data = await res.json();
+        // Берём 24 фильма
+        displayMovies(data.results.slice(0, 24));
+      } catch(e) {
+        moviesContainer.innerHTML = '<p style="color:#f55; padding:10px;">Не удалось загрузить фильмы по жанру</p>';
+      }
+    }
+
+    // Загрузить фильмы по году
+    async function loadMoviesByYear(year) {
+      removeMainButtonHighlight();
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ru-RU&primary_release_year=${year}&sort_by=popularity.desc&page=1`);
+        if (!res.ok) throw new Error('Ошибка сети');
+        const data = await res.json();
+        // Берём 24 фильма
+        displayMovies(data.results.slice(0, 24));
+      } catch(e) {
+        moviesContainer.innerHTML = '<p style="color:#f55; padding:10px;">Не удалось загрузить фильмы по году</p>';
+      }
+    }
+
+    function highlightMainButton(id) {
+      removeMainButtonHighlight();
+      document.getElementById(id).classList.add('active');
+    }
+
+    function removeMainButtonHighlight() {
+      document.querySelectorAll('nav > .dropbtn').forEach(btn => btn.classList.remove('active'));
+    }
+
+    function displayMovies(movies) {
+      moviesContainer.innerHTML = '';
+      if(!movies.length) {
+        moviesContainer.innerHTML = '<p style="color:#ccc;">Фильмы не найдены</p>';
+        return;
+      }
+      movies.forEach(movie => {
+        const seoTitle = transliterate(movie.title);
+        const card = document.createElement('a');
+        card.href = `movie/${movie.id}-${seoTitle}.html`;
+        card.className = 'movie';
+        card.title = movie.title;
+        card.innerHTML = `
+          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=Нет+постера'}" alt="${movie.title}" />
+          <div class="movie-title">${movie.title}</div>
+        `;
+        moviesContainer.appendChild(card);
+      });
+    }
+
+    // Инициализация
+    initMenus();
+    loadPopular();
+
+  </script>
 </body>
 </html>
