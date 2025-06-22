@@ -1,126 +1,70 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TopKino — Блог о кино, новости и обзоры</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #eee;
-      margin: 20px;
-    }
-    main {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .post-card {
-      background: #222;
-      border-radius: 8px;
-      width: 280px;
-      overflow: hidden;
-      box-shadow: 0 0 10px #00aaff44;
-      text-decoration: none;
-      color: #eee;
-      display: flex;
-      flex-direction: column;
-    }
-    .post-card:hover {
-      box-shadow: 0 0 15px #00aaffaa;
-    }
-    .post-image {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      background: #333;
-    }
-    .post-title {
-      font-size: 1.2rem;
-      padding: 10px;
-      flex-grow: 1;
-    }
-    .post-description {
-      font-size: 0.9rem;
-      padding: 0 10px 10px;
-      color: #ccc;
-    }
-  </style>
-</head>
-<body>
-
-<main id="posts-container" aria-label="Список статей блога">
-  <!-- Здесь появятся карточки -->
-</main>
-
 <script>
-  // Список статей с URL
+  // Список статей с URL, можно расширить
   const articles = [
-    { url: 'https://topkino.netlify.app/blog/karate-kid-2025.html' },
-    { url: 'https://topkino.netlify.app/blog/some-other-article.html' }
+    { url: 'karate-kid-2025.html' },
+    { url: 'some-other-article.html' }
   ];
 
-  async function loadArticleMeta(url) {
+  async function fetchArticleData(url) {
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Ошибка загрузки: ${url}`);
       const text = await res.text();
-
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, 'text/html');
 
+      // Заголовок
       const title = doc.querySelector('meta[property="og:title"]')?.content
-                    || doc.querySelector('title')?.textContent
-                    || 'Без названия';
+                  || doc.querySelector('title')?.textContent
+                  || 'Без названия';
 
-      const description = doc.querySelector('meta[name="description"]')?.content
-                          || doc.querySelector('meta[property="og:description"]')?.content
-                          || 'Описание отсутствует';
+      // Описание
+      const description = doc.querySelector('meta[property="og:description"]')?.content
+                        || doc.querySelector('meta[name="description"]')?.content
+                        || 'Описание отсутствует';
 
+      // Картинка
       let image = doc.querySelector('meta[property="og:image"]')?.content;
-
       if (!image) {
-        const firstImg = doc.querySelector('article img, main img, img');
-        if (firstImg) {
-          image = firstImg.src || firstImg.getAttribute('src');
-        }
+        const imgEl = doc.querySelector('article img, main img, img');
+        if (imgEl) image = imgEl.src || imgEl.getAttribute('src');
       }
-
       if (!image) {
-        image = 'https://via.placeholder.com/280x160?text=No+Image';
+        image = 'https://via.placeholder.com/300x140?text=No+Image';
       }
 
       return { title, description, image, url };
     } catch (e) {
-      console.error('Ошибка загрузки статьи:', url, e);
+      console.error('Ошибка при загрузке статьи:', url, e);
       return null;
     }
   }
 
   async function renderPosts() {
     const container = document.getElementById('posts-container');
+    container.innerHTML = ''; // Очистить контейнер перед добавлением
     for (const article of articles) {
-      const meta = await loadArticleMeta(article.url);
-      if (!meta) continue;
+      const data = await fetchArticleData(article.url);
+      if (!data) continue;
 
-      const a = document.createElement('a');
-      a.href = meta.url;
-      a.className = 'post-card';
-      a.title = meta.title;
+      const articleEl = document.createElement('article');
+      articleEl.className = 'post-card';
+      articleEl.setAttribute('itemscope', '');
+      articleEl.setAttribute('itemtype', 'https://schema.org/Article');
 
-      a.innerHTML = `
-        <img src="${meta.image}" alt="Изображение статьи: ${meta.title}" class="post-image" loading="lazy" />
-        <h2 class="post-title">${meta.title}</h2>
-        <p class="post-description">${meta.description}</p>
+      articleEl.innerHTML = `
+        <a href="${data.url}" itemprop="url" title="${data.title}">
+          <img src="${data.image}" alt="${data.title}" class="post-image" itemprop="image" loading="lazy" />
+          <h2 class="post-title" itemprop="headline">${data.title}</h2>
+          <p class="post-excerpt" itemprop="description">${data.description}</p>
+          <meta itemprop="author" content="TopKino" />
+          <meta itemprop="publisher" content="TopKino" />
+        </a>
       `;
-
-      container.appendChild(a);
+      container.appendChild(articleEl);
     }
   }
 
-  renderPosts();
+  // Запускаем подгрузку при загрузке страницы
+  document.addEventListener('DOMContentLoaded', renderPosts);
 </script>
-
-</body>
-</html>
