@@ -1,0 +1,16 @@
+{
+  "name": "kinoportal",
+  "version": "1.0.0",
+  "description": "Современный сайт о кино на русском языке",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server",
+    "build": "echo 'Build completed'"
+  },
+  "keywords": ["кино", "фильмы", "блог", "сайт"],
+  "author": "КиноПортал",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
